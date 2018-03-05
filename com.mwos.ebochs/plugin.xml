@@ -104,6 +104,13 @@
    </extension>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.mwos.ebochs.EbochsTester"
+            id="com.mwos.ebochs.ebochsTester"
+            namespace="com.mwos.ebochs"
+            properties="isEbochs,notEbochs"
+            type="java.lang.Object">
+      </propertyTester>
    </extension>
 
 </plugin>
