@@ -117,7 +117,7 @@
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
-            class="com.mwos.ebochs.EbochsTester"
+            class="com.mwos.ebochs.propertyTester.EbochsTester"
             id="com.mwos.ebochs.ebochsTester"
             namespace="com.mwos.ebochs"
             properties="isEbochs,notEbochs"
