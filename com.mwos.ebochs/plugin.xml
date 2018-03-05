@@ -101,6 +101,18 @@
             </command>
          </menu>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.views.ProblemView?after=additions">
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.views.ProblemView?after=additions">
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.views.ProblemView?after=additions">
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
@@ -111,6 +123,21 @@
             properties="isEbochs,notEbochs"
             type="java.lang.Object">
       </propertyTester>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.mwos.ebochs.wizards.category"
+            name="OS">
+      </category>
+      <wizard
+            category="com.mwos.ebochs.wizards.category"
+            class="com.mwos.ebochs.wizard.OSNewWizard"
+            icon="resource/image/panda.png"
+            id="com.mwos.ebochs.wizard.OSWizard"
+            name="向导测试"
+            project="true">
+      </wizard>
    </extension>
 
 </plugin>
