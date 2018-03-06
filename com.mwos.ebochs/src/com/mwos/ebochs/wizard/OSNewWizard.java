@@ -3,17 +3,22 @@ package com.mwos.ebochs.wizard;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.wb.swt.ResourceManager;
 
 public class OSNewWizard extends Wizard implements INewWizard {
 
-	private OSWizardPage firstPage = null;
 	private ISelection selection;
-
+	private OSNewWizardPage newProjectPage;
+	
 	public OSNewWizard() {
-		super();
 		setNeedsProgressMonitor(true);
+		this.setWindowTitle("Create OS Project");
+		this.setTitleBarColor(new RGB(215, 225, 232));
+		this.setDefaultPageImageDescriptor(
+				ResourceManager.getPluginImageDescriptor("com.mwos.ebochs", "resource/image/window.png"));
 	}
 
 	@Override
@@ -23,9 +28,8 @@ public class OSNewWizard extends Wizard implements INewWizard {
 
 	@Override
 	public void addPages() {
-		firstPage = new OSWizardPage(selection);
-		addPage(firstPage);
-		addPage(new OSWizardPage(selection));
+		newProjectPage = new OSNewWizardPage();
+		addPage(newProjectPage);
 	}
 
 	@Override
