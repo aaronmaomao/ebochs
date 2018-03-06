@@ -1,5 +1,6 @@
 package com.mwos.ebochs.wizard;
 
+import org.eclipse.core.internal.resources.Project;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
