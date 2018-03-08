@@ -19,7 +19,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.wb.swt.ResourceManager;
 
-public class OSNewWizardPage extends WizardPage {
+public class NewWizardPage extends WizardPage {
 	private Text projtext;
 	private Text locationText;
 	private Text bochsText;
@@ -28,7 +28,7 @@ public class OSNewWizardPage extends WizardPage {
 	/**
 	 * Create the wizard.
 	 */
-	public OSNewWizardPage() {
+	public NewWizardPage() {
 		super("wizardPage");
 		setImageDescriptor(ResourceManager.getPluginImageDescriptor("com.mwos.ebochs", "resource/image/window.png"));
 		setPageComplete(false);
@@ -42,8 +42,8 @@ public class OSNewWizardPage extends WizardPage {
 	 * @param parent
 	 */
 	public void createControl(Composite parent) {
-		final boolean canNext[] = { false, true, false, false };// canName = false, canLocation = false, canBochs =
-																// false, canBochsdbg = false;
+		final boolean canNext[] = { false, true, false, false };
+																
 		Composite container = new Composite(parent, SWT.NONE);
 
 		setControl(container);

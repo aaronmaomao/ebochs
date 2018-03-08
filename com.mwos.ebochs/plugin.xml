@@ -132,7 +132,7 @@
       </category>
       <wizard
             category="com.mwos.ebochs.wizards.category"
-            class="com.mwos.ebochs.wizard.OSNewWizard"
+            class="com.mwos.ebochs.wizard.NewProjectWizard"
             icon="resource/image/panda.png"
             id="com.mwos.ebochs.wizard.OSWizard"
             name="向导测试"
