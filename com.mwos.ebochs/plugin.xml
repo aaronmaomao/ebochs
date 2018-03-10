@@ -139,5 +139,20 @@
             project="true">
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="com.mwos.ebochs.view.category"
+            name="OS Debug">
+      </category>
+      <view
+            category="com.mwos.ebochs.view.category"
+            class="com.mwos.ebochs.view.RegisterVPart"
+            icon="resource/image/register.png"
+            id="com.mwos.ebochs.view.registerVPart"
+            inject="true"
+            name="寄存器">
+      </view>
+   </extension>
 
 </plugin>
