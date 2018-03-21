@@ -2,129 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.ui.commands">
-      <category
-            description="Ebochs cmd"
-            id="com.mwos.ebochs.commands.category"
-            name="EbochsCmd">
-      </category>
-      <command
-            categoryId="com.mwos.ebochs.commands.category"
-            id="com.mwos.ebochs.commands.openView"
-            name="Open Ebochs View">
-      </command>
-      <command
-            categoryId="com.mwos.ebochs.commands.category"
-            description="Add selected item"
-            id="com.mwos.ebochs.commands.add"
-            name="Add">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               id="com.mwos.ebochs.menu.ebochsMenu"
-               label="Ebochs"
-               mnemonic="b">
-            <command
-                  commandId="com.mwos.ebochs.commands.openView"
-                  icon="resource/image/panda.png"
-                  id="com.mwos.ebochs.menus.openEbochsView"
-                  mnemonic="O"
-                  style="push">
-            </command>
-         </menu>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="com.mwos.ebochs.toolbars.main">
-            <command
-                  commandId="com.mwos.ebochs.commands.openView"
-                  icon="resource/image/panda.png"
-                  id="com.mwos.ebochs.toolbars.openEbochsView"
-                  style="push"
-                  tooltip="Open Ebochs View">
-               <visibleWhen
-                     checkEnabled="false">
-                  <with
-                        variable="activeContexts">
-                     <iterate
-                           ifEmpty="false"
-                           operator="or">
-                        <equals
-                              value="com.mwos.ebochs.workbenchActonSet">
-                        </equals>
-                     </iterate>
-                  </with>
-               </visibleWhen>
-            </command>
-         </toolbar>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
-         <menu
-               label="Ebochs">
-            <command
-                  commandId="com.mwos.ebochs.commands.add"
-                  icon="resource/image/panda.png"
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <with
-                        variable="selection">
-                     <iterate
-                           ifEmpty="false"
-                           operator="or">
-                        <and>
-                           <or>
-                              <instanceof
-                                    value="org.eclipse.jdt.core.IJavaElement">
-                              </instanceof>
-                              <instanceof
-                                    value="org.eclipse.core.resources.IResource">
-                              </instanceof>
-                           </or>
-                           <test
-                                 forcePluginActivation="true"
-                                 property="com.mwos.ebochs.notEbochs">
-                           </test>
-                        </and>
-                     </iterate>
-                  </with>
-               </visibleWhen>
-            </command>
-         </menu>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="menu:org.eclipse.ui.views.ProblemView?after=additions">
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="popup:org.eclipse.ui.views.ProblemView?after=additions">
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="toolbar:org.eclipse.ui.views.ProblemView?after=additions">
-      </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.core.expressions.propertyTesters">
-      <propertyTester
-            class="com.mwos.ebochs.propertyTester.EbochsTester"
-            id="com.mwos.ebochs.ebochsTester"
-            namespace="com.mwos.ebochs"
-            properties="isEbochs,notEbochs"
-            type="java.lang.Object">
-      </propertyTester>
-   </extension>
-   <extension
          point="org.eclipse.ui.newWizards">
       <category
             id="com.mwos.ebochs.wizards.category"
@@ -153,6 +30,78 @@
             inject="true"
             name="寄存器">
       </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.mwos.ebochs.handlers.Asm2objHandler"
+            commandId="com.mwos.ebochs.command.asm2obj">
+      </handler>
+      <handler
+            class="com.mwos.ebochs.handlers.C2asmHandler"
+            commandId="com.mwos.ebochs.commands.c2asm">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="com.mwos.ebochs.commands.sampleCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+6">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="com.mwos.ebochs.menus.sampleMenu"
+               label="Sample Menu"
+               mnemonic="M">
+            <command
+                  commandId="com.mwos.ebochs.commands.sampleCommand"
+                  id="com.mwos.ebochs.menus.sampleCommand"
+                  mnemonic="S">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="com.mwos.ebochs.toolbars.by"
+               label="编译工具栏">
+            <command
+                  commandId="com.mwos.ebochs.commands.c2asm"
+                  id="com.mwos.ebochs.toolbars.by.c2asm"
+                  label="[C to asm]"
+                  tooltip="把c文件编译为asm文件">
+            </command>
+            <command
+                  commandId="com.mwos.ebochs.command.asm2obj"
+                  id="com.mwos.ebochs.toolbars.by.asm2obj"
+                  label="[asm to obj]"
+                  tooltip="把asm文件编译为obj文件">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="com.mwos.ebochs.commands.category.by"
+            name="编译命令类">
+      </category>
+      <command
+            categoryId="com.mwos.ebochs.commands.category.by"
+            id="com.mwos.ebochs.commands.c2asm"
+            name="C to asm">
+      </command>
+      <command
+            categoryId="com.mwos.ebochs.commands.category.by"
+            id="com.mwos.ebochs.command.asm2obj"
+            name="asm to obj">
+      </command>
    </extension>
 
 </plugin>
