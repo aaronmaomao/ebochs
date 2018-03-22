@@ -5,7 +5,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 
-public class Asm2objHandler implements IHandler {
+public class RunHandler implements IHandler {
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
@@ -27,7 +27,7 @@ public class Asm2objHandler implements IHandler {
 
 	@Override
 	public boolean isEnabled() {
-		System.out.println("asd");
+		// TODO Auto-generated method stub
 		return false;
 	}
 

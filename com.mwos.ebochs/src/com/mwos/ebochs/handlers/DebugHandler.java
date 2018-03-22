@@ -4,8 +4,10 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
 
-public class Asm2objHandler implements IHandler {
+public class DebugHandler implements IHandler {
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
@@ -22,19 +24,26 @@ public class Asm2objHandler implements IHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		// TODO Auto-generated method stub
+		System.out.println("开始调试操作系统");
+		try {
+			PlatformUI.getWorkbench().showPerspective("org.eclipse.debug.ui.DebugPerspective",
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+		} catch (WorkbenchException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		System.out.println("asd");
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isHandled() {
 		// TODO Auto-generated method stub
-		return false;
+		// return false;
+		return true;
 	}
 
 	@Override

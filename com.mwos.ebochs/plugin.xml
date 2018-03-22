@@ -20,9 +20,10 @@
          point="org.eclipse.ui.views">
       <category
             id="com.mwos.ebochs.view.category"
-            name="OS Debug">
+            name="操作系统调试">
       </category>
       <view
+            allowMultiple="false"
             category="com.mwos.ebochs.view.category"
             class="com.mwos.ebochs.view.RegisterVPart"
             icon="resource/image/register.png"
@@ -30,16 +31,30 @@
             inject="true"
             name="寄存器">
       </view>
+      <view
+            category="com.mwos.ebochs.view.category"
+            class="com.mwos.ebochs.view.MemVPart"
+            id="com.mwos.ebochs.view.MemVPart"
+            name="内存">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
             class="com.mwos.ebochs.handlers.Asm2objHandler"
-            commandId="com.mwos.ebochs.command.asm2obj">
+            commandId="com.mwos.ebochs.commands.asm2obj">
       </handler>
       <handler
             class="com.mwos.ebochs.handlers.C2asmHandler"
             commandId="com.mwos.ebochs.commands.c2asm">
+      </handler>
+      <handler
+            class="com.mwos.ebochs.handlers.RunHandler"
+            commandId="com.mwos.ebochs.command.run">
+      </handler>
+      <handler
+            class="com.mwos.ebochs.handlers.DebugHandler"
+            commandId="com.mwos.ebochs.command.debug">
       </handler>
    </extension>
    <extension
@@ -76,12 +91,65 @@
                   id="com.mwos.ebochs.toolbars.by.c2asm"
                   label="[C to asm]"
                   tooltip="把c文件编译为asm文件">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <adapt
+                              type="org.eclipse.core.resources.IResource">
+                           <test
+                                 property="org.eclipse.core.resources.name"
+                                 value="*.c">
+                           </test>
+                        </adapt>
+                     </iterate>
+                  </with>
+               </visibleWhen>
             </command>
             <command
                   commandId="com.mwos.ebochs.command.asm2obj"
                   id="com.mwos.ebochs.toolbars.by.asm2obj"
                   label="[asm to obj]"
                   tooltip="把asm文件编译为obj文件">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <adapt
+                              type="org.eclipse.core.resources.IResource">
+                           <test
+                                 property="org.eclipse.core.resources.name"
+                                 value="*.asm">
+                           </test>
+                        </adapt>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+         </toolbar>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="com.mwos.ebochs.toolbars.rd">
+            <command
+                  commandId="com.mwos.ebochs.command.run"
+                  id="com.mwos.ebochs.toolbars.rd.run"
+                  label="[运行]"
+                  tooltip="运行操作系统">
+            </command>
+            <command
+                  commandId="com.mwos.ebochs.command.debug"
+                  id="com.mwos.ebochs.toolbars.rd.debug"
+                  label="[调试]"
+                  tooltip="调试操作系统">
             </command>
          </toolbar>
       </menuContribution>
@@ -99,9 +167,90 @@
       </command>
       <command
             categoryId="com.mwos.ebochs.commands.category.by"
-            id="com.mwos.ebochs.command.asm2obj"
+            id="com.mwos.ebochs.commands.asm2obj"
             name="asm to obj">
       </command>
+      <category
+            id="com.mwos.ebochs.commands.category.rd"
+            name="运行调试类">
+      </category>
+      <command
+            categoryId="com.mwos.ebochs.commands.category.rd"
+            id="com.mwos.ebochs.command.run"
+            name="运行">
+      </command>
+      <command
+            categoryId="com.mwos.ebochs.commands.category.by"
+            id="com.mwos.ebochs.command.debug"
+            name="调试">
+      </command>
    </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.debug.ui.DebugPerspective">
+         <view
+               id="com.mwos.ebochs.view.MemVPart"
+               minimized="false"
+               ratio="0.5"
+               relationship="stack"
+               relative="com.mwos.ebochs.view.registerVPart"
+               visible="true">
+         </view>
+         <view
+               id="com.mwos.ebochs.view.registerVPart"
+               minimized="false"
+               ratio="0.3"
+               relationship="stack"
+               relative="com.mwos.ebochs.view.registerVPart"
+               visible="true">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.mwos.ebochs.perspective.OSDebugPerspective"
+            id="com.mwos.ebochs.perspective.OSDebugPerspective"
+            name="OS Debug">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.mwos.ebochs.editor.AsmEditor"
+            extensions="asm"
+            icon="resource/image/panda.png"
+            id="com.mwos.ebochs.editor.AsmEditor"
+            name="AsmEditor">
+      </editor>
+      <editor
+            class="com.mwos.ebochs.editor.AsmMultiEditor"
+            extensions="gas"
+            icon="resource/image/register.png"
+            id="com.mwos.ebochs.editor.AsmMultiEditor"
+            name="MultiPageEditorPart">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mwos.ebochs.preference.OSPreferencePage"
+            id="com.mwos.ebochs.preference.os"
+            name="MWOS">
+      </page>
+      <page
+            category="com.mwos.ebochs.preference.os"
+            class="com.mwos.ebochs.preference.ToolChainPreferencePage"
+            id="com.mwos.ebochs.preference.toolchain"
+            name="工具链">
+      </page>
+      <page
+            category="com.mwos.ebochs.preference.os"
+            class="com.mwos.ebochs.preference.VMPreferencePage"
+            id="com.mwos.ebochs.preference.vm"
+            name="虚拟机">
+      </page>
+     </extension>
 
 </plugin>
