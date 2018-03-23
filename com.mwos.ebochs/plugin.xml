@@ -34,8 +34,23 @@
       <view
             category="com.mwos.ebochs.view.category"
             class="com.mwos.ebochs.view.MemVPart"
+            icon="resource/icons/monitor_link.png"
             id="com.mwos.ebochs.view.MemVPart"
             name="内存">
+      </view>
+      <view
+            category="com.mwos.ebochs.view.category"
+            class="com.mwos.ebochs.view.StackVPart"
+            icon="resource/icons/text_align_justify.png"
+            id="com.mwos.ebochs.view.StackVPart"
+            name="堆栈">
+      </view>
+      <view
+            category="com.mwos.ebochs.view.category"
+            class="com.mwos.ebochs.view.GIdtVPart"
+            icon="resource/icons/table_multiple.png"
+            id="com.mwos.ebochs.view.GIdtVPart"
+            name="全局描述符表">
       </view>
    </extension>
    <extension
@@ -186,31 +201,10 @@
       </command>
    </extension>
    <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.eclipse.debug.ui.DebugPerspective">
-         <view
-               id="com.mwos.ebochs.view.MemVPart"
-               minimized="false"
-               ratio="0.5"
-               relationship="stack"
-               relative="com.mwos.ebochs.view.registerVPart"
-               visible="true">
-         </view>
-         <view
-               id="com.mwos.ebochs.view.registerVPart"
-               minimized="false"
-               ratio="0.3"
-               relationship="stack"
-               relative="com.mwos.ebochs.view.registerVPart"
-               visible="true">
-         </view>
-      </perspectiveExtension>
-   </extension>
-   <extension
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.mwos.ebochs.perspective.OSDebugPerspective"
+            icon="resource/icons/calculator.png"
             id="com.mwos.ebochs.perspective.OSDebugPerspective"
             name="OS Debug">
       </perspective>
