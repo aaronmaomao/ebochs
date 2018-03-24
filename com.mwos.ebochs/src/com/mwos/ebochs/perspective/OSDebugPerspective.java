@@ -16,8 +16,9 @@ public class OSDebugPerspective implements IPerspectiveFactory {
 		addPerspectiveShortcuts(layout);
 		layout.addView("com.mwos.ebochs.view.StackVPart", IPageLayout.RIGHT, 0.6f, IPageLayout.ID_EDITOR_AREA);
 		layout.addView("com.mwos.ebochs.view.MemVPart", IPageLayout.RIGHT, 0.5f, "com.mwos.ebochs.view.StackVPart");
-		layout.addView("com.mwos.ebochs.view.GIdtVPart", IPageLayout.TOP, 0.5f, "com.mwos.ebochs.view.MemVPart");
-		layout.addView("com.mwos.ebochs.view.registerVPart", IPageLayout.TOP, 0.5f, "com.mwos.ebochs.view.StackVPart");
+		layout.addView("com.mwos.ebochs.view.GIdtVPart", IPageLayout.TOP, 0.52f, "com.mwos.ebochs.view.MemVPart");
+		layout.addView("org.eclipse.ui.console.ConsoleView", IPageLayout.BOTTOM, 0.5f, "com.mwos.ebochs.view.GIdtVPart");
+		layout.addView("com.mwos.ebochs.view.registerVPart", IPageLayout.TOP, 0.52f, "com.mwos.ebochs.view.StackVPart");
 	}
 
 	/**
