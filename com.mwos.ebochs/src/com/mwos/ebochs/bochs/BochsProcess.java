@@ -66,7 +66,7 @@ public class BochsProcess {
 		BufferedReader br = new BufferedReader(reader);
 		String line="";
 		try {
-			while(!(line = br.readLine()).equals("")) {
+			while(!(line = br.readLine()).startsWith("<bochs:")) {
 				content +=(line+"\n");
 			}
 		} catch (IOException e) {
@@ -98,4 +98,5 @@ public class BochsProcess {
 			e.printStackTrace();
 		}
 	}
+	
 }

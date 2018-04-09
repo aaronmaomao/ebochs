@@ -11,22 +11,19 @@ public class DebugHandler implements IHandler {
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		// TODO Auto-generated method stub
 		System.out.println("开始调试操作系统");
 		try {
-			PlatformUI.getWorkbench().showPerspective("org.eclipse.debug.ui.DebugPerspective",
+			PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective",
 					PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 		} catch (WorkbenchException e) {
 			e.printStackTrace();
@@ -41,14 +38,12 @@ public class DebugHandler implements IHandler {
 
 	@Override
 	public boolean isHandled() {
-		// TODO Auto-generated method stub
 		// return false;
 		return true;
 	}
 
 	@Override
 	public void removeHandlerListener(IHandlerListener handlerListener) {
-		// TODO Auto-generated method stub
 
 	}
 
