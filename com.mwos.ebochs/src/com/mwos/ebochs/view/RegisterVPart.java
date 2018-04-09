@@ -23,29 +23,33 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.widgets.ExpandBar;
+import org.eclipse.swt.widgets.ExpandItem;
+import org.eclipse.swt.custom.StyledText;
 
 public class RegisterVPart extends ViewPart {
 	public static final String ID = "com.mwos.ebochs.view.registerVPart"; //$NON-NLS-1$
-	private Text text;
-	private Text text_1;
-	private Text text_2;
-	private Text text_3;
-	private Text text_4;
-	private Text text_5;
-	private Text text_6;
-	private Text text_7;
-	private Text text_8;
-	private Text text_9;
-	private Table table;
-	private Table table_1;
-	private Text text_10;
-	private Text text_11;
-	private Text text_12;
-	private Text text_13;
-	private Text text_14;
-	private Text text_15;
-	private Text text_16;
-	private Text text_17;
+	private Text text_18;
+	private Text text_19;
+	private Text text_20;
+	private Text text_21;
+	private Text text_22;
+	private Text text_23;
+	private Text text_24;
+	private Text text_25;
+	private Text text_26;
+	private Text text_27;
+	private Table table_2;
+	private Table table_3;
+	private Text text_28;
+	private Text text_29;
+	private Text text_30;
+	private Text text_31;
+	private Text text_32;
+	private Text text_33;
+	private Text text_34;
+	private Text text_35;
 
 	public RegisterVPart() {
 	}
@@ -57,232 +61,240 @@ public class RegisterVPart extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.BORDER);
-		composite.setLayout(new GridLayout(1, false));
-		{
-			Group group = new Group(composite, SWT.NONE);
-			group.setText("\u901A\u7528\u5BC4\u5B58\u5668");
-			GridData gd_group = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-			gd_group.minimumWidth = 350;
-			gd_group.heightHint = 255;
-			group.setLayoutData(gd_group);
-			{
-				Label lblNewLabel = new Label(group, SWT.NONE);
-				lblNewLabel.setBounds(10, 22, 30, 15);
-				lblNewLabel.setText("EAX");
-			}
-			
-			text = new Text(group, SWT.BORDER);
-			text.setBounds(45, 20, 100, 23);
-			
-			Label lblEbp = new Label(group, SWT.NONE);
-			lblEbp.setText("EBP");
-			lblEbp.setBounds(200, 22, 30, 15);
-			
-			text_1 = new Text(group, SWT.BORDER);
-			text_1.setBounds(235, 20, 100, 23);
-			
-			Label lblEbx = new Label(group, SWT.NONE);
-			lblEbx.setText("EBX");
-			lblEbx.setBounds(10, 51, 30, 15);
-			
-			text_2 = new Text(group, SWT.BORDER);
-			text_2.setBounds(45, 49, 100, 23);
-			
-			Label lblEcx_1 = new Label(group, SWT.NONE);
-			lblEcx_1.setText("ECX");
-			lblEcx_1.setBounds(10, 80, 30, 15);
-			
-			text_3 = new Text(group, SWT.BORDER);
-			text_3.setBounds(45, 78, 100, 23);
-			
-			Label lblEcx = new Label(group, SWT.NONE);
-			lblEcx.setText("EDX");
-			lblEcx.setBounds(10, 109, 30, 15);
-			
-			text_4 = new Text(group, SWT.BORDER);
-			text_4.setBounds(45, 107, 100, 23);
-			
-			Label lblEsp = new Label(group, SWT.NONE);
-			lblEsp.setText("ESP");
-			lblEsp.setBounds(200, 51, 30, 15);
-			
-			text_5 = new Text(group, SWT.BORDER);
-			text_5.setBounds(235, 49, 100, 23);
-			
-			Label lblEdi = new Label(group, SWT.NONE);
-			lblEdi.setText("EDI");
-			lblEdi.setBounds(200, 80, 30, 15);
-			
-			text_6 = new Text(group, SWT.BORDER);
-			text_6.setBounds(235, 78, 100, 23);
-			
-			Label lblEsi = new Label(group, SWT.NONE);
-			lblEsi.setText("ESI");
-			lblEsi.setBounds(200, 109, 30, 15);
-			
-			text_7 = new Text(group, SWT.BORDER);
-			text_7.setBounds(235, 107, 100, 23);
-			
-			Label lblEflag = new Label(group, SWT.NONE);
-			lblEflag.setText("EFLAGS");
-			lblEflag.setBounds(10, 139, 50, 15);
-			
-			text_8 = new Text(group, SWT.BORDER);
-			text_8.setBounds(62, 136, 83, 23);
-			
-			Label lblEip = new Label(group, SWT.NONE);
-			lblEip.setText("EIP");
-			lblEip.setBounds(200, 138, 30, 15);
-			
-			text_9 = new Text(group, SWT.BORDER);
-			text_9.setBounds(235, 136, 100, 23);
-			
-			table = new Table(group, SWT.BORDER | SWT.FULL_SELECTION);
-			table.setHeaderVisible(true);
-			table.setLinesVisible(true);
-			table.setBounds(10, 166, 325, 45);
-			
-			TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE);
-			tblclmnNewColumn.setWidth(40);
-			tblclmnNewColumn.setText("--");
-			
-			TableColumn tableColumn_1 = new TableColumn(table, SWT.NONE);
-			tableColumn_1.setWidth(40);
-			tableColumn_1.setText("--");
-			
-			TableColumn tblclmnAc = new TableColumn(table, SWT.NONE);
-			tblclmnAc.setWidth(40);
-			tblclmnAc.setText("AC");
-			
-			TableColumn tblclmnNm = new TableColumn(table, SWT.NONE);
-			tblclmnNm.setWidth(40);
-			tblclmnNm.setText("VM");
-			
-			TableColumn tblclmnIopl = new TableColumn(table, SWT.NONE);
-			tblclmnIopl.setWidth(40);
-			tblclmnIopl.setText("RF");
-			
-			TableColumn tblclmnNt = new TableColumn(table, SWT.NONE);
-			tblclmnNt.setWidth(40);
-			tblclmnNt.setText("NT");
-			
-			TableColumn tblclmnIopl_1 = new TableColumn(table, SWT.NONE);
-			tblclmnIopl_1.setWidth(40);
-			tblclmnIopl_1.setText("IOPL");
-			
-			TableColumn tblclmnOf = new TableColumn(table, SWT.NONE);
-			tblclmnOf.setWidth(40);
-			tblclmnOf.setText("OF");
-			
-			table_1 = new Table(group, SWT.BORDER | SWT.FULL_SELECTION);
-			table_1.setLinesVisible(true);
-			table_1.setHeaderVisible(true);
-			table_1.setBounds(10, 210, 325, 45);
-			
-			TableColumn tblclmnDf = new TableColumn(table_1, SWT.NONE);
-			tblclmnDf.setWidth(40);
-			tblclmnDf.setText("DF");
-			
-			TableColumn tblclmnIf = new TableColumn(table_1, SWT.NONE);
-			tblclmnIf.setWidth(40);
-			tblclmnIf.setText("IF");
-			
-			TableColumn tblclmnTf = new TableColumn(table_1, SWT.NONE);
-			tblclmnTf.setWidth(40);
-			tblclmnTf.setText("TF");
-			
-			TableColumn tblclmnSf = new TableColumn(table_1, SWT.NONE);
-			tblclmnSf.setWidth(40);
-			tblclmnSf.setText("SF");
-			
-			TableColumn tblclmnZf = new TableColumn(table_1, SWT.NONE);
-			tblclmnZf.setWidth(40);
-			tblclmnZf.setText("ZF");
-			
-			TableColumn tblclmnAf = new TableColumn(table_1, SWT.NONE);
-			tblclmnAf.setWidth(40);
-			tblclmnAf.setText("AF");
-			
-			TableColumn tblclmnPf = new TableColumn(table_1, SWT.NONE);
-			tblclmnPf.setWidth(40);
-			tblclmnPf.setText("PF");
-			
-			TableColumn tableColumn_12 = new TableColumn(table_1, SWT.NONE);
-			tableColumn_12.setWidth(40);
-			tableColumn_12.setText("CF");
-		}
 		
-		Group group = new Group(composite, SWT.NONE);
-		GridData gd_group = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_group.minimumWidth = 350;
-		gd_group.heightHint = 130;
-		group.setLayoutData(gd_group);
-		group.setText("\u6BB5\u5BC4\u5B58\u5668");
+		ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
+		scrolledComposite.setMinWidth(370);
 		
-		Label lblCs = new Label(group, SWT.NONE);
-		lblCs.setText("CS");
-		lblCs.setBounds(10, 22, 30, 15);
+		ExpandBar expandBar = new ExpandBar(scrolledComposite, SWT.V_SCROLL);
 		
-		text_10 = new Text(group, SWT.BORDER);
-		text_10.setBounds(45, 20, 100, 23);
+		ExpandItem xpndtmNewExpanditem = new ExpandItem(expandBar, SWT.NONE);
+		xpndtmNewExpanditem.setExpanded(true);
+		xpndtmNewExpanditem.setImage(ResourceManager.getPluginImage("com.mwos.ebochs", "resource/image/panda.png"));
+		xpndtmNewExpanditem.setText("New ExpandItem");
 		
-		Label lblFs = new Label(group, SWT.NONE);
-		lblFs.setText("EIP");
-		lblFs.setBounds(200, 22, 30, 15);
+		Composite composite_1 = new Composite(expandBar, SWT.BORDER);
+		xpndtmNewExpanditem.setControl(composite_1);
+		composite_1.setLayout(null);
 		
-		text_11 = new Text(group, SWT.BORDER);
-		text_11.setBounds(235, 20, 100, 23);
+		Label label_2 = new Label(composite_1, SWT.RIGHT);
+		label_2.setText("EAX");
+		label_2.setBounds(10, 13, 30, 15);
 		
-		Label lblDs = new Label(group, SWT.NONE);
-		lblDs.setText("SS");
-		lblDs.setBounds(10, 51, 30, 15);
+		text_18 = new Text(composite_1, SWT.BORDER);
+		text_18.setBounds(50, 10, 100, 23);
 		
-		text_12 = new Text(group, SWT.BORDER);
-		text_12.setBounds(45, 49, 100, 23);
+		Label label_3 = new Label(composite_1, SWT.RIGHT);
+		label_3.setText("EAX");
+		label_3.setBounds(10, 42, 30, 15);
 		
-		Label lblSs = new Label(group, SWT.NONE);
-		lblSs.setText("DS");
-		lblSs.setBounds(10, 80, 30, 15);
+		text_19 = new Text(composite_1, SWT.BORDER);
+		text_19.setBounds(50, 39, 100, 23);
 		
-		text_13 = new Text(group, SWT.BORDER);
-		text_13.setBounds(45, 78, 100, 23);
+		text_20 = new Text(composite_1, SWT.BORDER);
+		text_20.setBounds(50, 68, 100, 23);
 		
-		Label lblEs = new Label(group, SWT.NONE);
-		lblEs.setText("ES");
-		lblEs.setBounds(10, 109, 30, 15);
+		text_21 = new Text(composite_1, SWT.BORDER);
+		text_21.setBounds(50, 97, 100, 23);
 		
-		text_14 = new Text(group, SWT.BORDER);
-		text_14.setBounds(45, 107, 100, 23);
+		Label label_4 = new Label(composite_1, SWT.RIGHT);
+		label_4.setText("EAX");
+		label_4.setBounds(10, 71, 30, 15);
 		
-		Label lblGs = new Label(group, SWT.NONE);
-		lblGs.setText("ESP");
-		lblGs.setBounds(200, 51, 30, 15);
+		Label label_5 = new Label(composite_1, SWT.RIGHT);
+		label_5.setText("EAX");
+		label_5.setBounds(10, 100, 30, 15);
 		
-		text_15 = new Text(group, SWT.BORDER);
-		text_15.setBounds(235, 49, 100, 23);
+		Label label_6 = new Label(composite_1, SWT.RIGHT);
+		label_6.setText("EAX");
+		label_6.setBounds(10, 129, 30, 15);
 		
-		Label lblFs_1 = new Label(group, SWT.NONE);
-		lblFs_1.setText("FS");
-		lblFs_1.setBounds(200, 80, 30, 15);
+		text_22 = new Text(composite_1, SWT.BORDER);
+		text_22.setBounds(50, 126, 100, 23);
 		
-		text_16 = new Text(group, SWT.BORDER);
-		text_16.setBounds(235, 78, 100, 23);
+		Label label_7 = new Label(composite_1, SWT.RIGHT);
+		label_7.setText("EAX");
+		label_7.setBounds(195, 13, 30, 15);
 		
-		Label lblGs_1 = new Label(group, SWT.NONE);
-		lblGs_1.setText("GS");
-		lblGs_1.setBounds(200, 109, 30, 15);
+		text_23 = new Text(composite_1, SWT.BORDER);
+		text_23.setBounds(233, 10, 100, 23);
 		
-		text_17 = new Text(group, SWT.BORDER);
-		text_17.setBounds(235, 107, 100, 23);
+		Label label_8 = new Label(composite_1, SWT.RIGHT);
+		label_8.setText("EAX");
+		label_8.setBounds(195, 42, 30, 15);
 		
-		Label label = new Label(group, SWT.NONE);
-		label.setText("-----");
-		label.setBounds(160, 22, 30, 15);
+		Label label_9 = new Label(composite_1, SWT.RIGHT);
+		label_9.setText("EAX");
+		label_9.setBounds(195, 71, 30, 15);
 		
-		Label label_1 = new Label(group, SWT.NONE);
-		label_1.setText("-----");
-		label_1.setBounds(160, 51, 30, 15);
+		text_24 = new Text(composite_1, SWT.BORDER);
+		text_24.setBounds(233, 39, 100, 23);
+		
+		text_25 = new Text(composite_1, SWT.BORDER);
+		text_25.setBounds(233, 68, 100, 23);
+		
+		text_26 = new Text(composite_1, SWT.BORDER);
+		text_26.setBounds(233, 97, 100, 23);
+		
+		text_27 = new Text(composite_1, SWT.BORDER);
+		text_27.setBounds(233, 126, 100, 23);
+		
+		Label label_10 = new Label(composite_1, SWT.RIGHT);
+		label_10.setText("EAX");
+		label_10.setBounds(195, 100, 30, 15);
+		
+		Label label_11 = new Label(composite_1, SWT.RIGHT);
+		label_11.setText("EAX");
+		label_11.setBounds(195, 129, 30, 15);
+		
+		table_2 = new Table(composite_1, SWT.BORDER | SWT.FULL_SELECTION);
+		table_2.setLinesVisible(true);
+		table_2.setHeaderVisible(true);
+		table_2.setBounds(10, 155, 325, 45);
+		
+		TableColumn tableColumn = new TableColumn(table_2, SWT.NONE);
+		tableColumn.setWidth(40);
+		tableColumn.setText("--");
+		
+		TableColumn tableColumn_1 = new TableColumn(table_2, SWT.NONE);
+		tableColumn_1.setWidth(40);
+		tableColumn_1.setText("--");
+		
+		TableColumn tableColumn_2 = new TableColumn(table_2, SWT.NONE);
+		tableColumn_2.setWidth(40);
+		tableColumn_2.setText("AC");
+		
+		TableColumn tableColumn_3 = new TableColumn(table_2, SWT.NONE);
+		tableColumn_3.setWidth(40);
+		tableColumn_3.setText("VM");
+		
+		TableColumn tableColumn_4 = new TableColumn(table_2, SWT.NONE);
+		tableColumn_4.setWidth(40);
+		tableColumn_4.setText("RF");
+		
+		TableColumn tableColumn_5 = new TableColumn(table_2, SWT.NONE);
+		tableColumn_5.setWidth(40);
+		tableColumn_5.setText("NT");
+		
+		TableColumn tableColumn_6 = new TableColumn(table_2, SWT.NONE);
+		tableColumn_6.setWidth(40);
+		tableColumn_6.setText("IOPL");
+		
+		TableColumn tableColumn_7 = new TableColumn(table_2, SWT.NONE);
+		tableColumn_7.setWidth(40);
+		tableColumn_7.setText("OF");
+		
+		table_3 = new Table(composite_1, SWT.BORDER | SWT.FULL_SELECTION);
+		table_3.setLinesVisible(true);
+		table_3.setHeaderVisible(true);
+		table_3.setBounds(10, 206, 325, 45);
+		
+		TableColumn tableColumn_8 = new TableColumn(table_3, SWT.NONE);
+		tableColumn_8.setWidth(40);
+		tableColumn_8.setText("DF");
+		
+		TableColumn tableColumn_9 = new TableColumn(table_3, SWT.NONE);
+		tableColumn_9.setWidth(40);
+		tableColumn_9.setText("IF");
+		
+		TableColumn tableColumn_10 = new TableColumn(table_3, SWT.NONE);
+		tableColumn_10.setWidth(40);
+		tableColumn_10.setText("TF");
+		
+		TableColumn tableColumn_11 = new TableColumn(table_3, SWT.NONE);
+		tableColumn_11.setWidth(40);
+		tableColumn_11.setText("SF");
+		
+		TableColumn tableColumn_12 = new TableColumn(table_3, SWT.NONE);
+		tableColumn_12.setWidth(40);
+		tableColumn_12.setText("ZF");
+		
+		TableColumn tableColumn_13 = new TableColumn(table_3, SWT.NONE);
+		tableColumn_13.setWidth(40);
+		tableColumn_13.setText("AF");
+		
+		TableColumn tableColumn_14 = new TableColumn(table_3, SWT.NONE);
+		tableColumn_14.setWidth(40);
+		tableColumn_14.setText("PF");
+		
+		TableColumn tableColumn_15 = new TableColumn(table_3, SWT.NONE);
+		tableColumn_15.setWidth(40);
+		tableColumn_15.setText("CF");
+		xpndtmNewExpanditem.setHeight(265);
+		
+		ExpandItem xpndtmNewExpanditem_1 = new ExpandItem(expandBar, SWT.NONE);
+		xpndtmNewExpanditem_1.setText("New ExpandItem");
+		
+		Composite composite_2 = new Composite(expandBar, SWT.BORDER);
+		xpndtmNewExpanditem_1.setControl(composite_2);
+		xpndtmNewExpanditem_1.setHeight(150);
+		composite_2.setLayout(null);
+		
+		Label label_12 = new Label(composite_2, SWT.RIGHT);
+		label_12.setText("EAX");
+		label_12.setBounds(10, 13, 30, 15);
+		
+		text_28 = new Text(composite_2, SWT.BORDER);
+		text_28.setBounds(50, 10, 100, 23);
+		
+		Label label_13 = new Label(composite_2, SWT.RIGHT);
+		label_13.setText("EAX");
+		label_13.setBounds(10, 42, 30, 15);
+		
+		text_29 = new Text(composite_2, SWT.BORDER);
+		text_29.setBounds(50, 39, 100, 23);
+		
+		Label label_14 = new Label(composite_2, SWT.RIGHT);
+		label_14.setText("EAX");
+		label_14.setBounds(10, 71, 30, 15);
+		
+		text_30 = new Text(composite_2, SWT.BORDER);
+		text_30.setBounds(50, 68, 100, 23);
+		
+		Label label_15 = new Label(composite_2, SWT.RIGHT);
+		label_15.setText("EAX");
+		label_15.setBounds(10, 100, 30, 15);
+		
+		text_31 = new Text(composite_2, SWT.BORDER);
+		text_31.setBounds(50, 97, 100, 23);
+		
+		text_32 = new Text(composite_2, SWT.BORDER);
+		text_32.setBounds(233, 10, 100, 23);
+		
+		text_33 = new Text(composite_2, SWT.BORDER);
+		text_33.setBounds(233, 97, 100, 23);
+		
+		text_34 = new Text(composite_2, SWT.BORDER);
+		text_34.setBounds(233, 39, 100, 23);
+		
+		text_35 = new Text(composite_2, SWT.BORDER);
+		text_35.setBounds(233, 68, 100, 23);
+		
+		Label label_16 = new Label(composite_2, SWT.RIGHT);
+		label_16.setText("EAX");
+		label_16.setBounds(193, 13, 30, 15);
+		
+		Label label_17 = new Label(composite_2, SWT.RIGHT);
+		label_17.setText("EAX");
+		label_17.setBounds(193, 42, 30, 15);
+		
+		Label label_18 = new Label(composite_2, SWT.RIGHT);
+		label_18.setText("EAX");
+		label_18.setBounds(193, 71, 30, 15);
+		
+		Label label_19 = new Label(composite_2, SWT.RIGHT);
+		label_19.setText("EAX");
+		label_19.setBounds(193, 100, 30, 15);
+		
+		ExpandItem xpndtmNewExpanditem_2 = new ExpandItem(expandBar, SWT.NONE);
+		xpndtmNewExpanditem_2.setText("New ExpandItem");
+		
+		Composite composite_3 = new Composite(expandBar, SWT.BORDER);
+		xpndtmNewExpanditem_2.setControl(composite_3);
+		xpndtmNewExpanditem_2.setHeight(xpndtmNewExpanditem_2.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+		composite_3.setLayout(new GridLayout(1, false));
+		scrolledComposite.setContent(expandBar);
 
 		createActions();
 		initializeToolBar();
