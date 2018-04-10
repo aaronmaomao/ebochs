@@ -50,6 +50,7 @@ public class RegisterVPart extends ViewPart {
 	private Text text_33;
 	private Text text_34;
 	private Text text_35;
+	private Text text;
 
 	public RegisterVPart() {
 	}
@@ -72,7 +73,7 @@ public class RegisterVPart extends ViewPart {
 		ExpandItem xpndtmNewExpanditem = new ExpandItem(expandBar, SWT.NONE);
 		xpndtmNewExpanditem.setExpanded(true);
 		xpndtmNewExpanditem.setImage(ResourceManager.getPluginImage("com.mwos.ebochs", "resource/image/panda.png"));
-		xpndtmNewExpanditem.setText("New ExpandItem");
+		xpndtmNewExpanditem.setText("\u901A\u7528\u5BC4\u5B58\u5668");
 		
 		Composite composite_1 = new Composite(expandBar, SWT.BORDER);
 		xpndtmNewExpanditem.setControl(composite_1);
@@ -188,7 +189,7 @@ public class RegisterVPart extends ViewPart {
 		table_3 = new Table(composite_1, SWT.BORDER | SWT.FULL_SELECTION);
 		table_3.setLinesVisible(true);
 		table_3.setHeaderVisible(true);
-		table_3.setBounds(10, 206, 325, 45);
+		table_3.setBounds(10, 199, 325, 45);
 		
 		TableColumn tableColumn_8 = new TableColumn(table_3, SWT.NONE);
 		tableColumn_8.setWidth(40);
@@ -224,7 +225,9 @@ public class RegisterVPart extends ViewPart {
 		xpndtmNewExpanditem.setHeight(265);
 		
 		ExpandItem xpndtmNewExpanditem_1 = new ExpandItem(expandBar, SWT.NONE);
-		xpndtmNewExpanditem_1.setText("New ExpandItem");
+		xpndtmNewExpanditem_1.setExpanded(true);
+		xpndtmNewExpanditem_1.setImage(ResourceManager.getPluginImage("com.mwos.ebochs", "resource/image/register1.png"));
+		xpndtmNewExpanditem_1.setText("\u6BB5\u5BC4\u5B58\u5668");
 		
 		Composite composite_2 = new Composite(expandBar, SWT.BORDER);
 		xpndtmNewExpanditem_1.setControl(composite_2);
@@ -288,12 +291,21 @@ public class RegisterVPart extends ViewPart {
 		label_19.setBounds(193, 100, 30, 15);
 		
 		ExpandItem xpndtmNewExpanditem_2 = new ExpandItem(expandBar, SWT.NONE);
-		xpndtmNewExpanditem_2.setText("New ExpandItem");
+		xpndtmNewExpanditem_2.setExpanded(true);
+		xpndtmNewExpanditem_2.setImage(ResourceManager.getPluginImage("com.mwos.ebochs", "resource/image/register1.png"));
+		xpndtmNewExpanditem_2.setText("\u63A7\u5236\u5BC4\u5B58\u5668");
 		
 		Composite composite_3 = new Composite(expandBar, SWT.BORDER);
 		xpndtmNewExpanditem_2.setControl(composite_3);
-		xpndtmNewExpanditem_2.setHeight(xpndtmNewExpanditem_2.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-		composite_3.setLayout(new GridLayout(1, false));
+		composite_3.setLayout(null);
+		
+		Label label = new Label(composite_3, SWT.RIGHT);
+		label.setText("EAX");
+		label.setBounds(10, 13, 30, 15);
+		
+		text = new Text(composite_3, SWT.BORDER);
+		text.setBounds(50, 10, 100, 23);
+		xpndtmNewExpanditem_2.setHeight(150);
 		scrolledComposite.setContent(expandBar);
 
 		createActions();
