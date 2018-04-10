@@ -7,6 +7,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.jface.action.Action;
 import org.eclipse.wb.swt.ResourceManager;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.widgets.TabItem;
 
 public class GIdtVPart extends ViewPart {
 
@@ -60,5 +65,4 @@ public class GIdtVPart extends ViewPart {
 	public void setFocus() {
 		// Set the focus
 	}
-
 }
