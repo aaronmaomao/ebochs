@@ -2,33 +2,22 @@ package com.mwos.ebochs.view;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.ui.part.ViewPart;
-import org.eclipse.wb.swt.ResourceManager;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.custom.CBanner;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.ViewForm;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
-import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.part.ViewPart;
+import org.eclipse.wb.swt.ResourceManager;
+import com.mwos.ebochs.core.CmdHandler;
+import com.mwos.ebochs.core.CmdableUI;
+import com.mwos.ebochs.core.Command;
 
-public class RegisterVPart extends ViewPart {
+public class RegisterVPart extends ViewPart implements CmdableUI {
 	public static final String ID = "com.mwos.ebochs.view.registerVPart"; //$NON-NLS-1$
 	private Text text_18;
 	private Text text_19;
@@ -51,7 +40,10 @@ public class RegisterVPart extends ViewPart {
 	private Text text_34;
 	private Text text_35;
 
+	private CmdHandler handler;
+	
 	public RegisterVPart() {
+		handler = CmdHandler.getHandler();
 	}
 
 	/**
@@ -312,6 +304,12 @@ public class RegisterVPart extends ViewPart {
 		initializeToolBar();
 		initializeMenu();
 	}
+	
+	@Override
+	public void dispose() {
+		handler.dispose(this);
+		super.dispose();
+	}
 
 	/**
 	 * Create the actions.
@@ -337,5 +335,18 @@ public class RegisterVPart extends ViewPart {
 	@Override
 	public void setFocus() {
 		// Set the focus
+	}
+
+
+	@Override
+	public void ackData(Object data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyUI(Command cmd, Object notifyData) {
+		// TODO Auto-generated method stub
+		
 	}
 }
