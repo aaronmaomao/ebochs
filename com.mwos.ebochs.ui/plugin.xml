@@ -4,21 +4,101 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            categoryId="com.mwos.ebochs.ui.category1"
+            categoryId="com.mwos.ebochs.ui.category"
+            defaultHandler="com.mwos.ebochs.ui.handler.NewOSHandler"
             description="右键新建OS工程"
-            id="com.mwos.ebochs.ui.command1"
-            name="New OS">
+            id="com.mwos.ebochs.ui.command.NewOS"
+            name="NewOS">
       </command>
       <category
-            id="com.mwos.ebochs.ui.category1"
-            name="category1">
+            id="com.mwos.ebochs.ui.category"
+            name="category">
       </category>
+      <command
+            categoryId="com.mwos.ebochs.ui.category"
+            defaultHandler="com.mwos.ebochs.ui.handler.C2GASHandler"
+            id="com.mwos.ebochs.ui.command.C2GAS"
+            name="C2GAS">
+      </command>
+      <command
+            categoryId="com.mwos.ebochs.ui.category"
+            defaultHandler="com.mwos.ebochs.ui.handler.C2ASMHandler"
+            id="com.mwos.ebochs.ui.command.C2ASM"
+            name="C2ASM">
+      </command>
+      <command
+            categoryId="com.mwos.ebochs.ui.category"
+            defaultHandler="com.mwos.ebochs.ui.handler.ASM2OBJHandler"
+            id="com.mwos.ebochs.ui.command.ASM2OBJ"
+            name="ASM2OBJ">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            allPopups="false"
-            locationURI="com.mwos.ebochs.ui.menuContribution1">
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+               commandId="com.mwos.ebochs.ui.command.NewOS"
+               icon="resource/icons/door.png"
+               label="New OS"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <or>
+                        <instanceof
+                              value="org.eclipse.core.resources.IResource">
+                        </instanceof>
+                     </or>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.mwos.ebochs.ui.command.C2GAS"
+               icon="resource/icons/heart_add.png"
+               label="编译-GAS"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <or>
+                        <instanceof
+                              value="org.eclipse.core.resources.IFile">
+                        </instanceof>
+                     </or>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.mwos.ebochs.ui.command.C2ASM"
+               icon="resource/icons/drive_rename.png"
+               label="编译-ASM"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <or>
+                        <instanceof
+                              value="org.eclipse.core.resources.IFile">
+                        </instanceof>
+                     </or>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
       </menuContribution>
    </extension>
 
