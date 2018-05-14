@@ -8,8 +8,6 @@ public class C2ASMHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

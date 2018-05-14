@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="osnature"
+         name="OS Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="com.mwos.ebochs.cdt.project.OSProjectNature">
+         </run>
+      </runtime>
+      <requires-nature
+            id="org.eclipse.cdt.core.cnature">
+      </requires-nature>
+      <content-type
+            id="cHeader">
+      </content-type>
+      <options
+            allowLinking="true">
+      </options>
+      <content-type
+            id="cSource">
+      </content-type>
+      <content-type
+            id="asmSource">
+      </content-type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.projectNatureImages">
+      <image
+            icon="com.mwos.ebochs.cdt.image1"
+            id="com.mwos.ebochs.cdt.image1"
+            natureId="com.mwos.ebochs.cdt.osnature">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.mwos.ebochs.cdt.category2"
+            name="MWOS">
+      </category>
+      <wizard
+            class="com.mwos.ebochs.cdt.ui.wizards.NewOSWizard"
+            id="com.mwos.ebochs.cdt.wizard1"
+            name="New OS Project"
+            project="true">
+      </wizard>
+   </extension>
+
+</plugin>
