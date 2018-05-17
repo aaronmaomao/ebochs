@@ -9,10 +9,11 @@
       </category>
       <wizard
             category="com.mwos.ebochs.wizards.category"
-            class="com.mwos.ebochs.wizard.NewProjectWizard"
+            class="com.mwos.ebochs.ui.wizard.NewOSWizard"
+            hasPages="true"
             icon="resource/image/panda.png"
-            id="com.mwos.ebochs.wizard.OSWizard"
-            name="向导测试"
+            id="com.mwos.ebochs.wizards.OSWizard"
+            name="新建OS"
             project="true">
       </wizard>
    </extension>
@@ -253,6 +254,16 @@
             icon="resource/image/os.png"
             label="MWOS">
       </consoleFactory>
+   </extension>
+   <extension
+         id="osnature"
+         name="OS Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="com.mwos.ebochs.resource.project.OSProjectNature">
+         </run>
+      </runtime>
    </extension>
 
 </plugin>

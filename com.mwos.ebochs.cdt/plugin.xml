@@ -29,7 +29,7 @@
    <extension
          point="org.eclipse.ui.ide.projectNatureImages">
       <image
-            icon="com.mwos.ebochs.cdt.image1"
+            icon="resource/arrow_out.png"
             id="com.mwos.ebochs.cdt.image1"
             natureId="com.mwos.ebochs.cdt.osnature">
       </image>
@@ -37,15 +37,28 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <category
-            id="com.mwos.ebochs.cdt.category2"
+            id="com.mwos.ebochs.cdt.wizards.category"
             name="MWOS">
       </category>
       <wizard
+            category="com.mwos.ebochs.cdt.wizards.category"
             class="com.mwos.ebochs.cdt.ui.wizards.NewOSWizard"
-            id="com.mwos.ebochs.cdt.wizard1"
+            icon="resource/arrow_refresh.png"
+            id="com.mwos.ebochs.cdt.wizard.newos"
             name="New OS Project"
             project="true">
       </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.cdt.core.toolChainProvider">
+      <provider
+            class="com.mwos.ebochs.cdt.project.ToolChainProvider"
+            id="com.mwos.ebochs.cdt.provider">
+      </provider>
+      <type
+            id="com.mwos.ebochs.cdt.type"
+            name="name">
+      </type>
    </extension>
 
 </plugin>

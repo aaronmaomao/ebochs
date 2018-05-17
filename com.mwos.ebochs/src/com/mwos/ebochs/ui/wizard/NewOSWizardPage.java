@@ -1,4 +1,4 @@
-package com.mwos.ebochs.wizard;
+package com.mwos.ebochs.ui.wizard;
 
 import java.io.File;
 
@@ -19,7 +19,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.wb.swt.ResourceManager;
 
-public class NewWizardPage extends WizardPage {
+public class NewOSWizardPage extends WizardPage {
 	private Text projtext;
 	private Text locationText;
 	private Text bochsText;
@@ -28,7 +28,7 @@ public class NewWizardPage extends WizardPage {
 	/**
 	 * Create the wizard.
 	 */
-	public NewWizardPage() {
+	public NewOSWizardPage() {
 		super("wizardPage");
 		setImageDescriptor(ResourceManager.getPluginImageDescriptor("com.mwos.ebochs", "resource/image/window.png"));
 		setPageComplete(false);
@@ -97,9 +97,9 @@ public class NewWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				DirectoryDialog folderdlg = new DirectoryDialog(container.getShell());
-				folderdlg.setText("ÎÄ¼þÑ¡Ôñ");
+				folderdlg.setText("ï¿½Ä¼ï¿½Ñ¡ï¿½ï¿½");
 				folderdlg.setFilterPath("SystemDrive");
-				folderdlg.setMessage("ÇëÑ¡ÔñÏàÓ¦µÄÎÄ¼þ¼Ð");
+				folderdlg.setMessage("ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½");
 				String selecteddir = folderdlg.open();
 				if (selecteddir != null) {
 					locationText.setText(selecteddir);
@@ -133,7 +133,7 @@ public class NewWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog filedlg = new FileDialog(container.getShell(), SWT.OPEN);
-				filedlg.setText("Ñ¡Ôñbochs.exe");
+				filedlg.setText("Ñ¡ï¿½ï¿½bochs.exe");
 				filedlg.setFilterPath("SystemRoot");
 				filedlg.setFileName("bochs.exe");
 				filedlg.setFilterExtensions(new String[] { "bochs.exe" });
@@ -173,7 +173,7 @@ public class NewWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog filedlg = new FileDialog(container.getShell(), SWT.OPEN);
-				filedlg.setText("Ñ¡Ôñbochsdbg.exe");
+				filedlg.setText("Ñ¡ï¿½ï¿½bochsdbg.exe");
 				filedlg.setFilterPath("SystemRoot");
 				filedlg.setFileName("bochsdbg.exe");
 				filedlg.setFilterExtensions(new String[] { "bochsdbg.exe" });
