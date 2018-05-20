@@ -264,6 +264,88 @@
                class="com.mwos.ebochs.resource.project.OSProjectNature">
          </run>
       </runtime>
+      <builder
+            id="com.mwos.ebochs.OSBuilder">
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="com.mwos.ebochs.core.launch.LaunchConfigDelegate"
+            id="com.mwos.ebochs.launchConfigurationType"
+            modes="run,debug"
+            name="Launch OS debug">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="com.mwos.ebochs.core.launch.LaunchShortcut"
+            icon="resource/icons/pilcrow.png"
+            id="com.mwos.ebochs.shortcut"
+            label="Launch OS debug"
+            modes="run,debug">
+         <configurationType
+               id="com.mwos.ebochs.launchConfigurationType">
+         </configurationType>
+         <contextualLaunch>
+            <enablement>
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <or>
+                        <test
+                              property="org.eclipse.debug.ui.matchesPattern"
+                              value="*.c">
+                        </test>
+                     </or>
+                  </iterate>
+               </with></enablement></contextualLaunch>
+      </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="com.mwos.ebochs.core.launch.LaunchConfigurationTabGroup"
+            id="com.mwos.ebochs.launchConfigurationTabGroup"
+            type="com.mwos.ebochs.launchConfigurationType">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabs">
+      <tab
+            class="com.mwos.ebochs.core.launch.LaunchConfigArgsTab"
+            group="com.mwos.ebochs.launchConfigurationTabGroup"
+            id="com.mwos.ebochs.launch.ArgumentTab"
+            name="Arguments">
+      </tab>
+      <tab
+            class="com.mwos.ebochs.core.launch.LaunchConfigMainTab"
+            group="com.mwos.ebochs.launchConfigurationTabGroup"
+            id="com.mwos.ebochs.launch.MainTab"
+            name="Main">
+      </tab>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="com.mwos.ebochs.launchConfigurationType"
+            icon="resource/icons/application_form.png"
+            id="com.mwos.ebochs.launchConfigurationTypeImage1">
+      </launchConfigurationTypeImage>
+   </extension>
+   <extension
+         id="OSBuilder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="com.mwos.ebochs.core.build.ProjectBuilder">
+         </run>
+      </builder>
    </extension>
 
 </plugin>

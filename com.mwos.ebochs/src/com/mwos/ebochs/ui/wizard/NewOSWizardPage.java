@@ -19,17 +19,22 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.wb.swt.ResourceManager;
 
+import com.mwos.ebochs.resource.project.OSProject;
+
 public class NewOSWizardPage extends WizardPage {
 	private Text projtext;
 	private Text locationText;
 	private Text bochsText;
 	private Text bochsdbgText;
+	private String projName;
 
 	/**
 	 * Create the wizard.
 	 */
 	public NewOSWizardPage() {
 		super("wizardPage");
+		setMessage("Create new os project.");
+		// setErrorMessage(" A project with this name already exists.");
 		setImageDescriptor(ResourceManager.getPluginImageDescriptor("com.mwos.ebochs", "resource/image/window.png"));
 		setPageComplete(false);
 		setTitle("OS Project");
@@ -43,7 +48,7 @@ public class NewOSWizardPage extends WizardPage {
 	 */
 	public void createControl(Composite parent) {
 		final boolean canNext[] = { false, true, false, false };
-																
+
 		Composite container = new Composite(parent, SWT.NONE);
 
 		setControl(container);
@@ -64,7 +69,15 @@ public class NewOSWizardPage extends WizardPage {
 
 				String text = projtext.getText();
 				if (!text.trim().equals("")) {
-					canNext[0] = true;
+					if (!OSProject.getProject(text).exists()) {
+						setMessage("Create new os project.");
+						setErrorMessage(null);
+						projName = text;
+						canNext[0] = true;
+					} else {
+						setErrorMessage(" A project with this name already exists.");
+						canNext[0] = false;
+					}
 				} else {
 					canNext[0] = false;
 				}
@@ -218,6 +231,10 @@ public class NewOSWizardPage extends WizardPage {
 				}
 			}
 		});
+	}
+	
+	public String getProjName() {
+		return this.projName;
 	}
 
 	private void setCanNext(boolean can[]) {

@@ -21,4 +21,9 @@ public class OSProject {
 		project.getFolder("inc").create(false, true, null);
 		return project;
 	}
+	
+	public static IProject getProject(String name) {
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(name);
+		return project;
+	}
 }
