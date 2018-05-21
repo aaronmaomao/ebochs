@@ -339,9 +339,12 @@
    </extension>
    <extension
          id="OSBuilder"
+         name="OS Builder"
          point="org.eclipse.core.resources.builders">
       <builder
-            hasNature="true">
+            callOnEmptyDelta="false"
+            hasNature="true"
+            isConfigurable="true">
          <run
                class="com.mwos.ebochs.core.build.ProjectBuilder">
          </run>
