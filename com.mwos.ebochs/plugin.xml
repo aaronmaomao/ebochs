@@ -267,6 +267,12 @@
       <builder
             id="com.mwos.ebochs.OSBuilder">
       </builder>
+      <options
+            allowLinking="true">
+      </options>
+      <requires-nature
+            id="org.eclipse.cdt.core.cnature">
+      </requires-nature>
    </extension>
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">

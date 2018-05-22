@@ -1,5 +1,6 @@
 package com.mwos.ebochs.core.build;
 
+import java.io.File;
 import java.util.Map;
 
 import org.eclipse.core.resources.ICommand;
@@ -25,14 +26,15 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		switch (kind) {
 		case FULL_BUILD:
 			break;
-		case INCREMENTAL_BUILD:
-			break;
 		case CLEAN_BUILD:
 			break;
+		case INCREMENTAL_BUILD:
 		case AUTO_BUILD:
+			String info = doBuilds(getDelta(getProject()).getAffectedChildren(IResourceDelta.ADDED | IResourceDelta.CHANGED));
+			System.out.println(info);
 			break;
 		default:
-			IResourceDelta delta = getDelta(getProject());
+
 			break;
 		}
 		return null;
@@ -41,5 +43,30 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected void clean(IProgressMonitor monitor) throws CoreException {
 		super.clean(monitor);
+	}
+
+	private String doBuilds(IResourceDelta deltas[]) {
+		String info = "";
+		if (deltas != null) {
+			for (IResourceDelta delta : deltas) {
+				if (new File(delta.getResource().getLocationURI().getPath()).isFile()) {
+					if (delta.getResource().getFileExtension().equals("c"))
+						info += doBuild(delta.getProjectRelativePath().toString());
+				} else {
+					info += doBuilds(delta.getAffectedChildren());
+				}
+			}
+		}
+		return info;
+	}
+
+	private String doBuild(String file) {
+		try {
+			String res = Compiler.compile(file, this.getProject());
+			return res + "\r\n";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return file + ">编译异常\r\n";
+		}
 	}
 }
