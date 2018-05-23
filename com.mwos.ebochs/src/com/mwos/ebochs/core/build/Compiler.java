@@ -1,7 +1,5 @@
 package com.mwos.ebochs.core.build;
 
-import java.io.File;
-
 import org.eclipse.core.resources.IProject;
 
 import com.mwos.ebochs.core.FileUtil;

@@ -50,7 +50,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		if (deltas != null) {
 			for (IResourceDelta delta : deltas) {
 				if (new File(delta.getResource().getLocationURI().getPath()).isFile()) {
-					if (delta.getResource().getFileExtension().equals("c"))
+					if (delta.getResource().getName().endsWith(".c"))
 						info += doBuild(delta.getProjectRelativePath().toString());
 				} else {
 					info += doBuilds(delta.getAffectedChildren());

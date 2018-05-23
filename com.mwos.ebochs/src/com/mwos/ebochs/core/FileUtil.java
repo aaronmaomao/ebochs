@@ -185,28 +185,33 @@ public class FileUtil {
 			recurDir(dir, list, filter);
 		}
 	}
-	
-	public static String getFileName(String path,boolean ext) {
+
+	public static String getFileName(String path, boolean ext) {
 		File f = new File(path);
-		if(ext) {
-			return f.getAbsolutePath().split("\\\\")[f.getAbsolutePath().split("\\\\").length-1];
-		}else {
-			String temp = f.getAbsolutePath().split("\\\\")[f.getAbsolutePath().split("\\\\").length-1];
-			return temp.substring(0, temp.lastIndexOf("."));
+		String s[] = f.getAbsolutePath().split("\\\\");
+		if (ext) {
+			return s[s.length - 1];
+		} else {
+			String temp = s[s.length - 1];
+			if (temp.contains("."))
+				return temp.substring(0, temp.lastIndexOf("."));
+			else
+				return temp;
 		}
 	}
-	
+
 	public static String getIncStr(String path) {
-		List<File> incs = listDir(path,new String[] {"obj",".setting"},false);
-		String temp="";
-		for(File f:incs) {
-			temp+=(" \""+f.getAbsolutePath()+"\"");
+		List<File> incs = listDir(path, new String[] { "obj", ".setting" }, false);
+		String temp = "";
+		for (File f : incs) {
+			temp += (" \"" + f.getAbsolutePath() + "\"");
 		}
 		return temp;
 	}
 
-	// public static void main(String[] args) {
-	// System.out.println("aaab.h".matches(".*\\.h"));
-	// }
-	
+	public static void main(String[] args) {
+		String a = "asdfsdf";
+		System.out.println(a.split("\\\\").length);
+	}
+
 }

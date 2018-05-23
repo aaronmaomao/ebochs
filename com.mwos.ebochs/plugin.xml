@@ -273,6 +273,9 @@
       <requires-nature
             id="org.eclipse.cdt.core.cnature">
       </requires-nature>
+      <content-type
+            id="cSource">
+      </content-type>
    </extension>
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
@@ -355,6 +358,16 @@
                class="com.mwos.ebochs.core.build.ProjectBuilder">
          </run>
       </builder>
+   </extension>
+   <extension
+         point="org.eclipse.core.resources.filterMatchers">
+      <filterMatcher
+            class="com.mwos.ebochs.resource.project.FileMatcher"
+            description="com.mwos.ebochs.filterMatcher"
+            id="com.mwos.ebochs.filterMatcher"
+            name="FileMatcher"
+            ordering="first">
+      </filterMatcher>
    </extension>
 
 </plugin>
