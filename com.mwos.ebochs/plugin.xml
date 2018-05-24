@@ -211,23 +211,6 @@
       </perspective>
    </extension>
    <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            class="com.mwos.ebochs.editor.AsmEditor"
-            extensions="asm"
-            icon="resource/image/panda.png"
-            id="com.mwos.ebochs.editor.AsmEditor"
-            name="AsmEditor">
-      </editor>
-      <editor
-            class="com.mwos.ebochs.editor.AsmMultiEditor"
-            extensions="gas"
-            icon="resource/image/register.png"
-            id="com.mwos.ebochs.editor.AsmMultiEditor"
-            name="MultiPageEditorPart">
-      </editor>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             class="com.mwos.ebochs.preference.OSPreferencePage"
@@ -273,9 +256,6 @@
       <requires-nature
             id="org.eclipse.cdt.core.cnature">
       </requires-nature>
-      <content-type
-            id="cSource">
-      </content-type>
    </extension>
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
@@ -368,6 +348,45 @@
             name="FileMatcher"
             ordering="first">
       </filterMatcher>
+   </extension>
+   <extension
+         point="org.eclipse.cdt.managedbuilder.core.buildDefinitions">
+      <toolChain
+            archList="x86"
+            id="com.mwos.ebochs.toolChain"
+            isAbstract="false"
+            isToolChainSupported="com.mwos.ebochs.core.build.ToolChainSupport"
+            name="ostc"
+            osList="win32">
+         <builder
+               arguments="-c"
+               command="cc1"
+               id="com.mwos.ebochs.builder1"
+               isAbstract="false"
+               isVariableCaseSensitive="false">
+         </builder>
+         <tool
+               command="nask"
+               icon="resource/icons/award_star_silver_1.png"
+               id="com.mwos.ebochs.tool1"
+               isAbstract="false"
+               name="tool1"
+               outputFlag="-o">
+         </tool>
+      </toolChain>
+      <projectType
+            id="com.mwos.ebochs.projectType1"
+            isAbstract="false"
+            name="os type">
+      </projectType>
+      <configuration
+            id="com.mwos.ebochs.configuration1"
+            name="onfiguration1">
+         <toolChain
+               id="com.mwos.ebochs.toolChain2"
+               isAbstract="false">
+         </toolChain>
+      </configuration>
    </extension>
 
 </plugin>
