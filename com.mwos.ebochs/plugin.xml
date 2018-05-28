@@ -349,44 +349,5 @@
             ordering="first">
       </filterMatcher>
    </extension>
-   <extension
-         point="org.eclipse.cdt.managedbuilder.core.buildDefinitions">
-      <toolChain
-            archList="x86"
-            id="com.mwos.ebochs.toolChain"
-            isAbstract="false"
-            isToolChainSupported="com.mwos.ebochs.core.build.ToolChainSupport"
-            name="ostc"
-            osList="win32">
-         <builder
-               arguments="-c"
-               command="cc1"
-               id="com.mwos.ebochs.builder1"
-               isAbstract="false"
-               isVariableCaseSensitive="false">
-         </builder>
-         <tool
-               command="nask"
-               icon="resource/icons/award_star_silver_1.png"
-               id="com.mwos.ebochs.tool1"
-               isAbstract="false"
-               name="tool1"
-               outputFlag="-o">
-         </tool>
-      </toolChain>
-      <projectType
-            id="com.mwos.ebochs.projectType1"
-            isAbstract="false"
-            name="os type">
-      </projectType>
-      <configuration
-            id="com.mwos.ebochs.configuration1"
-            name="onfiguration1">
-         <toolChain
-               id="com.mwos.ebochs.toolChain2"
-               isAbstract="false">
-         </toolChain>
-      </configuration>
-   </extension>
 
 </plugin>

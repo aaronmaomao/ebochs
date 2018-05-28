@@ -17,6 +17,7 @@ import org.eclipse.cdt.managedbuilder.internal.core.Configuration;
 import org.eclipse.cdt.managedbuilder.internal.core.ManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.internal.core.ManagedProject;
 import org.eclipse.core.resources.FileInfoMatcherDescription;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -31,7 +32,7 @@ public class OSProject extends CProject {
 	}
 
 	@SuppressWarnings("restriction")
-	public static CProject create(String name) throws CoreException {
+	public static IProject create(String name) throws CoreException {
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(name);
 		project.create(null);
 		project.open(null);
@@ -41,53 +42,73 @@ public class OSProject extends CProject {
 		project.setDescription(des, IResource.BACKGROUND_REFRESH, null);
 		CProjectNature.addCNature(project, null);
 
-		FileInfoMatcherDescription matcher = new FileInfoMatcherDescription("com.mwos.ebochs.filterMatcher", "");
+		FileInfoMatcherDescription matcher1 = new FileInfoMatcherDescription("com.mwos.ebochs.filterMatcher",
+				"Project");
+		FileInfoMatcherDescription matcher2 = new FileInfoMatcherDescription("com.mwos.ebochs.filterMatcher", "src");
+		FileInfoMatcherDescription matcher3 = new FileInfoMatcherDescription("com.mwos.ebochs.filterMatcher", "inc");
 
-		IResourceFilterDescription filter = project.createFilter(IResourceFilterDescription.FILES | IResourceFilterDescription.INCLUDE_ONLY | IResourceFilterDescription.FOLDERS,
-				matcher, IResource.BACKGROUND_REFRESH, null);
-
-		project.getFolder("src").create(false, true, null);
-		project.getFolder("inc").create(false, true, null);
+		IResourceFilterDescription filter = project.createFilter(IResourceFilterDescription.FILES
+				| IResourceFilterDescription.INCLUDE_ONLY | IResourceFilterDescription.FOLDERS, matcher1,
+				IResource.BACKGROUND_REFRESH, null);
+		IFolder src = project.getFolder("src");
+		IFolder inc = project.getFolder("inc");
+		IFolder obj = project.getFolder("obj");
+		src.create(false, true, null);
+		inc.create(false, true, null);
+		src.createFilter(IResourceFilterDescription.FILES | IResourceFilterDescription.INCLUDE_ONLY
+				| IResourceFilterDescription.FOLDERS, matcher2, IResource.BACKGROUND_REFRESH, null);
+		inc.createFilter(IResourceFilterDescription.FILES | IResourceFilterDescription.INCLUDE_ONLY
+				| IResourceFilterDescription.FOLDERS, matcher3, IResource.BACKGROUND_REFRESH, null);
+		
 		// File obj = new File(project.getLocationURI().getPath() + "\\obj");
 		// obj.mkdir();
 
-		ICProjectDescriptionManager mgr = CoreModel.getDefault().getProjectDescriptionManager();
-		ICProjectDescription cdes = mgr.getProjectDescription(project, true);
-		cdes = mgr.createProjectDescription(project, true);
-		ManagedBuildInfo info = ManagedBuildManager.createBuildInfo(project);
-		IProjectType projType = ManagedBuildManager.getExtensionProjectType("com.mwos.ebochs.projectType1"); // or get projectType from UI
-		IToolChain toolChain = ManagedBuildManager.getExtensionToolChain("com.mwos.ebochs.toolChain"); // or get toolChain from UI
-		ManagedProject mProj = new ManagedProject(project, projType);
-		info.setManagedProject(mProj);
-		IConfiguration[] configs = ManagedBuildManager.getExtensionConfigurations(toolChain, projType);
-		for (IConfiguration icf : configs) {
-			if (!(icf instanceof Configuration)) {
-				continue;
-			}
-			Configuration cf = (Configuration) icf;
+		// ICProjectDescriptionManager mgr =
+		// CoreModel.getDefault().getProjectDescriptionManager();
+		// ICProjectDescription cdes = mgr.getProjectDescription(project, true);
+		// cdes = mgr.createProjectDescription(project, true);
+		// ManagedBuildInfo info = ManagedBuildManager.createBuildInfo(project);
+		// IProjectType projType =
+		// ManagedBuildManager.getExtensionProjectType("com.mwos.ebochs.projectType1");
+		// // or get projectType from UI
+		// IToolChain toolChain =
+		// ManagedBuildManager.getExtensionToolChain("com.mwos.ebochs.toolChain1"); //
+		// or get toolChain from UI
+		// ManagedProject mProj = new ManagedProject(project, projType);
+		// info.setManagedProject(mProj);
+		// IConfiguration[] configs =
+		// ManagedBuildManager.getExtensionConfigurations(toolChain, projType);
+		// for (IConfiguration icf : configs) {
+		// if (!(icf instanceof Configuration)) {
+		// continue;
+		// }
+		// Configuration cf = (Configuration) icf;
+		//
+		// String id = ManagedBuildManager.calculateChildId(cf.getId(), null);
+		// Configuration config = new Configuration(mProj, cf, id, false, true);
+		//
+		// ICConfigurationDescription cfgDes =
+		// cdes.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID,
+		// config.getConfigurationData());
+		// config.setConfigurationDescription(cfgDes);
+		// config.exportArtifactInfo();
+		//
+		// IBuilder bld = config.getEditableBuilder();
+		// if (bld != null) {
+		// bld.setManagedBuildOn(true);
+		// }
+		//
+		// config.setName(toolChain.getName());
+		// config.setArtifactName(project.getName());
+		//
+		// }
+		//
+		// mgr.setProjectDescription(project, cdes);
+		//
+		// CProject croject = new CProject(CModelManager.getDefault().getCModel(),
+		// project);
 
-			String id = ManagedBuildManager.calculateChildId(cf.getId(), null);
-			Configuration config = new Configuration(mProj, cf, id, false, true);
-
-			ICConfigurationDescription cfgDes = cdes.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, config.getConfigurationData());
-			config.setConfigurationDescription(cfgDes);
-			config.exportArtifactInfo();
-
-			IBuilder bld = config.getEditableBuilder();
-			if (bld != null) {
-				bld.setManagedBuildOn(true);
-			}
-
-			config.setName(toolChain.getName());
-			config.setArtifactName(project.getName());
-
-		}
-
-		mgr.setProjectDescription(project, cdes);
-
-		CProject croject = new CProject(CModelManager.getDefault().getCModel(), project);
-
-		return croject;
+		return project;
 	}
 
 	public static IProject getProject(String name) {

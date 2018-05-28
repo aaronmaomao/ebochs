@@ -9,7 +9,7 @@ public class ToolChainSupport implements IManagedIsToolChainSupported {
 	@Override
 	public boolean isSupported(IToolChain toolChain, Version version, String instance) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }
