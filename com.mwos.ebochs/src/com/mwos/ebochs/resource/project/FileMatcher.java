@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.CoreException;
 public class FileMatcher extends AbstractFileInfoMatcher {
 
 	private IProject project;
+	private Object arguments;
 
 	public FileMatcher() {
 		// TODO Auto-generated constructor stub
@@ -17,37 +18,40 @@ public class FileMatcher extends AbstractFileInfoMatcher {
 	@Override
 	public void initialize(IProject project, Object arguments) throws CoreException {
 		this.project = project;
+		this.arguments = arguments;
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public boolean matches(IContainer parent, IFileInfo fileInfo) throws CoreException {
-		if (parent.getFullPath().toString().startsWith(project.getFullPath() + "/src")) {
-			String file = fileInfo.getName();
-			if (file.endsWith(".c") || file.endsWith(".h") || file.endsWith(".asm")) {
+
+		switch (arguments.toString()) {
+		case "Project":
+			return matcheProject(parent, fileInfo);
+		case "src":
+			return matcheSrc(parent, fileInfo);
+		case "inc":
+			return matcheInc(parent, fileInfo);
+		default:
+			return false;
+		}
+	}
+
+	private boolean matcheProject(IContainer parent, IFileInfo fileInfo) {
+		if(fileInfo.isDirectory()) {
+			if(fileInfo.getName().equals("src")||fileInfo.getName().equals("inc")) {
 				return true;
-			} else {
-				return false;
 			}
 		}
-		if (parent.getFullPath().toString().startsWith(project.getFullPath() + "/inc")) {
-			String file = fileInfo.getName();
-			if (file.endsWith(".c") || file.endsWith(".h") || file.endsWith(".asm")) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-		if (parent.getFullPath().toString().startsWith(project.getFullPath() + "/res"))
-			return true;
-		if (parent.getFullPath().toString().equals(project.getFullPath().toString()) && fileInfo.getName().equals("src"))
-			return true;
-		if (parent.getFullPath().toString().equals(project.getFullPath().toString()) && fileInfo.getName().equals("inc"))
-			return true;
-		if (parent.getFullPath().toString().equals(project.getFullPath().toString()) && fileInfo.getName().equals("res"))
-			return true;
 		return false;
 	}
 
+	private boolean matcheSrc(IContainer parent, IFileInfo fileInfo) {
+		return false;
+	}
+
+	private boolean matcheInc(IContainer parent, IFileInfo fileInfo) {
+		return false;
+	}
 }

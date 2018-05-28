@@ -53,13 +53,14 @@ public class OSProject extends CProject {
 		IFolder src = project.getFolder("src");
 		IFolder inc = project.getFolder("inc");
 		IFolder obj = project.getFolder("obj");
-		src.create(false, true, null);
-		inc.create(false, true, null);
 		src.createFilter(IResourceFilterDescription.FILES | IResourceFilterDescription.INCLUDE_ONLY
 				| IResourceFilterDescription.FOLDERS, matcher2, IResource.BACKGROUND_REFRESH, null);
 		inc.createFilter(IResourceFilterDescription.FILES | IResourceFilterDescription.INCLUDE_ONLY
 				| IResourceFilterDescription.FOLDERS, matcher3, IResource.BACKGROUND_REFRESH, null);
-		
+		src.create(false, true, null);
+		inc.create(false, true, null);
+		obj.create(false, true, null);
+
 		// File obj = new File(project.getLocationURI().getPath() + "\\obj");
 		// obj.mkdir();
 
