@@ -44,10 +44,14 @@ public class FileMatcher extends AbstractFileInfoMatcher {
 				return true;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	private boolean matcheSrc(IContainer parent, IFileInfo fileInfo) {
+		if(!fileInfo.isDirectory()) {
+			if(fileInfo.getName().endsWith(".c")||fileInfo.getName().endsWith(".h")||fileInfo.getName().endsWith(".asm"))
+				return true;
+		}
 		return false;
 	}
 

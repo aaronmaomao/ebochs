@@ -44,22 +44,24 @@ public class OSProject extends CProject {
 
 		FileInfoMatcherDescription matcher1 = new FileInfoMatcherDescription("com.mwos.ebochs.filterMatcher",
 				"Project");
-		FileInfoMatcherDescription matcher2 = new FileInfoMatcherDescription("com.mwos.ebochs.filterMatcher", "src");
-		FileInfoMatcherDescription matcher3 = new FileInfoMatcherDescription("com.mwos.ebochs.filterMatcher", "inc");
+//		FileInfoMatcherDescription matcher2 = new FileInfoMatcherDescription("com.mwos.ebochs.filterMatcher", "src");
+//		FileInfoMatcherDescription matcher3 = new FileInfoMatcherDescription("com.mwos.ebochs.filterMatcher", "inc");
 
-		IResourceFilterDescription filter = project.createFilter(IResourceFilterDescription.FILES
-				| IResourceFilterDescription.INCLUDE_ONLY | IResourceFilterDescription.FOLDERS, matcher1,
-				IResource.BACKGROUND_REFRESH, null);
+		project.createFilter(IResourceFilterDescription.EXCLUDE_ALL
+				| IResourceFilterDescription.INCLUDE_ONLY | IResourceFilterDescription.FILES
+				| IResourceFilterDescription.FOLDERS, matcher1, IResource.BACKGROUND_REFRESH, null);
 		IFolder src = project.getFolder("src");
 		IFolder inc = project.getFolder("inc");
 		IFolder obj = project.getFolder("obj");
-		src.createFilter(IResourceFilterDescription.FILES | IResourceFilterDescription.INCLUDE_ONLY
-				| IResourceFilterDescription.FOLDERS, matcher2, IResource.BACKGROUND_REFRESH, null);
-		inc.createFilter(IResourceFilterDescription.FILES | IResourceFilterDescription.INCLUDE_ONLY
-				| IResourceFilterDescription.FOLDERS, matcher3, IResource.BACKGROUND_REFRESH, null);
-		src.create(false, true, null);
-		inc.create(false, true, null);
-		obj.create(false, true, null);
+//		src.createFilter( IResourceFilterDescription.INCLUDE_ONLY
+//				| IResourceFilterDescription.FILES | IResourceFilterDescription.EXCLUDE_ALL
+//				| IResourceFilterDescription.FOLDERS, matcher2, IResource.BACKGROUND_REFRESH, null);
+//		inc.createFilter( IResourceFilterDescription.INCLUDE_ONLY
+//				| IResourceFilterDescription.FILES | IResourceFilterDescription.EXCLUDE_ALL
+//				| IResourceFilterDescription.FOLDERS, matcher3, IResource.BACKGROUND_REFRESH, null);
+		src.create(true, true, null);
+		inc.create(true, true, null);
+		obj.create(true, true, null);
 
 		// File obj = new File(project.getLocationURI().getPath() + "\\obj");
 		// obj.mkdir();
@@ -109,6 +111,7 @@ public class OSProject extends CProject {
 		// CProject croject = new CProject(CModelManager.getDefault().getCModel(),
 		// project);
 
+		project.refreshLocal(IProject.DEPTH_INFINITE, null);
 		return project;
 	}
 
