@@ -1,5 +1,12 @@
 package com.mwos.ebochs.core.build;
 
+import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
+import org.eclipse.cdt.core.settings.model.ICFolderDescription;
+import org.eclipse.cdt.core.settings.model.ICLanguageSetting;
+import org.eclipse.cdt.core.settings.model.ICLanguageSettingEntry;
+import org.eclipse.cdt.core.settings.model.ICProjectDescription;
+import org.eclipse.cdt.core.settings.model.ICSettingEntry;
 import org.eclipse.core.resources.IProject;
 
 import com.mwos.ebochs.core.FileUtil;
@@ -22,6 +29,12 @@ public class Compiler {
 	}
 
 	public static String compile(String file, IProject project) throws Exception {
+		ICProjectDescription projectDescription = CoreModel.getDefault().getProjectDescription(project);
+		ICConfigurationDescription activeConfiguration = projectDescription.getActiveConfiguration(); // or another config
+		ICFolderDescription folderDescription = activeConfiguration.getRootFolderDescription(); // or use getResourceDescription(IResource), or pick one from getFolderDescriptions()
+		ICLanguageSetting[] languageSettings = folderDescription.getLanguageSettings();
+		//ICLanguageSetting lang = ...; // pick one from languageSettings, by id
+		ICLanguageSettingEntry[] includePathSettings = languageSettings[2].getSettingEntries(ICSettingEntry.INCLUDE_PATH);
 		String projectPath = project.getLocationURI().getPath();
 		String name = FileUtil.getFileName(file, false);
 		String gasExe = cc1 + cmdReg1;
@@ -37,7 +50,7 @@ public class Compiler {
 			return result.getErrorInfo();
 		}
 	}
-
+	
 	public static void main(String[] args) {
 		String file = "src\\s.d";
 		String name = file.split("\\\\")[file.split("\\\\").length - 1];

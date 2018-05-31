@@ -21,20 +21,15 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor) throws CoreException {
 		// TODO Auto-generated method stub
-		ICommand command = getCommand();
-		getDelta(getProject());
 		switch (kind) {
 		case FULL_BUILD:
 			break;
-		case CLEAN_BUILD:
-			break;
-		case INCREMENTAL_BUILD:
 		case AUTO_BUILD:
+		case INCREMENTAL_BUILD:
 			String info = doBuilds(getDelta(getProject()).getAffectedChildren(IResourceDelta.ADDED | IResourceDelta.CHANGED));
 			System.out.println(info);
 			break;
 		default:
-
 			break;
 		}
 		return null;
@@ -50,8 +45,11 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		if (deltas != null) {
 			for (IResourceDelta delta : deltas) {
 				if (new File(delta.getResource().getLocationURI().getPath()).isFile()) {
-					if (delta.getResource().getName().endsWith(".c"))
-						info += doBuild(delta.getProjectRelativePath().toString());
+					if (delta.getResource().getName().endsWith(".c")) {
+						info += doBuildC(delta.getProjectRelativePath().toString());
+					} else if (delta.getResource().getName().endsWith(".asm")) {
+						info += doBuildAsm(delta.getProjectRelativePath().toString());
+					}
 				} else {
 					info += doBuilds(delta.getAffectedChildren());
 				}
@@ -60,7 +58,17 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		return info;
 	}
 
-	private String doBuild(String file) {
+	private String doBuildAsm(String file) {
+		try {
+			String res = Compiler.compile(file, this.getProject());
+			return res + "\r\n";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return file + ">编译异常\r\n";
+		}
+	}
+
+	private String doBuildC(String file) {
 		try {
 			String res = Compiler.compile(file, this.getProject());
 			return res + "\r\n";

@@ -349,5 +349,27 @@
             ordering="first">
       </filterMatcher>
    </extension>
+   <extension
+         id="MyMarks"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="com.mwos.ebochs.super1">
+      </super>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            class="com.mwos.ebochs.resource.project.OSPrjLabelDecorator"
+            icon="resource/icons/basket_go.png"
+            id="com.mwos.ebochs.decorator.lib"
+            label="OSProject Library IFolder"
+            state="true">
+         <enablement>
+            <objectClass
+                  name="org.eclipse.core.resources.IFolder">
+            </objectClass>
+         </enablement>
+      </decorator>
+   </extension>
 
 </plugin>
