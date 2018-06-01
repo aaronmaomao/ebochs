@@ -201,10 +201,10 @@ public class FileUtil {
 	}
 
 	public static String getIncStr(String path) {
-		List<File> incs = listDir(path, new String[] { "obj", ".setting" }, false);
+		List<File> incs = listDir(path, new String[] { "obj", ".settings" }, false);
 		String temp = "";
 		for (File f : incs) {
-			temp += (" \"" + f.getAbsolutePath() + "\"");
+			temp += (" -I \"" + f.getAbsolutePath() + "\"");
 		}
 		return temp;
 	}

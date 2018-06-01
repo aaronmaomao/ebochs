@@ -21,26 +21,21 @@ public class Compiler {
 
 	private static String toolchain = "D:\\study\\mwos\\001-data\\toolchain";
 	private static String cc1 = toolchain + "\\cc1.exe";
-	private static String cmdReg1 = " -m32 -O1 \"%c\" -o \"%obj\" -I %inc";
-	private static String cmdReg2 = " -m32 -gcoff -masm=intel -O1 \"%c\" -o \"%obj\" -I %inc";
+	private static String cmdReg1 = " -m32 -O1 \"%c\" -o \"%obj\"  %inc";
+	private static String cmdReg2 = " -m32 -gcoff -masm=intel -O1 \"%c\" -o \"%obj\" %inc";
 
 	private Compiler() {
 
 	}
 
 	public static String compile(String file, IProject project) throws Exception {
-		ICProjectDescription projectDescription = CoreModel.getDefault().getProjectDescription(project);
-		ICConfigurationDescription activeConfiguration = projectDescription.getActiveConfiguration(); // or another config
-		ICFolderDescription folderDescription = activeConfiguration.getRootFolderDescription(); // or use getResourceDescription(IResource), or pick one from getFolderDescriptions()
-		ICLanguageSetting[] languageSettings = folderDescription.getLanguageSettings();
-		//ICLanguageSetting lang = ...; // pick one from languageSettings, by id
-		ICLanguageSettingEntry[] includePathSettings = languageSettings[2].getSettingEntries(ICSettingEntry.INCLUDE_PATH);
 		String projectPath = project.getLocationURI().getPath();
+		String incs = getInc(project);
 		String name = FileUtil.getFileName(file, false);
 		String gasExe = cc1 + cmdReg1;
-		gasExe = gasExe.replace("%c", file).replace("%obj", "obj\\" + name + ".gas").replace("%inc", FileUtil.getIncStr(projectPath));
+		gasExe = gasExe.replace("%c", file).replace("%obj", "obj\\" + name + ".gas").replace("%inc", incs);
 		String asmExe = cc1 + cmdReg2;
-		asmExe = asmExe.replace("%c", file).replace("%obj", "obj\\_" + name + ".asm").replace("%inc", FileUtil.getIncStr(projectPath));
+		asmExe = asmExe.replace("%c", file).replace("%obj", "obj\\_" + name + ".asm").replace("%inc", incs);
 		
 		RunResult result = EXERunner.run(gasExe, projectPath);
 		EXERunner.runNoResult(asmExe, projectPath);
@@ -49,6 +44,24 @@ public class Compiler {
 		} else {
 			return result.getErrorInfo();
 		}
+	}
+	
+	private static String getInc(IProject project) {
+		String incs = FileUtil.getIncStr(project.getLocationURI().getPath());
+		ICProjectDescription projectDescription = CoreModel.getDefault().getProjectDescription(project);
+		ICConfigurationDescription activeConfiguration = projectDescription.getActiveConfiguration(); // or another config
+		ICFolderDescription folderDescription = activeConfiguration.getRootFolderDescription(); // or use getResourceDescription(IResource), or pick one from getFolderDescriptions()
+		ICLanguageSetting[] languageSettings = folderDescription.getLanguageSettings();
+		for(ICLanguageSetting languageSetting:languageSettings) {
+			for(ICLanguageSettingEntry includePathSetting:languageSetting.getSettingEntries(ICSettingEntry.INCLUDE_PATH)) {
+				String inc = includePathSetting.getValue();
+				if(!inc.isEmpty()&&!incs.contains(inc)) {
+					incs+=(" -I \""+inc.trim()+"\"");
+				}
+			}
+		}
+		
+		return incs;
 	}
 	
 	public static void main(String[] args) {
