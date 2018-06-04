@@ -1,11 +1,12 @@
-package com.mwos.ebochs.core.launch;
+package com.mwos.ebochs.ui.launch.debug;
 
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 
-public class LaunchConfigurationTabGroup extends AbstractLaunchConfigurationTabGroup {
-	public LaunchConfigurationTabGroup() {
+public class LaunchTabGroupDebug extends AbstractLaunchConfigurationTabGroup {
+
+	public LaunchTabGroupDebug() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -13,6 +14,5 @@ public class LaunchConfigurationTabGroup extends AbstractLaunchConfigurationTabG
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
 		this.setTabs(new ILaunchConfigurationTab[] {});
 	}
-	
-	
+
 }

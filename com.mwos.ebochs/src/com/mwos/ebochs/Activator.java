@@ -1,10 +1,13 @@
 package com.mwos.ebochs;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.wb.swt.ResourceManager;
 import org.osgi.framework.BundleContext;
+
+import com.mwos.ebochs.ui.preference.OSDevPreference;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -62,4 +65,13 @@ public class Activator extends AbstractUIPlugin {
 		return getPluginImageDescriptor(path).createImage();
 	}
 
+	@Override
+	protected void initializeDefaultPreferences(IPreferenceStore store) {
+		// TODO Auto-generated method stub
+		if (store.getDefaultString(OSDevPreference.TOOLCHAIN) == null)
+			store.setDefault(OSDevPreference.TOOLCHAIN, "");
+		
+		if (store.getDefaultString(OSDevPreference.BOCHS) == null)
+			store.setDefault(OSDevPreference.BOCHS, "");
+	}
 }

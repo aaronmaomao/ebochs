@@ -81,10 +81,10 @@ public class OSProject extends CProject {
 		// IResourceFilterDescription.FOLDERS, matcher1,
 		// IResource.BACKGROUND_REFRESH, null);
 
-		IFolder inc = project.getFolder("inc");
-		inc.create(true, true, null);
-		IFolder src = project.getFolder("src");
-		src.create(true, true, null);
+//		IFolder inc = project.getFolder("inc");
+//		inc.create(true, true, null);
+//		IFolder src = project.getFolder("src");
+//		src.create(true, true, null);
 		IFolder obj = project.getFolder("obj");
 		obj.create(IFolder.HIDDEN, true, null);
 		

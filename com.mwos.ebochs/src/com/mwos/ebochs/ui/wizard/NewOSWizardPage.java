@@ -22,23 +22,23 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.mwos.ebochs.resource.project.OSProject;
 
 public class NewOSWizardPage extends WizardPage {
-	private Text projtext;
-	private Text locationText;
-	private Text bochsText;
-	private Text bochsdbgText;
+	private Text textPrjName;
 	private String projName;
+
+	private int isVaild = 0x1;
+	private static final int prjNameVaild = 0x1;
 
 	/**
 	 * Create the wizard.
 	 */
 	public NewOSWizardPage() {
 		super("wizardPage");
-		setMessage("Create new os project.");
+		setMessage("创建x86操作系统工程");
 		// setErrorMessage(" A project with this name already exists.");
 		setImageDescriptor(ResourceManager.getPluginImageDescriptor("com.mwos.ebochs", "resource/image/window.png"));
 		setPageComplete(false);
-		setTitle("OS Project");
-		setDescription("Create new Operation System Project");
+		setTitle("OS 工程");
+		setDescription("创建x86操作系统工程");
 	}
 
 	/**
@@ -47,8 +47,6 @@ public class NewOSWizardPage extends WizardPage {
 	 * @param parent
 	 */
 	public void createControl(Composite parent) {
-		final boolean canNext[] = { false, true, false, false };
-
 		Composite container = new Composite(parent, SWT.NONE);
 
 		setControl(container);
@@ -56,192 +54,50 @@ public class NewOSWizardPage extends WizardPage {
 		gl_container.verticalSpacing = 2;
 		container.setLayout(gl_container);
 
-		Label lblNewLabel = new Label(container, SWT.NONE);
-		GridData gd_lblNewLabel = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
-		gd_lblNewLabel.widthHint = 77;
-		lblNewLabel.setLayoutData(gd_lblNewLabel);
-		lblNewLabel.setText("Project name");
+		Label lblPrjName = new Label(container, SWT.NONE);
+		GridData gd_lblPrjName = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gd_lblPrjName.widthHint = 77;
+		lblPrjName.setLayoutData(gd_lblPrjName);
+		lblPrjName.setText("工程名");
 
-		projtext = new Text(container, SWT.BORDER);
-		projtext.addModifyListener(new ModifyListener() {
+		textPrjName = new Text(container, SWT.BORDER);
+		textPrjName.addModifyListener(new ModifyListener() {
 
 			public void modifyText(ModifyEvent e) {
 
-				String text = projtext.getText();
-				if (!text.trim().equals("")) {
+				String text = textPrjName.getText().trim();
+				if (!text.isEmpty()) {
 					if (!OSProject.getProject(text).exists()) {
-						setMessage("Create new os project.");
+						setMessage("创建x86操作系统工程");
 						setErrorMessage(null);
 						projName = text;
-						canNext[0] = true;
+						vaild(prjNameVaild, true);
 					} else {
-						setErrorMessage(" A project with this name already exists.");
-						canNext[0] = false;
+						setErrorMessage("该名字的工程存在！");
+						vaild(prjNameVaild, false);
 					}
 				} else {
-					canNext[0] = false;
-				}
-				setCanNext(canNext);
-			}
-		});
-		projtext.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
-
-		Button btnCheckButton = new Button(container, SWT.CHECK);
-		btnCheckButton.setSelection(true);
-
-		GridData gd_btnCheckButton = new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1);
-		gd_btnCheckButton.verticalIndent = 10;
-		gd_btnCheckButton.heightHint = 16;
-		btnCheckButton.setLayoutData(gd_btnCheckButton);
-		btnCheckButton.setText("Use default location");
-
-		Label lblLocation = new Label(container, SWT.NONE);
-		lblLocation.setEnabled(false);
-		lblLocation.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblLocation.setText("location");
-
-		locationText = new Text(container, SWT.BORDER);
-		locationText.setEnabled(false);
-		locationText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-
-		Button btnNewButton = new Button(container, SWT.NONE);
-		btnNewButton.setEnabled(false);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				DirectoryDialog folderdlg = new DirectoryDialog(container.getShell());
-				folderdlg.setText("�ļ�ѡ��");
-				folderdlg.setFilterPath("SystemDrive");
-				folderdlg.setMessage("��ѡ����Ӧ���ļ���");
-				String selecteddir = folderdlg.open();
-				if (selecteddir != null) {
-					locationText.setText(selecteddir);
-				}
-				setCanNext(canNext);
-			}
-		});
-		btnNewButton.setText("Browse...");
-
-		Group grpBochsSetting = new Group(container, SWT.NONE);
-		grpBochsSetting.setText("Bochs setting");
-		GridLayout gl_grpBochsSetting = new GridLayout(3, false);
-		gl_grpBochsSetting.horizontalSpacing = 4;
-		grpBochsSetting.setLayout(gl_grpBochsSetting);
-		GridData gd_grpBochsSetting = new GridData(SWT.FILL, SWT.FILL, true, false, 4, 1);
-		gd_grpBochsSetting.heightHint = 77;
-		gd_grpBochsSetting.widthHint = 564;
-		grpBochsSetting.setLayoutData(gd_grpBochsSetting);
-
-		Label lblNewLabel_1 = new Label(grpBochsSetting, SWT.NONE);
-		lblNewLabel_1.setText(" bochs");
-
-		bochsText = new Text(grpBochsSetting, SWT.BORDER);
-		bochsText.setEditable(false);
-		GridData gd_bochsText = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_bochsText.horizontalIndent = 7;
-		bochsText.setLayoutData(gd_bochsText);
-
-		Button btnNewButton_1 = new Button(grpBochsSetting, SWT.NONE);
-		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog filedlg = new FileDialog(container.getShell(), SWT.OPEN);
-				filedlg.setText("ѡ��bochs.exe");
-				filedlg.setFilterPath("SystemRoot");
-				filedlg.setFileName("bochs.exe");
-				filedlg.setFilterExtensions(new String[] { "bochs.exe" });
-				String selected = filedlg.open();
-				if (selected != null) {
-					File file = new File(selected);
-					if (file.exists()) {
-						bochsText.setText(selected);
-						canNext[2] = true;
-						selected = selected.replace("bochs.exe", "") + "bochsdbg.exe";
-						file = new File(selected);
-						if (file.exists()) {
-							bochsdbgText.setText(selected);
-							canNext[3] = true;
-						}
-					} else {
-						bochsText.setText("");
-						canNext[2] = false;
-					}
-				}
-				setCanNext(canNext);
-			}
-		});
-		btnNewButton_1.setText("Browse...");
-
-		Label lblBochsdbg = new Label(grpBochsSetting, SWT.NONE);
-		lblBochsdbg.setText(" bochsdbg");
-
-		bochsdbgText = new Text(grpBochsSetting, SWT.BORDER);
-		bochsdbgText.setEditable(false);
-		GridData gd_bochsdbgText = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd_bochsdbgText.horizontalIndent = 7;
-		bochsdbgText.setLayoutData(gd_bochsdbgText);
-
-		Button button = new Button(grpBochsSetting, SWT.NONE);
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				FileDialog filedlg = new FileDialog(container.getShell(), SWT.OPEN);
-				filedlg.setText("ѡ��bochsdbg.exe");
-				filedlg.setFilterPath("SystemRoot");
-				filedlg.setFileName("bochsdbg.exe");
-				filedlg.setFilterExtensions(new String[] { "bochsdbg.exe" });
-				String selected = filedlg.open();
-				if (selected != null) {
-					File file = new File(selected);
-					if (file.exists()) {
-						bochsdbgText.setText(selected);
-						canNext[3] = true;
-					} else {
-						bochsdbgText.setText("");
-						canNext[3] = false;
-					}
-				}
-				setCanNext(canNext);
-			}
-		});
-		button.setText("Browse...");
-		new Label(grpBochsSetting, SWT.NONE);
-		new Label(grpBochsSetting, SWT.NONE);
-		new Label(grpBochsSetting, SWT.NONE);
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-
-		btnCheckButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (btnCheckButton.getSelection()) {
-					lblLocation.setEnabled(false);
-					locationText.setEnabled(false);
-					btnNewButton.setEnabled(false);
-				} else {
-					lblLocation.setEnabled(true);
-					locationText.setEnabled(true);
-					btnNewButton.setEnabled(true);
+					vaild(prjNameVaild, false);
 				}
 			}
 		});
+		textPrjName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 	}
-	
+
 	public String getProjName() {
 		return this.projName;
 	}
 
-	private void setCanNext(boolean can[]) {
-		boolean r = true;
-		for (boolean b : can) {
-			r &= b;
+	private void vaild(int field, boolean b) {
+		if (b)
+			this.isVaild |= field;
+		else
+			this.isVaild &= ~field;
+		if (isVaild == 0x1) {
+			setPageComplete(true);
+			this.setErrorMessage(null);
+		} else {
+			setPageComplete(false);
 		}
-		setPageComplete(r);
 	}
 }

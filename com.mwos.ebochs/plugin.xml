@@ -5,15 +5,16 @@
          point="org.eclipse.ui.newWizards">
       <category
             id="com.mwos.ebochs.wizards.category"
-            name="OS">
+            name="操作系统">
       </category>
       <wizard
             category="com.mwos.ebochs.wizards.category"
             class="com.mwos.ebochs.ui.wizard.NewOSWizard"
+            finalPerspective="org.eclipse.cdt.ui.CPerspective"
             hasPages="true"
             icon="resource/image/panda.png"
             id="com.mwos.ebochs.wizards.OSWizard"
-            name="新建OS"
+            name="新建OS工程-x86"
             project="true">
       </wizard>
    </extension>
@@ -213,19 +214,19 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="com.mwos.ebochs.preference.OSPreferencePage"
+            class="com.mwos.ebochs.ui.preference.OSDevPreference"
             id="com.mwos.ebochs.preference.os"
-            name="MWOS">
+            name="操作系统开发">
       </page>
       <page
             category="com.mwos.ebochs.preference.os"
-            class="com.mwos.ebochs.preference.ToolChainPreferencePage"
+            class="com.mwos.ebochs.ui.preference.ToolChainPreferencePage"
             id="com.mwos.ebochs.preference.toolchain"
             name="工具链">
       </page>
       <page
             category="com.mwos.ebochs.preference.os"
-            class="com.mwos.ebochs.preference.VMPreferencePage"
+            class="com.mwos.ebochs.ui.preference.VMPreferencePage"
             id="com.mwos.ebochs.preference.vm"
             name="虚拟机">
       </page>
@@ -260,20 +261,26 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="com.mwos.ebochs.core.launch.LaunchConfigDelegate"
-            id="com.mwos.ebochs.launchConfigurationType"
-            modes="run,debug"
-            name="Launch OS debug">
+            delegate="com.mwos.ebochs.ui.launch.run.OSLaunchConfigTypeRun"
+            id="com.mwos.ebochs.launchConfigurationType.run"
+            modes="run"
+            name="Launch OS Run">
+      </launchConfigurationType>
+      <launchConfigurationType
+            delegate="com.mwos.ebochs.ui.launch.debug.OSLaunchConfigTypeDebug"
+            id="com.mwos.ebochs.launchConfigurationType.debug"
+            modes="debug"
+            name="Launch OS Debug">
       </launchConfigurationType>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="com.mwos.ebochs.core.launch.LaunchShortcut"
+            class="com.mwos.ebochs.ui.launch.run.OSLaunchRun"
             icon="resource/icons/pilcrow.png"
-            id="com.mwos.ebochs.shortcut"
-            label="Launch OS debug"
-            modes="run,debug">
+            id="com.mwos.ebochs.launch.run"
+            label="Launch OS Run"
+            modes="run">
          <configurationType
                id="com.mwos.ebochs.launchConfigurationType">
          </configurationType>
@@ -294,27 +301,39 @@
                   </iterate>
                </with></enablement></contextualLaunch>
       </shortcut>
+      <shortcut
+            class="com.mwos.ebochs.ui.launch.debug.OSLaunchDebug"
+            icon="resource/icons/chart_curve.png"
+            id="com.mwos.ebochs.launch.debug"
+            label="Launch OS Debug"
+            modes="debug">
+      </shortcut>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="com.mwos.ebochs.core.launch.LaunchConfigurationTabGroup"
-            id="com.mwos.ebochs.launchConfigurationTabGroup"
-            type="com.mwos.ebochs.launchConfigurationType">
+            class="com.mwos.ebochs.ui.launch.run.LaunchTabGroupRun"
+            id="com.mwos.ebochs.launchConfigurationTabGroup.run"
+            type="com.mwos.ebochs.launchConfigurationType.run">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="com.mwos.ebochs.ui.launch.debug.LaunchTabGroupDebug"
+            id="com.mwos.ebochs.launchConfigurationTabGroup.debug"
+            type="com.mwos.ebochs.launchConfigurationType.debug">
       </launchConfigurationTabGroup>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabs">
       <tab
-            class="com.mwos.ebochs.core.launch.LaunchConfigArgsTab"
-            group="com.mwos.ebochs.launchConfigurationTabGroup"
-            id="com.mwos.ebochs.launch.ArgumentTab"
-            name="Arguments">
+            class="com.mwos.ebochs.ui.launch.run.MainTabRun"
+            group="com.mwos.ebochs.launchConfigurationTabGroup.run"
+            id="com.mwos.ebochs.launch.run.MainTab"
+            name="Main">
       </tab>
       <tab
-            class="com.mwos.ebochs.core.launch.LaunchConfigMainTab"
-            group="com.mwos.ebochs.launchConfigurationTabGroup"
-            id="com.mwos.ebochs.launch.MainTab"
+            class="com.mwos.ebochs.ui.launch.debug.MainTabDebug"
+            group="com.mwos.ebochs.launchConfigurationTabGroup.debug"
+            id="com.mwos.ebochs.launch.debug.MainTab"
             name="Main">
       </tab>
    </extension>
@@ -338,23 +357,6 @@
                class="com.mwos.ebochs.core.build.ProjectBuilder">
          </run>
       </builder>
-   </extension>
-   <extension
-         point="org.eclipse.core.resources.filterMatchers">
-      <filterMatcher
-            class="com.mwos.ebochs.resource.project.FileMatcher"
-            description="com.mwos.ebochs.filterMatcher"
-            id="com.mwos.ebochs.filterMatcher"
-            name="FileMatcher"
-            ordering="first">
-      </filterMatcher>
-   </extension>
-   <extension
-         id="MyMarks"
-         point="org.eclipse.core.resources.markers">
-      <super
-            type="com.mwos.ebochs.super1">
-      </super>
    </extension>
    <extension
          point="org.eclipse.ui.decorators">

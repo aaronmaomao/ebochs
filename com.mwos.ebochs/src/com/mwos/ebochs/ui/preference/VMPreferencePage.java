@@ -1,4 +1,4 @@
-package com.mwos.ebochs.preference;
+package com.mwos.ebochs.ui.preference;
 
 import java.io.File;
 
@@ -116,7 +116,7 @@ public class VMPreferencePage extends PreferencePage implements IWorkbenchPrefer
 
 	private String chooseFile(String name, Composite container) {
 		FileDialog filedlg = new FileDialog(container.getShell(), SWT.OPEN);
-		filedlg.setText("Ñ¡Ôñ" + name);
+		filedlg.setText("Ñ¡ï¿½ï¿½" + name);
 		filedlg.setFilterPath("SystemRoot");
 		filedlg.setFileName(name);
 		filedlg.setFilterExtensions(new String[] { name });
