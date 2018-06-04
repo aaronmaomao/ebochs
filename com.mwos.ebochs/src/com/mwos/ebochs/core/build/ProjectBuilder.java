@@ -60,7 +60,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 
 	private String doBuildAsm(String file) {
 		try {
-			String res = Compiler.compile(file, this.getProject());
+			String res = Compiler.compileAsm(file, this.getProject());
 			return res + "\r\n";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -70,7 +70,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 
 	private String doBuildC(String file) {
 		try {
-			String res = Compiler.compile(file, this.getProject());
+			String res = Compiler.compileC(file, this.getProject());
 			return res + "\r\n";
 		} catch (Exception e) {
 			e.printStackTrace();

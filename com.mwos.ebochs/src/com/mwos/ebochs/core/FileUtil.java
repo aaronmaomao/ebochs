@@ -204,7 +204,7 @@ public class FileUtil {
 		List<File> incs = listDir(path, new String[] { "obj", ".settings" }, false);
 		String temp = "";
 		for (File f : incs) {
-			temp += (" -I \"" + f.getAbsolutePath() + "\"");
+			temp += (" -I " + f.getAbsolutePath());
 		}
 		return temp;
 	}
