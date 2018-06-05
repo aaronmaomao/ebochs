@@ -37,41 +37,35 @@ public class Compiler {
 
 	}
 
-	public static String compileC(String file, IProject project) throws Exception {
+	public static BuildResult compileC(String file, IProject project) throws Exception {
 		String projectPath = project.getLocationURI().getPath();
 		String fileName = FileUtil.getFileName(file, false);
 
-		String cmd_c2gas = getCmd(Compiler.c2gas).replace("%.c", file).replace("%.gas", fileName + ".gas").replace("%.inc",
-				getInc(project));
-		RunResult result = EXERunner.run(cmd_c2gas, projectPath);
-		if (result.exitValue() != 0) {
-			return result.getInfo();
+		String cmd_c2gas = getCmd(Compiler.c2gas).replace("%.c", file).replace("%.gas", fileName + ".gas").replace("%.inc", getInc(project));
+		RunResult c2gasResult = EXERunner.run(cmd_c2gas, projectPath);
+		if (c2gasResult.exitValue() != 0) {
+			return new BuildResult(c2gasResult);
 		}
 
-		String cmd_c2asm = getCmd(Compiler.c2asm).replace("%.c", file).replace("%.asm", fileName + ".asm").replace("%.inc",
-				getInc(project));
+		String cmd_c2asm = getCmd(Compiler.c2asm).replace("%.c", file).replace("%.asm", fileName + ".asm").replace("%.inc", getInc(project));
 		EXERunner.run(cmd_c2asm, projectPath);
 
 		String cmd_gas2asm = getCmd(Compiler.gas2asm).replace("%.gas", fileName + ".gas").replace("%.asm", fileName + ".asm");
 		EXERunner.run(cmd_gas2asm, projectPath);
 
-		compileAsm("obj\\" + fileName + ".asm", project);
+		BuildResult naskResult = compileAsm("obj\\" + fileName + ".asm", project);
 
-		return result.getInfo();
+		return new BuildResult(c2gasResult).merge(naskResult);
 	}
 
-	public static String compileAsm(String file, IProject project) throws IOException, InterruptedException {
+	public static BuildResult compileAsm(String file, IProject project) throws IOException, InterruptedException {
 		String projectPath = project.getLocationURI().getPath();
 		String fileName = FileUtil.getFileName(file, false);
 
-		String cmd_nask = getCmd(Compiler.nask).replace("%.asm", file).replace("%.obj", fileName + ".obj").replace("%.lst",
-				fileName + ".lst");
+		String cmd_nask = getCmd(Compiler.nask).replace("%.asm", file).replace("%.obj", fileName + ".obj").replace("%.lst", fileName + ".lst");
 		RunResult result = EXERunner.run(cmd_nask, projectPath);
-		if (result.exitValue() != 0) {
-			return result.getInfo();
-		}
 
-		return result.getInfo();
+		return new BuildResult(result);
 	}
 
 	private static String getCmd(String type) {
@@ -107,9 +101,9 @@ public class Compiler {
 		return incs;
 	}
 
-	public static void main(String[] args) {
-		String file = "src\\s.d";
-		String name = file.split("\\\\")[file.split("\\\\").length - 1];
-		System.out.println(name);
-	}
+	// public static void main(String[] args) {
+	// String file = "src\\s.d";
+	// String name = file.split("\\\\")[file.split("\\\\").length - 1];
+	// System.out.println(name);
+	// }
 }

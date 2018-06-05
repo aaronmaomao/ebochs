@@ -1,8 +1,16 @@
 package com.mwos.ebochs;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.wb.swt.ResourceManager;
 import org.osgi.framework.BundleContext;
@@ -70,8 +78,32 @@ public class Activator extends AbstractUIPlugin {
 		// TODO Auto-generated method stub
 		if (store.getDefaultString(OSDevPreference.TOOLCHAIN) == null)
 			store.setDefault(OSDevPreference.TOOLCHAIN, "");
-		
+
 		if (store.getDefaultString(OSDevPreference.BOCHS) == null)
 			store.setDefault(OSDevPreference.BOCHS, "");
+	}
+
+	public static IProject getCurrentProject() {
+		IProject project = null;  
+//        
+//        //1.根据当前编辑器获取工程  
+//        IEditorPart part = getActiveEditor();  
+//        if(part != null){  
+//            Object object = part.getEditorInput().getAdapter(IFile.class);  
+//            if(object != null){  
+//                project = ((IFile)object).getProject();  
+//            }  
+//        }  
+//          
+//        if(project == null){  
+//            ISelectionService selectionService =     
+//                    Workbench.getInstance().getActiveWorkbenchWindow().getSelectionService();    
+//            ISelection selection = selectionService.getSelection();    
+//            if(selection instanceof IStructuredSelection) {    
+//                Object element = ((IStructuredSelection)selection).getFirstElement();    
+//            }     
+//        }  
+          
+        return project;  
 	}
 }

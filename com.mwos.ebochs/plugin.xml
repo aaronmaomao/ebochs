@@ -261,16 +261,10 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="com.mwos.ebochs.ui.launch.run.OSLaunchConfigTypeRun"
-            id="com.mwos.ebochs.launchConfigurationType.run"
-            modes="run"
-            name="Launch OS Run">
-      </launchConfigurationType>
-      <launchConfigurationType
-            delegate="com.mwos.ebochs.ui.launch.debug.OSLaunchConfigTypeDebug"
-            id="com.mwos.ebochs.launchConfigurationType.debug"
-            modes="debug"
-            name="Launch OS Debug">
+            delegate="com.mwos.ebochs.ui.launch.LaunchType"
+            id="com.mwos.ebochs.launchConfigurationType"
+            modes="run,debug"
+            name="Launch OS">
       </launchConfigurationType>
    </extension>
    <extension
@@ -314,28 +308,13 @@
       <launchConfigurationTabGroup
             class="com.mwos.ebochs.ui.launch.run.LaunchTabGroupRun"
             id="com.mwos.ebochs.launchConfigurationTabGroup.run"
-            type="com.mwos.ebochs.launchConfigurationType.run">
+            type="com.mwos.ebochs.launchConfigurationType">
       </launchConfigurationTabGroup>
       <launchConfigurationTabGroup
             class="com.mwos.ebochs.ui.launch.debug.LaunchTabGroupDebug"
             id="com.mwos.ebochs.launchConfigurationTabGroup.debug"
-            type="com.mwos.ebochs.launchConfigurationType.debug">
+            type="com.mwos.ebochs.launchConfigurationType">
       </launchConfigurationTabGroup>
-   </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTabs">
-      <tab
-            class="com.mwos.ebochs.ui.launch.run.MainTabRun"
-            group="com.mwos.ebochs.launchConfigurationTabGroup.run"
-            id="com.mwos.ebochs.launch.run.MainTab"
-            name="Main">
-      </tab>
-      <tab
-            class="com.mwos.ebochs.ui.launch.debug.MainTabDebug"
-            group="com.mwos.ebochs.launchConfigurationTabGroup.debug"
-            id="com.mwos.ebochs.launch.debug.MainTab"
-            name="Main">
-      </tab>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">

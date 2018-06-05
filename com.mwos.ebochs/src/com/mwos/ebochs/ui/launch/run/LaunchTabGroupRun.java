@@ -12,7 +12,7 @@ public class LaunchTabGroupRun extends AbstractLaunchConfigurationTabGroup {
 
 	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-		this.setTabs(new ILaunchConfigurationTab[] {});
+		MainTabRun main = new MainTabRun();
+		this.setTabs(new ILaunchConfigurationTab[] {main});
 	}
-
 }
