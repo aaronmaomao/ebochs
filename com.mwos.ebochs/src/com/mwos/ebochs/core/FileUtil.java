@@ -2,6 +2,10 @@ package com.mwos.ebochs.core;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -208,10 +212,32 @@ public class FileUtil {
 		}
 		return temp;
 	}
+	
+
+	public static File makeImage(String path, long size) throws IOException {
+		File image = new File(path);
+		if (!image.exists())
+			image.createNewFile();
+		OutputStream out = new FileOutputStream(image);
+		byte[] buff = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		long count = size / buff.length;
+		long yu = size % buff.length;
+		for (int i = 0; i < count; i++) {
+			out.write(buff, 0, buff.length);
+		}
+		out.write(buff, 0, (int) yu);
+		out.flush();
+		out.close();
+		return image;
+	}
 
 	public static void main(String[] args) {
-		String a = "asdfsdf";
-		System.out.println(a.split("\\\\").length);
+		try {
+			makeImage("D://a.img",1474560);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

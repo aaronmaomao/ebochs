@@ -65,13 +65,13 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		try {
 			BuildResult res = Compiler.compileAsm(file, this.getProject());
 			if (res.isSuccess()) {
-				ConsoleFactory.outMsg(file + " -----编译成功\r\n" + res.getMsg(), this.getProject());
+				ConsoleFactory.outMsg(file + " ----- 编译成功\r\n" + res.getMsg(), this.getProject());
 			} else {
-				ConsoleFactory.outErrMsg(file + " -----编译错误\r\n" + res.getAllMsg(), this.getProject());
+				ConsoleFactory.outErrMsg(file + " ----- 编译错误\r\n" + res.getAllMsg(), this.getProject());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			ConsoleFactory.outErrMsg(file + " -----编译异常\r\n", this.getProject());
+			ConsoleFactory.outErrMsg(file + " ----- 编译异常\r\n", this.getProject());
 		}
 	}
 
@@ -79,13 +79,13 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		try {
 			BuildResult res = Compiler.compileC(file, this.getProject());
 			if (res.isSuccess()) {
-				ConsoleFactory.outMsg(file + " -----编译成功\r\n" + res.getMsg(), this.getProject());
+				ConsoleFactory.outMsg(file + " ----- 编译成功\r\n" + res.getMsg(), this.getProject());
 			} else {
-				ConsoleFactory.outErrMsg(file + " -----编译错误\r\n" + res.getAllMsg(), this.getProject());
+				ConsoleFactory.outErrMsg(file + " ----- 编译错误\r\n" + res.getAllMsg(), this.getProject());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			ConsoleFactory.outErrMsg(file + " -----编译异常\r\n", this.getProject());
+			ConsoleFactory.outErrMsg(file + " ----- 编译异常\r\n", this.getProject());
 		}
 	}
 }

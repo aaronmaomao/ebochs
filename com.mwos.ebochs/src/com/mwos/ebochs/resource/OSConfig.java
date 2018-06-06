@@ -1,4 +1,4 @@
-package com.mwos.ebochs.resource.project;
+package com.mwos.ebochs.resource;
 
 import java.util.Map;
 import java.util.Set;

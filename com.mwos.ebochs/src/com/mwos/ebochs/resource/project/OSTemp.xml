@@ -7,7 +7,7 @@
 	
 	<!-- 生成镜像的源文件/资源 -->
 	<source type="core" name="main">
-		<image format="fat16" size="1.4M" driver="floppy" name="mwos.img">
+		<image format="fat16" size="1440k" driver="floppy" name="mwos.img">
 			<bootloader>src/boot.asm</bootloader>
 		</image>
 		<item include="true">src/bootInit.c</item>
