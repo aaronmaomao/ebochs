@@ -1,33 +1,16 @@
 package com.mwos.ebochs.resource.project;
 
-import java.util.Map;
+import java.net.URL;
 
 import org.eclipse.cdt.core.CProjectNature;
-import org.eclipse.cdt.core.cdtvariables.ICdtVariablesContributor;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
-import org.eclipse.cdt.core.settings.model.CConfigurationStatus;
-import org.eclipse.cdt.core.settings.model.CSourceEntry;
-import org.eclipse.cdt.core.settings.model.ICBuildSetting;
-import org.eclipse.cdt.core.settings.model.ICConfigExtensionReference;
-import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
-import org.eclipse.cdt.core.settings.model.ICExternalSetting;
-import org.eclipse.cdt.core.settings.model.ICFileDescription;
-import org.eclipse.cdt.core.settings.model.ICFolderDescription;
-import org.eclipse.cdt.core.settings.model.ICLanguageSetting;
-import org.eclipse.cdt.core.settings.model.ICProjectDescription;
-import org.eclipse.cdt.core.settings.model.ICProjectDescriptionManager;
-import org.eclipse.cdt.core.settings.model.ICResourceDescription;
-import org.eclipse.cdt.core.settings.model.ICSettingContainer;
-import org.eclipse.cdt.core.settings.model.ICSettingEntry;
-import org.eclipse.cdt.core.settings.model.ICSettingObject;
-import org.eclipse.cdt.core.settings.model.ICSourceEntry;
-import org.eclipse.cdt.core.settings.model.ICStorageElement;
-import org.eclipse.cdt.core.settings.model.ICTargetPlatformSetting;
-import org.eclipse.cdt.core.settings.model.WriteAccessException;
-import org.eclipse.cdt.core.settings.model.extension.CConfigurationData;
-import org.eclipse.cdt.core.settings.model.util.CDataUtil;
+import org.eclipse.cdt.core.model.ICProject;
+import org.eclipse.cdt.core.model.IPathEntry;
 import org.eclipse.cdt.internal.core.model.CProject;
+import org.eclipse.cdt.internal.ui.util.CoreUtility;
+import org.eclipse.cdt.utils.PathUtil;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -38,8 +21,12 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
+import org.osgi.framework.Bundle;
+
+import com.mwos.ebochs.Activator;
+import com.mwos.ebochs.ui.preference.OSDevPreference;
 
 public class OSProject extends CProject {
 
@@ -81,13 +68,44 @@ public class OSProject extends CProject {
 		// IResourceFilterDescription.FOLDERS, matcher1,
 		// IResource.BACKGROUND_REFRESH, null);
 
-//		IFolder inc = project.getFolder("inc");
-//		inc.create(true, true, null);
-//		IFolder src = project.getFolder("src");
-//		src.create(true, true, null);
+		ICProject cp = CoreModel.getDefault().create(project);
+
+		IFolder inc = project.getFolder("inc");
+		// inc.create(true, true, null);
+		IFolder src = project.getFolder("src");
+		// src.create(true, true, null);
 		IFolder obj = project.getFolder("obj");
-		obj.create(IFolder.HIDDEN, true, null);
+
+		IPathEntry incEntry = CoreModel.newSourceEntry(inc.getFullPath());
+		IPathEntry srcEntry = CoreModel.newSourceEntry(src.getFullPath());
+		IPathEntry objEntry = CoreModel.newOutputEntry(obj.getFullPath());
+		String OSlib = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN);
+		IPathEntry pathEntry = null;
+		if (!OSlib.isEmpty()) {
+			pathEntry = CoreModel.newIncludeEntry(null, null, PathUtil.getWorkspaceRelativePath(OSlib + "/lib"), true);
+		}
+
+		BasicNewResourceWizard.selectAndReveal(inc, Activator.getDefault().getWorkbench().getActiveWorkbenchWindow());
+		BasicNewResourceWizard.selectAndReveal(src, Activator.getDefault().getWorkbench().getActiveWorkbenchWindow());
+		BasicNewResourceWizard.selectAndReveal(obj, Activator.getDefault().getWorkbench().getActiveWorkbenchWindow());
+
+		CoreUtility.createFolder(inc, true, true, null);
+		CoreUtility.createFolder(src, true, true, null);
+		CoreUtility.createFolder(obj, true, true, null);
 		
+		try {
+			IFile config = project.getFile("OS.xml");
+			Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+			URL url = bundle.getResource("src/com/mwos/ebochs/resource/project/OSTemp.xml");
+			config.create(url.openStream(), true, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		cp.setRawPathEntries(new IPathEntry[] { incEntry, srcEntry, objEntry, pathEntry }, null);
+
+		// IFolder objs = project.getFolder("objs");
+
 		// File obj = new File(project.getLocationURI().getPath() + "\\obj");
 		// obj.mkdir();
 

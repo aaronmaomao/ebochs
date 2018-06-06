@@ -6,6 +6,8 @@ import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.debug.ui.ILaunchConfigurationTab;
 
+import com.mwos.ebochs.ui.launch.run.MainTabRun;
+
 public class LaunchTabGroupDebug extends AbstractLaunchConfigurationTabGroup {
 
 	public LaunchTabGroupDebug() {
@@ -14,7 +16,7 @@ public class LaunchTabGroupDebug extends AbstractLaunchConfigurationTabGroup {
 
 	@Override
 	public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
-		MainTabDebug main = new MainTabDebug();
+		MainTabRun main = new MainTabRun();
 		this.setTabs(new ILaunchConfigurationTab[] { main });
 	}
 	

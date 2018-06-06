@@ -11,7 +11,8 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 	@Override
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor) throws CoreException {
 		// TODO Auto-generated method stub
-
 	}
+	
+	
 
 }

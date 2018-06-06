@@ -2,7 +2,11 @@ package com.mwos.ebochs.core.build;
 
 import java.io.IOException;
 
+import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.parser.ExtendedScannerInfo;
+import org.eclipse.cdt.core.parser.IScannerInfo;
+import org.eclipse.cdt.core.parser.IScannerInfoProvider;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICFolderDescription;
 import org.eclipse.cdt.core.settings.model.ICLanguageSetting;
@@ -84,19 +88,36 @@ public class Compiler {
 
 	private static String getInc(IProject project) {
 		String incs = FileUtil.getIncStr(project.getLocationURI().getPath());
-		ICProjectDescription projectDescription = CoreModel.getDefault().getProjectDescription(project);
-		ICConfigurationDescription activeConfiguration = projectDescription.getActiveConfiguration(); // or another config
-		ICFolderDescription folderDescription = activeConfiguration.getRootFolderDescription(); // or use getResourceDescription(IResource),
-																								// or pick one from getFolderDescriptions()
-		ICLanguageSetting[] languageSettings = folderDescription.getLanguageSettings();
-		for (ICLanguageSetting languageSetting : languageSettings) {
-			for (ICLanguageSettingEntry includePathSetting : languageSetting.getSettingEntries(ICSettingEntry.INCLUDE_PATH)) {
-				String inc = includePathSetting.getValue();
-				if (!inc.isEmpty() && !incs.contains(inc)) {
-					incs += (" -I " + inc.trim());
+		IScannerInfoProvider provider = CCorePlugin.getDefault().getScannerInfoProvider(project);
+		if (provider != null) {
+			IScannerInfo info = provider.getScannerInformation(project);
+			if (info instanceof ExtendedScannerInfo) {
+				for (String inc : ((ExtendedScannerInfo) info).getLocalIncludePath()) {
+					if (!incs.contains(inc))
+						incs += (" -I " + inc.trim());
 				}
 			}
 		}
+
+		// ICProjectDescription projectDescription =
+		// CoreModel.getDefault().getProjectDescription(project);
+		// ICConfigurationDescription activeConfiguration =
+		// projectDescription.getActiveConfiguration(); // or another config
+		// ICFolderDescription folderDescription =
+		// activeConfiguration.getRootFolderDescription(); // or use
+		// getResourceDescription(IResource),
+		// // or pick one from getFolderDescriptions()
+		// ICLanguageSetting[] languageSettings =
+		// folderDescription.getLanguageSettings();
+		// for (ICLanguageSetting languageSetting : languageSettings) {
+		// for (ICLanguageSettingEntry includePathSetting :
+		// languageSetting.getSettingEntries(ICSettingEntry.INCLUDE_PATH)) {
+		// includePathSetting.getValue();
+		// if (!inc.isEmpty() && !incs.contains(inc)) {
+		// incs += (" -I " + inc.trim());
+		// }
+		// }
+		// }
 
 		return incs;
 	}
