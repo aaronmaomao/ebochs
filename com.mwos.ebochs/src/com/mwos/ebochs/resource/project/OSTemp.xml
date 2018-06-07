@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <os name="mwos" bits="32" version="mwos1.1">
 	<!-- 运行平台配置 -->
-	<platforms>
-		<platform>i386</platform>
-	</platforms>
+	<platform arch="x86">
+		<cpu>i386</cpu>
+	</platform>
 	
 	<!-- 生成镜像的源文件/资源 -->
 	<source type="core" name="main">
 		<image format="fat16" size="1440k" driver="floppy" name="mwos.img">
 			<bootloader>src/boot.asm</bootloader>
 		</image>
-		<item include="true">src/bootInit.c</item>
-		<item include="true">src/OSMain.c</item>
+		<code include="true">src/bootInit.c</code>
+		<code include="true">src/OSMain.c</code>
 	</source>
 	<source type="app" name="HelloWorld.mwe">
-		<item>app/main.c</item>
+		<code>app/main.c</code>
 	</source>
 </os>
