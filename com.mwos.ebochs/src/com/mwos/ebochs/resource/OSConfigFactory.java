@@ -39,51 +39,119 @@ public class OSConfigFactory {
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dbBuilder = dbFactory.newDocumentBuilder();
-		Document document = dbBuilder.parse("D:\\OS\\ebochs\\com.mwos.ebochs\\src\\com\\mwos\\ebochs\\resource\\project\\OSTemp.xml");
-
+		Document document = dbBuilder.parse(osxml.getLocationURI().getPath());
+		//Document document = dbBuilder.parse("D:\\OS\\ebochs\\com.mwos.ebochs\\src\\com\\mwos\\ebochs\\resource\\project\\OSTemp.xml");
+		
 		Node mapper = document.getFirstChild();
-		parse(mapper, null);
-//		NodeList nodes = mapper.getChildNodes();
-//		for(int i=0;i<nodes.getLength();i++) {
-//			Node node = nodes.item(i);
-//			System.out.println(node.getAttributes());
-//		}
-//		for (int i = 0; i < mapper.getChildNodes().getLength(); i++) {
-//			Node node = mapper.getChildNodes().item(i);
-//			String s = node.getNodeName();
-//			if (s.toLowerCase().equals("#comment")) {
-//				System.out.println("这是注释内容: " + node.getTextContent());
-//			} else if (s.toLowerCase().equals("#text")) {
-//				System.out.println("呐，这是标签之外的文本: " + node.getNodeName());
-//			} else if ("node".equals(s)) {
-//				// 获取元素属性的值
-//				String column = node.getAttributes().getNamedItem("column").getNodeValue();
-//				String field = node.getAttributes().getNamedItem("property").getNodeValue();
-//			} else {
-//				// 其他的就不要了
-//			}
-//		}
+		parse(mapper, config);
 
 		return config;
 	}
-	
-	private static void parse(Node node,OSConfig osConfig) {
-		System.out.println(node.getNodeName());
-		NamedNodeMap map = node.getAttributes();
-		if(map!=null)
-		for(int i=0;i<map.getLength();i++) {
-			System.out.println(map.item(i).getNodeName()+" "+map.item(i).getNodeValue());
+
+	private static void parse(Node node, OSConfig osConfig) {
+		if (node.getNodeName().equalsIgnoreCase("os")) {
+			for (int i = 0; i < node.getAttributes().getLength(); i++) {
+				Node attr = node.getAttributes().item(i);
+				if (attr.getNodeName().equalsIgnoreCase("name")) {
+					osConfig.setName(attr.getNodeValue());
+				} else if (attr.getNodeName().equalsIgnoreCase("bits")) {
+					osConfig.setBits(attr.getNodeValue());
+				} else if (attr.getNodeName().equalsIgnoreCase("version")) {
+					osConfig.setVersion(attr.getNodeValue());
+				}
+
+			}
+		} else if (node.getNodeName().equalsIgnoreCase("platform")) {
+			Platform platform = new Platform();
+			for (int i = 0; i < node.getAttributes().getLength(); i++) {
+				Node attr = node.getAttributes().item(i);
+				if (attr.getNodeName().equalsIgnoreCase("arch")) {
+					platform.setArch(attr.getNodeValue());
+				}
+			}
+
+			for (int i = 0; i < node.getChildNodes().getLength(); i++) {
+				Node child = node.getChildNodes().item(i);
+				if (child.getNodeName().equalsIgnoreCase("cpu")) {
+					for (int j = 0; j < child.getChildNodes().getLength(); j++) {
+						Node _child = child.getChildNodes().item(j);
+						if (_child.getNodeName().equalsIgnoreCase("#text")) {
+							platform.addCpu(_child.getNodeValue());
+						}
+					}
+				}
+			}
+			osConfig.setPlatform(platform);
+		} else if (node.getNodeName().equalsIgnoreCase("image")) {
+			Image image = new Image();
+			for (int i = 0; i < node.getAttributes().getLength(); i++) {
+				Node attr = node.getAttributes().item(i);
+				if (attr.getNodeName().equalsIgnoreCase("name")) {
+					image.setName(attr.getNodeValue());
+				} else if (attr.getNodeName().equalsIgnoreCase("size")) {
+					image.setSize(attr.getNodeValue());
+				} else if (attr.getNodeName().equalsIgnoreCase("driver")) {
+					image.setDriver(attr.getNodeValue());
+				} else if (attr.getNodeName().equalsIgnoreCase("format")) {
+					image.setFormat(attr.getNodeValue());
+				}
+			}
+
+			for (int i = 0; i < node.getChildNodes().getLength(); i++) {
+				Node child = node.getChildNodes().item(i);
+				if (child.getNodeName().equalsIgnoreCase("mbr")) {
+					for (int j = 0; j < child.getChildNodes().getLength(); j++) {
+						Node _child = child.getChildNodes().item(j);
+						if (_child.getNodeName().equalsIgnoreCase("#text")) {
+							image.setBootloader(_child.getNodeValue());
+						}
+					}
+				}
+			}
+			osConfig.addImage(image);
+		} else if (node.getNodeName().equalsIgnoreCase("source")) {
+			Source source = new Source();
+
+			for (int i = 0; i < node.getAttributes().getLength(); i++) {
+				Node attr = node.getAttributes().item(i);
+				if (attr.getNodeName().equalsIgnoreCase("type")) {
+					source.setType(attr.getNodeValue());
+				} else if (attr.getNodeName().equalsIgnoreCase("name")) {
+					source.setName(attr.getNodeValue());
+				}
+			}
+
+			for (int i = 0; i < node.getChildNodes().getLength(); i++) {
+				Node child = node.getChildNodes().item(i);
+
+				if (child.getNodeName().equalsIgnoreCase("code")) {
+					Code c = new Code();
+					for (int j = 0; j < child.getAttributes().getLength(); j++) {
+						Node attr = child.getAttributes().item(j);
+						if (attr.getNodeName().equalsIgnoreCase("type")) {
+							c.setType(attr.getNodeValue());
+						}
+					}
+
+					for (int j = 0; j < child.getChildNodes().getLength(); j++) {
+						Node _child = child.getChildNodes().item(j);
+						if (_child.getNodeName().equalsIgnoreCase("#text")) {
+							c.setName(_child.getNodeValue());
+						}
+					}
+					source.addCode(c);
+				}
+			}
+
+			osConfig.addSource(source);
 		}
-		
-		NodeList nodes = node.getChildNodes();
-		if(nodes!=null)
-		for(int i=0;i<nodes.getLength();i++) {
-			if(!nodes.item(i).getNodeName().equalsIgnoreCase("#comment")&&!nodes.item(i).getNodeName().equalsIgnoreCase("#comment"))
-			parse(nodes.item(i),osConfig);
+
+		for (int i = 0; i < node.getChildNodes().getLength(); i++) {
+			parse(node.getChildNodes().item(i), osConfig);
 		}
 	}
 
-	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
-		parse(null);
-	}
+//	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+//		parse(null);
+//	}
 }

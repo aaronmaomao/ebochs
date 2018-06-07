@@ -5,13 +5,15 @@
 		<cpu>i386</cpu>
 	</platform>
 	
-	<!-- 生成镜像的源文件/资源 -->
+	<!-- 镜像/存储配置 -->
+	<image name="mwos.img" size="1440k" driver="floppy" format="fat16">
+		<mbr>src/mbr.asm</mbr>
+	</image>
+
+	<!-- 源文件/资源 -->
 	<source type="core" name="main">
-		<image format="fat16" size="1440k" driver="floppy" name="mwos.img">
-			<bootloader>src/boot.asm</bootloader>
-		</image>
-		<code include="true">src/bootInit.c</code>
-		<code include="true">src/OSMain.c</code>
+		<code type="bootloader">src/bootloader.asm</code>
+		<code>src/OSMain.c</code>
 	</source>
 	<source type="app" name="HelloWorld.mwe">
 		<code>app/main.c</code>
