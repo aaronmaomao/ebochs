@@ -86,66 +86,68 @@ public class OSConfig {
 
 		return false;
 	}
+	
+	public class Source {
+		public static final String CORE = "core";
+		public static final String APP = "app";
+
+		private String type;
+		private String name;
+		private Map<String, Code> codes;
+
+		public Source(String type, String name) {
+			this();
+			this.type = type;
+			this.name = name;
+		}
+
+		public Source() {
+			this.codes = new LinkedHashMap<>();
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public Map<String, Code> getCodes() {
+			return codes;
+		}
+
+		public Code getCode(String name) {
+			return codes.get(name);
+		}
+
+		public void addCode(String code) {
+			Code c = new Code();
+			c.setName(code);
+			this.codes.put(code, c);
+		}
+
+		public void addCode(Code code) {
+			this.codes.put(code.getName(), code);
+		}
+
+		public boolean isInclude(String code) {
+			return this.codes.containsKey(code);
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+	}
 
 }
 
-class Source {
-	public static final String CORE = "core";
-	public static final String APP = "app";
 
-	private String type;
-	private String name;
-	private Map<String, Code> codes;
-
-	public Source(String type, String name) {
-		this();
-		this.type = type;
-		this.name = name;
-	}
-
-	public Source() {
-		this.codes = new LinkedHashMap<>();
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public Map<String, Code> getCodes() {
-		return codes;
-	}
-
-	public Code getCode(String name) {
-		return codes.get(name);
-	}
-
-	public void addCode(String code) {
-		Code c = new Code();
-		c.setName(code);
-		this.codes.put(code, c);
-	}
-
-	public void addCode(Code code) {
-		this.codes.put(code.getName(), code);
-	}
-
-	public boolean isInclude(String code) {
-		return this.codes.containsKey(code);
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-}
 
 class Code {
 	public final static String BOOT = "bootloader";

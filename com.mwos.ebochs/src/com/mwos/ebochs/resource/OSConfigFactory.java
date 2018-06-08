@@ -17,6 +17,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.mwos.ebochs.resource.OSConfig.Source;
+
 public class OSConfigFactory {
 	private static Map<IProject, OSConfig> _map = new HashMap<>();
 
@@ -27,8 +29,11 @@ public class OSConfigFactory {
 	public static OSConfig getConfig(IProject project) throws ParserConfigurationException, SAXException, IOException {
 		OSConfig config = _map.get(project);
 		if (config == null) {
-			if (new File(project.getLocationURI().toString() + "\\OS.xml").exists()) {
-				parse(project.getFile("OS.xml"));
+			if (new File(project.getLocationURI().getPath() + "\\OS.xml").exists()) {
+				config = parse(project.getFile("OS.xml"));
+				if(config!=null)
+					_map.put(project, config);
+					
 			}
 		}
 		return config;
@@ -110,7 +115,7 @@ public class OSConfigFactory {
 			}
 			osConfig.addImage(image);
 		} else if (node.getNodeName().equalsIgnoreCase("source")) {
-			Source source = new Source();
+			Source source = osConfig.new Source();
 
 			for (int i = 0; i < node.getAttributes().getLength(); i++) {
 				Node attr = node.getAttributes().item(i);
