@@ -232,12 +232,8 @@ public class FileUtil {
 	}
 
 	public static void main(String[] args) {
-		try {
-			makeImage("D://a.img",1474560);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println("aaabb".matches(""));
 	}
+	
 
 }

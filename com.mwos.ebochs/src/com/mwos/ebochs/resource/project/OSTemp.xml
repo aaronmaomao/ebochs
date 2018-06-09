@@ -4,18 +4,25 @@
 	<platform arch="x86">
 		<cpu>i386</cpu>
 	</platform>
-	
+
 	<!-- 镜像/存储配置 -->
-	<image name="mwos.img" size="1440k" driver="floppy" format="fat16">
-		<mbr>src/mbr.asm</mbr>
+	<image name="mwos.img" size="1440k" device="floppy" format="fat16" mbr="mbr.bin">
+		<resource type="codepart" name="bootloader.bin" />
+		<resource type="codepart" name="os.bin" />
+		<resource type="codepart" name="HelloWorld.mwe" />
 	</image>
 
-	<!-- 源文件/资源 -->
-	<source type="core" name="main">
-		<code type="bootloader">src/bootloader.asm</code>
+	<!-- 源文件 -->
+	<codepart type="core" obj="mbr.bin">
+		<code>src/mbr.asm</code>
+	</codepart>
+	<codepart type="core" obj="bootloader.bin">
+		<code>src/bootloader.asm</code>
+	</codepart>
+	<codepart type="core" obj="os.bin">
 		<code>src/OSMain.c</code>
-	</source>
-	<source type="app" name="HelloWorld.mwe">
+	</codepart>
+	<codepart type="app" obj="HelloWorld.mwe">
 		<code>app/main.c</code>
-	</source>
+	</codepart>
 </os> 
