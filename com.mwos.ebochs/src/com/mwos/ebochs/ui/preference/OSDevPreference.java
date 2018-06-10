@@ -2,10 +2,13 @@ package com.mwos.ebochs.ui.preference;
 
 import java.io.File;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -22,8 +25,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.mwos.ebochs.Activator;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.ModifyEvent;
 
 public class OSDevPreference extends PreferencePage implements IWorkbenchPreferencePage {
 
@@ -98,7 +99,7 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String toochain = chooseFolder("工具链", container);
-				if (!toochain.isEmpty()) {
+				if (StringUtils.isNotEmpty(toochain)) {
 					textToolchain.setText(toochain);
 				}
 			}
@@ -136,7 +137,7 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String bochs = chooseFolder("bochs", container);
-				if (!bochs.isEmpty()) {
+				if (StringUtils.isNotEmpty(bochs)) {
 					textBochs.setText(bochs);
 				}
 			}
@@ -169,10 +170,10 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 			this.isVaild |= field;
 		else
 			this.isVaild &= ~field;
-		if(isVaild==0x11) {
+		if (isVaild == 0x11) {
 			this.setValid(true);
 			this.setErrorMessage(null);
-		}else {
+		} else {
 			this.setValid(false);
 		}
 	}

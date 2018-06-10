@@ -1,6 +1,8 @@
 package com.mwos.ebochs.resource.project;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.cdt.core.CProjectNature;
 import org.eclipse.cdt.core.model.CoreModel;
@@ -92,7 +94,7 @@ public class OSProject extends CProject {
 		CoreUtility.createFolder(inc, true, true, null);
 		CoreUtility.createFolder(src, true, true, null);
 		CoreUtility.createFolder(obj, true, true, null);
-		
+
 		try {
 			IFile config = project.getFile("OS.xml");
 			Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
@@ -161,5 +163,24 @@ public class OSProject extends CProject {
 	public static IProject getProject(String name) {
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(name);
 		return project;
+	}
+
+	public static List<IProject> getOSProject() {
+		List<IProject> projects = new ArrayList<>();
+		for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+			try {
+				if (p.exists() && p.isOpen() && p.getNature(OSProjectNature.NatureId) != null) {
+					projects.add(p);
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+		return projects;
+	}
+	
+	public static IProject getCurrentPrj() {
+		IProject p = null;
+		return p;
 	}
 }

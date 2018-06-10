@@ -1,5 +1,8 @@
 package com.mwos.ebochs.ui.launch.run;
 
+import java.util.List;
+
+import org.eclipse.core.resources.IProject;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -19,16 +22,15 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.mwos.ebochs.resource.project.OSProject;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
+import org.eclipse.swt.widgets.Combo;
 
 public class MainTabRun extends AbstractLaunchConfigurationTab {
-	private Text textPrj;
 	private Text textBochs;
 	private Text textVbox;
 	private Text textBxrc;
 
-	
-	
 	/**
 	 * @wbp.parser.entryPoint
 	 */
@@ -41,20 +43,23 @@ public class MainTabRun extends AbstractLaunchConfigurationTab {
 			Group groupPrj = new Group(container, SWT.NONE);
 			groupPrj.setText("选择工程");
 			groupPrj.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-			groupPrj.setLayout(new GridLayout(3, false));
+			groupPrj.setLayout(new GridLayout(2, false));
 			{
 				Label labelPrj = new Label(groupPrj, SWT.NONE);
 				labelPrj.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 				labelPrj.setText("工程");
 			}
-			{
-				textPrj = new Text(groupPrj, SWT.BORDER);
-				textPrj.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+			Combo comboProject = new Combo(groupPrj, SWT.READ_ONLY);
+			
+			List<IProject> projects = OSProject.getOSProject();
+			for(IProject p:projects) {
+				comboProject.add(p.getName());
 			}
-			{
-				Button btnPrj = new Button(groupPrj, SWT.NONE);
-				btnPrj.setText("浏览...");
-			}
+			if(comboProject.getItemCount()>0)
+				comboProject.select(0);
+			
+			comboProject.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		}
 		{
 			Group groupPlatform = new Group(container, SWT.NONE);
@@ -137,7 +142,7 @@ public class MainTabRun extends AbstractLaunchConfigurationTab {
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Main";
