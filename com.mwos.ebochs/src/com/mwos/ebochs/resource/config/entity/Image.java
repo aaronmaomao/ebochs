@@ -3,16 +3,23 @@ package com.mwos.ebochs.resource.config.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.cdt.utils.PathUtil;
+
+import com.mwos.ebochs.core.FileUtil;
+import com.mwos.ebochs.resource.project.OSProject;
+
 public class Image {
 	private String name;
 	private long size;
 	private String device;
 	private String format;
 	private String mbr;
-	private List<Resource> resources;
+	private OSConfig config;
+	private List<ImgFile> imgFiles;
 
-	public Image() {
-		resources = new ArrayList<>();
+	public Image(OSConfig config) {
+		this.config = config;
+		imgFiles = new ArrayList<>();
 	}
 
 	public String getName() {
@@ -64,22 +71,31 @@ public class Image {
 		this.mbr = mbr;
 	}
 
-	public List<Resource> getResources() {
-		return resources;
+	public List<ImgFile> getImgFiles() {
+		return imgFiles;
 	}
 
-	public void addResource(Resource r) {
-		for (Resource temp : resources) {
-			if (temp.getName().equals(r.getName()))
+	public void addImgFile(ImgFile r) {
+		for (ImgFile temp : imgFiles) {
+			if (temp.getFilePath().equals(r.getFilePath()))
 				return;
 		}
-
-		resources.add(r);
+		imgFiles.add(r);
 	}
 
-	public boolean isResInclude(String name) {
-		for (Resource temp : resources) {
-			if (temp.getName().equals(name))
+	public OSConfig getConfig() {
+		return config;
+	}
+
+	public boolean isResInclude(String path) {
+		if (!path.contains(":")) {
+			if (!path.startsWith("/"))
+				path = "/" + path;
+			path = this.config.getProject().getLocationURI().getPath() + path;
+		}
+
+		for (ImgFile temp : imgFiles) {
+			if (FileUtil.equalPath(temp.getFilePath(), path))
 				return true;
 		}
 
@@ -97,14 +113,13 @@ public class Image {
 			return false;
 		if (!this.mbr.equals(old.mbr))
 			return false;
-		if (this.resources.size() != old.resources.size())
+		if (this.imgFiles.size() != old.imgFiles.size())
 			return false;
 
-		for (int i = 0; i < resources.size(); i++) {
-			if (!resources.get(i).equal(old.getResources().get(i)))
+		for (int i = 0; i < imgFiles.size(); i++) {
+			if (!imgFiles.get(i).equal(old.getImgFiles().get(i)))
 				return false;
 		}
-
 		return true;
 	}
 }

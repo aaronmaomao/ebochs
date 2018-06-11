@@ -20,7 +20,7 @@ import com.mwos.ebochs.resource.config.entity.CodePart.Code;
 import com.mwos.ebochs.resource.config.entity.Image;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 import com.mwos.ebochs.resource.config.entity.Platform;
-import com.mwos.ebochs.resource.config.entity.Resource;
+import com.mwos.ebochs.resource.config.entity.ImgFile;
 
 public class OSConfigFactory {
 	private static Map<IProject, OSConfig> _map = new HashMap<>();
@@ -57,7 +57,8 @@ public class OSConfigFactory {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dbBuilder = dbFactory.newDocumentBuilder();
 		Document document = dbBuilder.parse(osxml.getLocationURI().getPath());
-		// Document document = dbBuilder.parse("D:\\OS\\ebochs\\com.mwos.ebochs\\src\\com\\mwos\\ebochs\\resource\\project\\OSTemp.xml");
+		// Document document =
+		// dbBuilder.parse("D:\\OS\\ebochs\\com.mwos.ebochs\\src\\com\\mwos\\ebochs\\resource\\project\\OSTemp.xml");
 
 		Node mapper = document.getFirstChild();
 		parse(mapper, config);
@@ -100,7 +101,7 @@ public class OSConfigFactory {
 			}
 			osConfig.setPlatform(platform);
 		} else if (node.getNodeName().equalsIgnoreCase("image")) {
-			Image image = new Image();
+			Image image = new Image(osConfig);
 			for (int i = 0; i < node.getAttributes().getLength(); i++) {
 				Node attr = node.getAttributes().item(i);
 				if (attr.getNodeName().equalsIgnoreCase("name")) {
@@ -118,23 +119,13 @@ public class OSConfigFactory {
 
 			for (int i = 0; i < node.getChildNodes().getLength(); i++) {
 				Node child = node.getChildNodes().item(i);
-				if (child.getNodeName().equalsIgnoreCase("resource")) {
-					Resource res = new Resource();
-					for (int j = 0; j < child.getAttributes().getLength(); j++) {
-						Node _attr = child.getAttributes().item(j);
-						if (_attr.getNodeName().equalsIgnoreCase("type")) {
-							res.setType(_attr.getNodeValue());
-						} else if (_attr.getNodeName().equalsIgnoreCase("name")) {
-							res.setName(_attr.getNodeValue());
-						}
-					}
-					res.setConfig(osConfig);
-					image.addResource(res);
+				if (child.getNodeName().equalsIgnoreCase("file")) {
+					image.addImgFile(getImgFile(child, image));
 				}
 			}
 			osConfig.addImage(image);
 		} else if (node.getNodeName().equalsIgnoreCase("codepart")) {
-			CodePart codePart = new CodePart();
+			CodePart codePart = new CodePart(osConfig);
 			for (int i = 0; i < node.getAttributes().getLength(); i++) {
 				Node attr = node.getAttributes().item(i);
 				if (attr.getNodeName().equalsIgnoreCase("type")) {
@@ -174,8 +165,28 @@ public class OSConfigFactory {
 		}
 	}
 
-	 public static void main(String[] args) throws ParserConfigurationException,
-	 SAXException, IOException {
-	 parse(null);
-	 }
+	private static ImgFile getImgFile(Node file, Image img) {
+		ImgFile imgFile = new ImgFile(img.getConfig());
+		for (int j = 0; j < file.getAttributes().getLength(); j++) {
+			Node _attr = file.getAttributes().item(j);
+			if (_attr.getNodeName().equalsIgnoreCase("name")) {
+				imgFile.setName(_attr.getNodeValue().trim());
+			} else if (_attr.getNodeName().equalsIgnoreCase("location")) {
+				imgFile.setLocation(_attr.getNodeValue().trim());
+			}
+		}
+
+		for (int j = 0; j < file.getChildNodes().getLength(); j++) {
+			Node sub = file.getChildNodes().item(j);
+			if (sub.getNodeName().equalsIgnoreCase("sub")) {
+				ImgFile subFile = getImgFile(sub, img);
+				imgFile.addSubFile(subFile);
+			}
+		}
+		return imgFile;
+	}
+
+	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+		parse(null);
+	}
 }

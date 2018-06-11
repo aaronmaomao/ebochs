@@ -21,7 +21,7 @@ import com.mwos.ebochs.resource.config.entity.CodePart;
 import com.mwos.ebochs.resource.config.entity.CodePart.Code;
 import com.mwos.ebochs.resource.config.entity.Image;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
-import com.mwos.ebochs.resource.config.entity.Resource;
+import com.mwos.ebochs.resource.config.entity.ImgFile;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
 import com.mwos.ebochs.ui.view.ConsoleFactory;
 
@@ -111,6 +111,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	}
 
 	private boolean doBuildFile(String file) {
+		
 		if (file.endsWith(".c")) {
 			return doBuildC(file);
 		} else if (file.endsWith(".asm")) {
@@ -126,8 +127,8 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 			if (!config.needBuild())
 				return false;
 			for (Image image : config.getImages()) {
-				for (Resource resource : image.getResources()) {
-					if (resource.getType().equals(Resource.CODEPART)) {
+				for (ImgFile resource : image.getImgFiles()) {
+					if (resource.getType().equals(ImgFile.CODEPART)) {
 						CodePart codePart = config.getCodePart(resource.getName());
 						if (codePart == null) {
 							ConsoleFactory.outErrMsg(resource.getName() + " ----- 构建异常：未找到资源\r\n", this.getProject());

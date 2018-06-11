@@ -6,9 +6,13 @@ import java.util.List;
 public class CodePart {
 	private String type;
 	private String obj;
+	private String location;
+	private OSConfig config;
 	private List<Code> codes;
 
-	public CodePart() {
+	public CodePart(OSConfig config) {
+		this.config = config;
+		this.obj = config.getProject().getLocationURI().getPath() + "/obj";
 		codes = new ArrayList<>();
 	}
 
@@ -50,10 +54,28 @@ public class CodePart {
 		this.codes.add(c);
 	}
 
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		if (location.contains(":")) {
+			this.location = location;
+		} else if (location.startsWith("/")) {
+			this.location = config.getProject().getLocationURI().getPath() + location;
+		}
+	}
+
+	public String getObjPath() {
+		return this.getLocation() + "/" + obj;
+	}
+
 	public boolean equal(CodePart old) {
 		if (!this.type.equals(old.type))
 			return false;
 		if (!this.obj.equals(old.obj))
+			return false;
+		if (!this.getObjPath().equals(old.getObjPath()))
 			return false;
 		if (this.codes.size() != old.codes.size())
 			return false;

@@ -2,7 +2,6 @@ package com.mwos.ebochs.core;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,6 +9,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.cdt.utils.PathUtil;
+import org.eclipse.core.runtime.Path;
 
 public class FileUtil {
 	private FileUtil() {
@@ -212,7 +214,6 @@ public class FileUtil {
 		}
 		return temp;
 	}
-	
 
 	public static File makeImage(String path, long size) throws IOException {
 		File image = new File(path);
@@ -231,9 +232,12 @@ public class FileUtil {
 		return image;
 	}
 
-	public static void main(String[] args) {
-		System.out.println("aaabb".matches(""));
+	public static boolean equalPath(String path1, String path2) {
+		return PathUtil.equalPath(new Path(path1), new Path(path2));
 	}
-	
+
+	public static void main(String[] args) {
+		System.out.println(equalPath("/D:/a", "/D:/a"));
+	}
 
 }

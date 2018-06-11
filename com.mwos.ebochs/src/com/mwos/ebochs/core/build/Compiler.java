@@ -1,7 +1,9 @@
 package com.mwos.ebochs.core.build;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.parser.ExtendedScannerInfo;
@@ -32,99 +34,65 @@ public class Compiler {
 	// private static String cmdReg2 = " -m32 -gcoff -masm=intel -O1 \"%c\" -o
 	// \"%obj\" %inc";
 
-	private static final String c2gas = "c2gas";
-	private static final String c2asm = "c2asm";
-	private static final String gas2asm = "gas2asm";
-	private static final String nask = "nask";
+	public static final String c2gas = "c2gas";
+	public static final String c2asm = "c2asm";
+	public static final String gas2asm = "gas2asm";
+	public static final String nask = "nask";
 
 	private Compiler() {
 
 	}
 
-	public static BuildResult compileC(String file, IProject project) throws Exception {
+	public static BuildResult compileC(String file, String objDir, IProject project) throws Exception {
 		String projectPath = project.getLocationURI().getPath();
 		String fileName = FileUtil.getFileName(file, false);
+		if (StringUtils.isEmpty(objDir)) {
+			objDir = "/obj";
 
-		String cmd_c2gas = getCmd(Compiler.c2gas).replace("%.c", file).replace("%.gas", fileName + ".gas").replace("%.inc", getInc(project));
+		} else if (!objDir.startsWith("/") && !objDir.startsWith("\\")) {
+			objDir = "/" + objDir;
+		}
+
+		File objF = new File(projectPath + objDir);
+		if (!objF.exists() || !objF.isDirectory())
+			objF.mkdirs();
+
+		String inc = CompilerUtil.getInc(project);
+
+		String cmd_c2gas = CompilerUtil.cmd_c2gas(file, objDir, inc);
 		RunResult c2gasResult = EXERunner.run(cmd_c2gas, projectPath);
 		if (c2gasResult.exitValue() != 0) {
 			return new BuildResult(c2gasResult);
 		}
 
-		String cmd_c2asm = getCmd(Compiler.c2asm).replace("%.c", file).replace("%.asm", fileName + ".asm").replace("%.inc", getInc(project));
+		String cmd_c2asm = CompilerUtil.cmd_c2asm(file, objDir, inc);
 		EXERunner.run(cmd_c2asm, projectPath);
 
-		String cmd_gas2asm = getCmd(Compiler.gas2asm).replace("%.gas", fileName + ".gas").replace("%.asm", fileName + ".asm");
+		String cmd_gas2asm = CompilerUtil.cmd_gas2asm(objDir + "/" + fileName + ".gas", objDir);
 		EXERunner.run(cmd_gas2asm, projectPath);
 
-		BuildResult naskResult = compileAsm("obj\\" + fileName + ".asm", project);
+		BuildResult naskResult = compileAsm(objDir + "/" + fileName + ".asm", objDir, project);
 
 		return new BuildResult(c2gasResult).merge(naskResult);
 	}
 
-	public static BuildResult compileAsm(String file, IProject project) throws IOException, InterruptedException {
+	public static BuildResult compileAsm(String file, String objDir, IProject project) throws IOException, InterruptedException {
 		String projectPath = project.getLocationURI().getPath();
 		String fileName = FileUtil.getFileName(file, false);
+		if (StringUtils.isEmpty(objDir)) {
+			objDir = "/obj";
 
-		String cmd_nask = getCmd(Compiler.nask).replace("%.asm", file).replace("%.obj", fileName + ".obj").replace("%.lst", fileName + ".lst");
+		} else if (!objDir.startsWith("/") && !objDir.startsWith("\\")) {
+			objDir = "/" + objDir;
+		}
+
+		String cmd_nask = CompilerUtil.cmd_nask(file, objDir);
 		RunResult result = EXERunner.run(cmd_nask, projectPath);
 
 		return new BuildResult(result);
 	}
 
-	private static String getCmd(String type) {
-		String cmd = "";
-		if (type.equals(c2gas)) {
-			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\cc1.exe -m32 -O1 %.c -o obj\\%.gas %.inc";
-		} else if (type.equals(c2asm)) {
-			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\cc1.exe -m32 -gcoff -masm=intel -O1 %.c -o obj\\_%.asm %.inc";
-		} else if (type.equals(gas2asm)) {
-			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\gas2nask.exe obj\\%.gas obj\\%.asm";
-		} else if (type.equals(nask)) {
-			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\nask.exe %.asm obj\\%.obj obj\\%.lst";
-		}
-		return cmd;
+	public static void main(String[] args) {
+		System.out.println(StringUtils.isEmpty(""));
 	}
-
-	private static String getInc(IProject project) {
-		String incs = FileUtil.getIncStr(project.getLocationURI().getPath());
-		IScannerInfoProvider provider = CCorePlugin.getDefault().getScannerInfoProvider(project);
-		if (provider != null) {
-			IScannerInfo info = provider.getScannerInformation(project);
-			if (info instanceof ExtendedScannerInfo) {
-				for (String inc : ((ExtendedScannerInfo) info).getLocalIncludePath()) {
-					if (!incs.contains(inc))
-						incs += (" -I " + inc.trim());
-				}
-			}
-		}
-
-		// ICProjectDescription projectDescription =
-		// CoreModel.getDefault().getProjectDescription(project);
-		// ICConfigurationDescription activeConfiguration =
-		// projectDescription.getActiveConfiguration(); // or another config
-		// ICFolderDescription folderDescription =
-		// activeConfiguration.getRootFolderDescription(); // or use
-		// getResourceDescription(IResource),
-		// // or pick one from getFolderDescriptions()
-		// ICLanguageSetting[] languageSettings =
-		// folderDescription.getLanguageSettings();
-		// for (ICLanguageSetting languageSetting : languageSettings) {
-		// for (ICLanguageSettingEntry includePathSetting :
-		// languageSetting.getSettingEntries(ICSettingEntry.INCLUDE_PATH)) {
-		// includePathSetting.getValue();
-		// if (!inc.isEmpty() && !incs.contains(inc)) {
-		// incs += (" -I " + inc.trim());
-		// }
-		// }
-		// }
-
-		return incs;
-	}
-
-	// public static void main(String[] args) {
-	// String file = "src\\s.d";
-	// String name = file.split("\\\\")[file.split("\\\\").length - 1];
-	// System.out.println(name);
-	// }
 }

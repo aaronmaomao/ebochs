@@ -7,19 +7,21 @@
 
 	<!-- 镜像/存储配置 -->
 	<image name="mwos.img" size="1440k" device="floppy" format="fat16" mbr="mbr.bin">
-		<resource type="codepart" name="bootloader.bin" />
-		<resource type="codepart" name="os.bin" />
-		<resource type="codepart" name="HelloWorld.mwe" />
+		<file name="os.bin">
+			<sub name="bootloader.bin" />
+			<sub name="core.bin" />
+		</file>
+		<file name="HelloWorld.mwe"/>
 	</image>
 
 	<!-- 源文件 -->
-	<codepart type="core" obj="mbr.bin">
+	<codepart type="os" obj="mbr.bin">
 		<code>src/mbr.asm</code>
 	</codepart>
-	<codepart type="core" obj="bootloader.bin">
+	<codepart type="os" obj="bootloader.bin">
 		<code>src/bootloader.asm</code>
 	</codepart>
-	<codepart type="core" obj="os.bin">
+	<codepart type="os" obj="core.bin">
 		<code>src/OSMain.c</code>
 	</codepart>
 	<codepart type="app" obj="HelloWorld.mwe">
