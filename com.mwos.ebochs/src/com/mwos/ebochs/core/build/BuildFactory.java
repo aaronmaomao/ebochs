@@ -43,8 +43,13 @@ public class BuildFactory {
 		}
 	}
 	
-	public static boolean link(String name, String rul, String stack, String[] objs) {
-		
+	public static boolean doBuildOSXml(IProject project) {
+		try {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	public static void cleanAll(IProject project) {

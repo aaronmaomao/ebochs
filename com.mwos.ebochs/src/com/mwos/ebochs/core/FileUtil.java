@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.cdt.utils.PathUtil;
 import org.eclipse.core.runtime.Path;
 
@@ -256,8 +257,12 @@ public class FileUtil {
 		return file;
 	}
 
-	public static void main(String[] args) {
-		System.out.println(equalPath("/D:/a", "/D:/a"));
+	public static String getParentDir(String name) {
+		String s = new File(name).getParent();
+		return (StringUtils.isNotBlank(s) ? s : "") + "/";
 	}
 
+	public static void main(String[] args) {
+		System.out.println(new File("asd").getParent().length());
+	}
 }
