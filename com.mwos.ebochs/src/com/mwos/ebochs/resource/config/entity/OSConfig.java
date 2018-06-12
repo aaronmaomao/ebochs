@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 
+import com.mwos.ebochs.core.FileUtil;
+
 public class OSConfig {
 	private IProject project;
 	private String name;
@@ -72,9 +74,9 @@ public class OSConfig {
 		codeParts.add(cp);
 	}
 
-	public CodePart getCodePart(String obj) {
+	public CodePart getCodePart(ImgFile imgFile) {
 		for (CodePart temp : codeParts) {
-			if (temp.getObj().equals(obj))
+			if (temp.getObj().equals(imgFile.getName()) && FileUtil.equalPath(temp.getLocation(), imgFile.getLocation()))
 				return temp;
 		}
 		return null;
@@ -121,11 +123,11 @@ public class OSConfig {
 			if (!this.images.get(i).equal(old.images.get(i)))
 				return false;
 		}
-		
-//		for (int i = 0; i < this.codeParts.size(); i++) {
-//			if (!this.codeParts.get(i).equal(old.codeParts.get(i)))
-//				return false;
-//		}
+
+		// for (int i = 0; i < this.codeParts.size(); i++) {
+		// if (!this.codeParts.get(i).equal(old.codeParts.get(i)))
+		// return false;
+		// }
 
 		return true;
 	}

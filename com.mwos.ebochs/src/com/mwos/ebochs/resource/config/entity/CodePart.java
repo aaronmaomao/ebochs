@@ -12,7 +12,7 @@ public class CodePart {
 
 	public CodePart(OSConfig config) {
 		this.config = config;
-		this.obj = config.getProject().getLocationURI().getPath() + "/obj";
+		this.location = config.getProject().getLocationURI().getPath() + "/obj";
 		codes = new ArrayList<>();
 	}
 

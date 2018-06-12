@@ -3,10 +3,7 @@ package com.mwos.ebochs.resource.config.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.cdt.utils.PathUtil;
-
 import com.mwos.ebochs.core.FileUtil;
-import com.mwos.ebochs.resource.project.OSProject;
 
 public class Image {
 	private String name;

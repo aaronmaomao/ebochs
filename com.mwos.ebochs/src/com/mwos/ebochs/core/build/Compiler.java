@@ -1,26 +1,13 @@
 package com.mwos.ebochs.core.build;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.cdt.core.CCorePlugin;
-import org.eclipse.cdt.core.model.CoreModel;
-import org.eclipse.cdt.core.parser.ExtendedScannerInfo;
-import org.eclipse.cdt.core.parser.IScannerInfo;
-import org.eclipse.cdt.core.parser.IScannerInfoProvider;
-import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
-import org.eclipse.cdt.core.settings.model.ICFolderDescription;
-import org.eclipse.cdt.core.settings.model.ICLanguageSetting;
-import org.eclipse.cdt.core.settings.model.ICLanguageSettingEntry;
-import org.eclipse.cdt.core.settings.model.ICProjectDescription;
-import org.eclipse.cdt.core.settings.model.ICSettingEntry;
 import org.eclipse.core.resources.IProject;
 
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.exe.EXERunner;
 import com.mwos.ebochs.core.exe.RunResult;
-import com.mwos.ebochs.ui.preference.OSDevPreference;
 
 public class Compiler {
 
@@ -43,50 +30,41 @@ public class Compiler {
 
 	}
 
-	public static BuildResult compileC(String file, String objDir, IProject project) throws Exception {
+	public static BuildResult compileC(String file, IProject project) throws Exception {
 		String projectPath = project.getLocationURI().getPath();
 		String fileName = FileUtil.getFileName(file, false);
-		if (StringUtils.isEmpty(objDir)) {
-			objDir = "/obj";
-
-		} else if (!objDir.startsWith("/") && !objDir.startsWith("\\")) {
-			objDir = "/" + objDir;
-		}
-
-		File objF = new File(projectPath + objDir);
-		if (!objF.exists() || !objF.isDirectory())
-			objF.mkdirs();
 
 		String inc = CompilerUtil.getInc(project);
+		String obj = CompilerUtil.getObjDir(file, project);
 
-		String cmd_c2gas = CompilerUtil.cmd_c2gas(file, objDir, inc);
+		String cmd_c2gas = CompilerUtil.getCmd(c2gas).replace("%.c", file).replace("%.gas", CompilerUtil.getObj(file, "%.gas", project)).replace("%inc", inc);
 		RunResult c2gasResult = EXERunner.run(cmd_c2gas, projectPath);
 		if (c2gasResult.exitValue() != 0) {
 			return new BuildResult(c2gasResult);
 		}
 
-		String cmd_c2asm = CompilerUtil.cmd_c2asm(file, objDir, inc);
+		String cmd_c2asm = CompilerUtil.getCmd(c2asm).replace("%.c", file).replace("%.asm", CompilerUtil.getObj(file, "_%.asm", project)).replace("%inc", inc);
 		EXERunner.run(cmd_c2asm, projectPath);
 
-		String cmd_gas2asm = CompilerUtil.cmd_gas2asm(objDir + "/" + fileName + ".gas", objDir);
+		String cmd_gas2asm = CompilerUtil.getCmd(gas2asm).replace("%.gas", CompilerUtil.getObj(file, "%.gas", project)).replace("%.asm",
+				CompilerUtil.getObj(file, "%.asm", project));
 		EXERunner.run(cmd_gas2asm, projectPath);
 
-		BuildResult naskResult = compileAsm(objDir + "/" + fileName + ".asm", objDir, project);
+		String cmd_nask = CompilerUtil.getCmd(nask).replace("%.asm", obj + "/" + fileName + ".asm").replace("%.obj", obj + "/" + fileName + ".obj").replace("%.lst",
+				obj + "/" + fileName + ".lst");
 
-		return new BuildResult(c2gasResult).merge(naskResult);
+		RunResult naskResult = EXERunner.run(cmd_nask, projectPath);
+
+		return new BuildResult(c2gasResult).merge(new BuildResult(naskResult));
 	}
 
-	public static BuildResult compileAsm(String file, String objDir, IProject project) throws IOException, InterruptedException {
-		String projectPath = project.getLocationURI().getPath();
+	public static BuildResult compileAsm(String file, IProject project) throws IOException, InterruptedException {
+		String obj = CompilerUtil.getObjDir(file, project);
 		String fileName = FileUtil.getFileName(file, false);
-		if (StringUtils.isEmpty(objDir)) {
-			objDir = "/obj";
+		String projectPath = project.getLocationURI().getPath();
+		String cmd_nask = CompilerUtil.getCmd(nask).replace("%.asm", obj + "/" + fileName + ".asm").replace("%.obj", obj + "/" + fileName + ".obj").replace("%.lst",
+				obj + "/" + fileName + ".lst");
 
-		} else if (!objDir.startsWith("/") && !objDir.startsWith("\\")) {
-			objDir = "/" + objDir;
-		}
-
-		String cmd_nask = CompilerUtil.cmd_nask(file, objDir);
 		RunResult result = EXERunner.run(cmd_nask, projectPath);
 
 		return new BuildResult(result);

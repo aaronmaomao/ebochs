@@ -52,7 +52,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected void clean(IProgressMonitor monitor) throws CoreException {
 		super.clean(monitor);
-		cleanAll(this.getProject());
+		BuildFactory.cleanAll(this.getProject());
 	}
 
 	private void doBuilds(IResourceDelta deltas[]) {
@@ -63,9 +63,9 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 			for (IResourceDelta delta : deltas) {
 				if (new File(delta.getResource().getLocationURI().getPath()).isFile()) {
 					if (delta.getResource().getName().endsWith(".c")) {
-						doBuildC(delta.getProjectRelativePath().toString());
+						BuildFactory.doBuildC(delta.getProjectRelativePath().toString(), this.getProject());
 					} else if (delta.getResource().getName().endsWith(".asm")) {
-						doBuildAsm(delta.getProjectRelativePath().toString());
+						BuildFactory.doBuildAsm(delta.getProjectRelativePath().toString(), this.getProject());
 					} else if (delta.getResource().getName().equals("OS.xml")) {
 						doBuildOSXml();
 					}
@@ -76,98 +76,8 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	private boolean doBuildAsm(String file) {
-		try {
-			clean(file, this.getProject());
-			BuildResult res = Compiler.compileAsm(file, this.getProject());
-			if (res.isSuccess()) {
-				ConsoleFactory.outMsg(file + " ----- 编译成功\r\n" + res.getMsg(), this.getProject());
-			} else {
-				ConsoleFactory.outErrMsg(file + " ----- 编译错误\r\n" + res.getAllMsg(), this.getProject());
-			}
-			return res.isSuccess();
-		} catch (Exception e) {
-			e.printStackTrace();
-			ConsoleFactory.outErrMsg(file + " ----- 编译异常\r\n", this.getProject());
-			return false;
-		}
-	}
-
-	private boolean doBuildC(String file) {
-		try {
-			clean(file, this.getProject());
-			BuildResult res = Compiler.compileC(file, this.getProject());
-			if (res.isSuccess()) {
-				ConsoleFactory.outMsg(file + " ----- 编译成功\r\n" + res.getMsg(), this.getProject());
-			} else {
-				ConsoleFactory.outErrMsg(file + " ----- 编译错误\r\n" + res.getAllMsg(), this.getProject());
-			}
-			return res.isSuccess();
-		} catch (Exception e) {
-			e.printStackTrace();
-			ConsoleFactory.outErrMsg(file + " ----- 编译异常\r\n", this.getProject());
-			return false;
-		}
-	}
-
-	private boolean doBuildFile(String file) {
-		
-		if (file.endsWith(".c")) {
-			return doBuildC(file);
-		} else if (file.endsWith(".asm")) {
-			return doBuildAsm(file);
-		}
-
+	private boolean doBuildOSXml() {
 		return false;
 	}
 
-	private boolean doBuildOSXml() {
-		try {
-			OSConfig config = OSConfigFactory.getBuildConfig(this.getProject());
-			if (!config.needBuild())
-				return false;
-			for (Image image : config.getImages()) {
-				for (ImgFile resource : image.getImgFiles()) {
-					if (resource.getType().equals(ImgFile.CODEPART)) {
-						CodePart codePart = config.getCodePart(resource.getName());
-						if (codePart == null) {
-							ConsoleFactory.outErrMsg(resource.getName() + " ----- 构建异常：未找到资源\r\n", this.getProject());
-							return false;
-						}
-						for (Code code : codePart.getCodes()) {
-							if (!doBuildFile(code.getName())) {
-								ConsoleFactory.outErrMsg(resource.getName() + " : " + code.getName() + " ----- 构建异常\r\n",
-										this.getProject());
-								return false;
-							}
-						}
-					}
-				}
-			}
-
-			return true;
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			ConsoleFactory.outErrMsg(this.getProject().getName() + " ----- 构建失败\r\n" + ExceptionUtil.getMsg(e), this.getProject());
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	private void cleanAll(IProject project) {
-		String path = project.getLocationURI().getPath() + "\\obj";
-		File f = new File(path);
-		f.delete();
-		f.mkdirs();
-	}
-
-	private void clean(String name, IProject project) {
-		name = FileUtil.getFileName(name, false);
-		String path = project.getLocationURI().getPath() + "\\obj";
-		// "^aa.*?bb$" aa开头，bb结尾
-		List<File> objs = FileUtil.listFiles(path, new String[] { "^" + name + "\\..*?", "^_" + name + "\\..*?", name }, true);
-		if (objs != null)
-			for (File f : objs) {
-				f.delete();
-			}
-	}
 }

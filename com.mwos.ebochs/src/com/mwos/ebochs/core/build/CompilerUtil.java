@@ -1,5 +1,8 @@
 package com.mwos.ebochs.core.build;
 
+import java.io.File;
+
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.parser.ExtendedScannerInfo;
 import org.eclipse.cdt.core.parser.IScannerInfo;
@@ -13,31 +16,8 @@ public class CompilerUtil {
 	private CompilerUtil() {
 	}
 
-	public static String cmd_c2gas(String c, String obj, String inc) {
-		String name = FileUtil.getFileName(c, false);
-		String cmd = getCmd(Compiler.c2gas);
-		return cmd.replace("%.c", c).replace("%.gas", obj + "/" + name + ".gas").replace("%inc", inc);
-	}
 
-	public static String cmd_c2asm(String c, String obj, String inc) {
-		String name = FileUtil.getFileName(c, false);
-		String cmd = getCmd(Compiler.c2asm);
-		return cmd.replace("%.c", c).replace("%.asm", obj + "/_" + name + ".asm").replace("%inc", inc);
-	}
-
-	public static String cmd_gas2asm(String gas, String obj) {
-		String name = FileUtil.getFileName(gas, false);
-		String cmd = getCmd(Compiler.gas2asm);
-		return cmd.replace("%.gas", gas).replace("%.asm", obj + "/" + name + ".asm");
-	}
-
-	public static String cmd_nask(String asm, String obj) {
-		String name = FileUtil.getFileName(asm, false);
-		String cmd = getCmd(Compiler.gas2asm);
-		return cmd.replace("%.asm", asm).replace("%.obj", obj + "/" + name + ".obj").replace("%.lst", obj + "/" + name + ".lst");
-	}
-
-	private static String getCmd(String type) {
+	public static String getCmd(String type) {
 		String cmd = "";
 		if (type.equals(Compiler.c2gas)) {
 			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\cc1.exe -m32 -O1 %.c -o %.gas %inc";
@@ -50,6 +30,40 @@ public class CompilerUtil {
 		}
 		return cmd;
 	}
+
+	public static String getObj(String file, String objName, IProject p) {
+		String fileName = FileUtil.getFileName(file, false);
+		String getObjDir = "/obj";
+		String dirs[] = file.split("/");
+		for (int i = 0; i < dirs.length - 1; i++) {
+			if (!dirs[i].isEmpty())
+				getObjDir += ("/" + dirs[i]);
+		}
+		File f = new File(p.getLocationURI().getPath() + getObjDir);
+		if (!f.exists())
+			f.mkdirs();
+		if (StringUtils.isNotBlank(objName)) {
+			getObjDir += objName.replace("%", fileName);
+		}
+		return getObjDir;
+	}
+
+	public static String getObjDir(String file, IProject p) {
+		String getObjDir = "/obj";
+		String dirs[] = file.split("/");
+		for (int i = 0; i < dirs.length - 1; i++) {
+			if (!dirs[i].isEmpty())
+				getObjDir += ("/" + dirs[i]);
+		}
+		File f = new File(p.getLocationURI().getPath() + getObjDir);
+		if (!f.exists())
+			f.mkdirs();
+		return getObjDir;
+	}
+
+//	public static void main(String[] args) {
+//		System.out.println(getObjDir(""));
+//	}
 
 	public static String getInc(IProject project) {
 		String incs = FileUtil.getIncStr(project.getLocationURI().getPath());
