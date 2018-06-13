@@ -1,27 +1,16 @@
 package com.mwos.ebochs.core.build;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.ParserConfigurationException;
-
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.xml.sax.SAXException;
 
-import com.mwos.ebochs.core.ExceptionUtil;
-import com.mwos.ebochs.core.FileUtil;
-import com.mwos.ebochs.resource.config.OSConfigFactory;
-import com.mwos.ebochs.resource.config.entity.CodePart;
-import com.mwos.ebochs.resource.config.entity.CodePart.Code;
-import com.mwos.ebochs.resource.config.entity.Image;
-import com.mwos.ebochs.resource.config.entity.OSConfig;
-import com.mwos.ebochs.resource.config.entity.ImgFile;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
 import com.mwos.ebochs.ui.view.ConsoleFactory;
 
@@ -52,7 +41,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected void clean(IProgressMonitor monitor) throws CoreException {
 		super.clean(monitor);
-		BuildFactory.cleanAll(this.getProject());
+		BuildTool.cleanAll(this.getProject());
 	}
 
 	private void doBuilds(IResourceDelta deltas[]) {
@@ -63,16 +52,58 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 			for (IResourceDelta delta : deltas) {
 				if (new File(delta.getResource().getLocationURI().getPath()).isFile()) {
 					if (delta.getResource().getName().endsWith(".c")) {
-						BuildFactory.doBuildC(delta.getProjectRelativePath().toString(), this.getProject());
+						doBuildC((IFile) delta.getResource());
 					} else if (delta.getResource().getName().endsWith(".asm")) {
-						BuildFactory.doBuildAsm(delta.getProjectRelativePath().toString(), this.getProject());
+						doBuildAsm((IFile) delta.getResource());
 					} else if (delta.getResource().getName().equals("OS.xml")) {
-						BuildFactory.doBuildOSXml(this.getProject());
+						doBuildOSXml();
 					}
 				} else {
 					doBuilds(delta.getAffectedChildren());
 				}
 			}
 		}
+	}
+
+	private boolean doBuildC(IFile file) {
+		try {
+			BuildResult res = BuildTool.compileC(file);
+			if (!res.isSuccess()) {
+				IMarker marker = file.createMarker("com.ebochs.BuildErrorMarker");
+				marker.setAttribute("Description", "编译错误");
+				ConsoleFactory.outErrMsg("------ 编译错误:\t" + file.getProjectRelativePath() + "\r\n" + res.getAllMsg(), file.getProject());
+				BuildTool.clean(file.getProjectRelativePath().toString(), file.getProject());
+			} else {
+				ConsoleFactory.outMsg("------ 编译成功:\t" + file.getProjectRelativePath() + "\r\n" + res.getAllMsg(), file.getProject());
+				file.deleteMarkers("com.ebochs.BuildErrorMarker", false, IFile.DEPTH_INFINITE);
+			}
+			return res.isSuccess();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private boolean doBuildAsm(IFile file) {
+		try {
+			BuildResult res = BuildTool.compileAsm(file);
+			if (!res.isSuccess()) {
+				IMarker marker = file.createMarker("com.ebochs.BuildErrorMarker");
+				marker.setAttribute("Description", "编译错误");
+				ConsoleFactory.outErrMsg(file + " ------ 编译错误\r\n" + res.getAllMsg(), file.getProject());
+				BuildTool.clean(file.getProjectRelativePath().toString(), file.getProject());
+			}else {
+				ConsoleFactory.outMsg("------ 编译成功:\t" + file.getProjectRelativePath() + "\r\n" + res.getAllMsg(), file.getProject());
+				file.deleteMarkers("com.ebochs.BuildErrorMarker", false, IFile.DEPTH_INFINITE);
+			}
+			return res.isSuccess();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private boolean doBuildOSXml() {
+		return false;
 	}
 }

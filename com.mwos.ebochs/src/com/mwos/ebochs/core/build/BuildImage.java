@@ -47,9 +47,9 @@ public class BuildImage {
 		boolean r = true;
 		for (Code code : cp.getCodes()) {
 			if (code.getName().toLowerCase().endsWith(".c")) {
-				r &= BuildFactory.doBuildC(code.getName(), p);
+			//	r &= BuildFactory.doBuildC(code.getName(), p);
 			} else if (code.getName().toLowerCase().endsWith(".asm")) {
-				r &= BuildFactory.doBuildAsm(code.getName(), p);
+			//	r &= BuildFactory.doBuildAsm(code.getName(), p);
 			} else {
 				r &= false;
 			}
