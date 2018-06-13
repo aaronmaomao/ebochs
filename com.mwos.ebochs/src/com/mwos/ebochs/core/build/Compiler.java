@@ -25,6 +25,7 @@ public class Compiler {
 	public static final String c2asm = "c2asm";
 	public static final String gas2asm = "gas2asm";
 	public static final String nask = "nask";
+	public static final String link = "obj2bim";
 
 	private Compiler() {
 
@@ -37,21 +38,23 @@ public class Compiler {
 		String inc = CompilerUtil.getInc(project);
 		String obj = CompilerUtil.getObjDir(file, project);
 
-		String cmd_c2gas = CompilerUtil.getCmd(c2gas).replace("%.c", file).replace("%.gas", CompilerUtil.getObj(file, "%.gas", project)).replace("%inc", inc);
+		String cmd_c2gas = CompilerUtil.getCmd(c2gas).replace("%.c", file).replace("%.gas", CompilerUtil.getObj(file, "%.gas", project))
+				.replace("%inc", inc);
 		RunResult c2gasResult = EXERunner.run(cmd_c2gas, projectPath);
 		if (c2gasResult.exitValue() != 0) {
 			return new BuildResult(c2gasResult);
 		}
 
-		String cmd_c2asm = CompilerUtil.getCmd(c2asm).replace("%.c", file).replace("%.asm", CompilerUtil.getObj(file, "_%.asm", project)).replace("%inc", inc);
+		String cmd_c2asm = CompilerUtil.getCmd(c2asm).replace("%.c", file).replace("%.asm", CompilerUtil.getObj(file, "_%.asm", project))
+				.replace("%inc", inc);
 		EXERunner.run(cmd_c2asm, projectPath);
 
 		String cmd_gas2asm = CompilerUtil.getCmd(gas2asm).replace("%.gas", CompilerUtil.getObj(file, "%.gas", project)).replace("%.asm",
 				CompilerUtil.getObj(file, "%.asm", project));
 		EXERunner.run(cmd_gas2asm, projectPath);
 
-		String cmd_nask = CompilerUtil.getCmd(nask).replace("%.asm", obj + "/" + fileName + ".asm").replace("%.obj", obj + "/" + fileName + ".obj").replace("%.lst",
-				obj + "/" + fileName + ".lst");
+		String cmd_nask = CompilerUtil.getCmd(nask).replace("%.asm", obj + "/" + fileName + ".asm")
+				.replace("%.obj", obj + "/" + fileName + ".obj").replace("%.lst", obj + "/" + fileName + ".lst");
 
 		RunResult naskResult = EXERunner.run(cmd_nask, projectPath);
 
@@ -62,11 +65,26 @@ public class Compiler {
 		String obj = CompilerUtil.getObjDir(file, project);
 		String fileName = FileUtil.getFileName(file, false);
 		String projectPath = project.getLocationURI().getPath();
-		String cmd_nask = CompilerUtil.getCmd(nask).replace("%.asm", obj + "/" + fileName + ".asm").replace("%.obj", obj + "/" + fileName + ".obj").replace("%.lst",
-				obj + "/" + fileName + ".lst");
+		String cmd_nask = CompilerUtil.getCmd(nask).replace("%.asm", obj + "/" + fileName + ".asm")
+				.replace("%.obj", obj + "/" + fileName + ".obj").replace("%.lst", obj + "/" + fileName + ".lst");
 
 		RunResult result = EXERunner.run(cmd_nask, projectPath);
 
+		return new BuildResult(result);
+	}
+
+	public static BuildResult link(String file, String stack, String[] objs, IProject p) throws IOException, InterruptedException {
+		String fileName = FileUtil.getFileName(file, false);
+		String projectPath = p.getLocationURI().getPath();
+		String cmd_link = CompilerUtil.getCmd(link).replace("%.out", file).replace("%.stack", stack).replace("%.map",
+				FileUtil.getParentDir(file) + fileName + ".map");
+		String objStr = "";
+		for (String obj : objs) {
+			obj += (" " + obj);
+		}
+		cmd_link = cmd_link.replace("%objs", objStr);
+
+		RunResult result = EXERunner.run(cmd_link, projectPath);
 		return new BuildResult(result);
 	}
 

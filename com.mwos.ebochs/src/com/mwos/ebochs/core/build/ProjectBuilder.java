@@ -67,7 +67,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 					} else if (delta.getResource().getName().endsWith(".asm")) {
 						BuildFactory.doBuildAsm(delta.getProjectRelativePath().toString(), this.getProject());
 					} else if (delta.getResource().getName().equals("OS.xml")) {
-						doBuildOSXml();
+						BuildFactory.doBuildOSXml(this.getProject());
 					}
 				} else {
 					doBuilds(delta.getAffectedChildren());
@@ -75,9 +75,4 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 			}
 		}
 	}
-
-	private boolean doBuildOSXml() {
-		return false;
-	}
-
 }

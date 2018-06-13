@@ -16,7 +16,6 @@ public class CompilerUtil {
 	private CompilerUtil() {
 	}
 
-
 	public static String getCmd(String type) {
 		String cmd = "";
 		if (type.equals(Compiler.c2gas)) {
@@ -27,6 +26,8 @@ public class CompilerUtil {
 			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\gas2nask.exe %.gas %.asm";
 		} else if (type.equals(Compiler.nask)) {
 			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\nask.exe %.asm %.obj %.lst";
+		} else if (type.equals(Compiler.link)) {
+			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\obj2bim.exe  @"+OSDevPreference.getValue(OSDevPreference.TOOLCHAIN)+"/lib/haribote.rul out:%.out stack:%.stack map:%.map %objs";
 		}
 		return cmd;
 	}
@@ -61,9 +62,9 @@ public class CompilerUtil {
 		return getObjDir;
 	}
 
-//	public static void main(String[] args) {
-//		System.out.println(getObjDir(""));
-//	}
+	// public static void main(String[] args) {
+	// System.out.println(getObjDir(""));
+	// }
 
 	public static String getInc(IProject project) {
 		String incs = FileUtil.getIncStr(project.getLocationURI().getPath());
