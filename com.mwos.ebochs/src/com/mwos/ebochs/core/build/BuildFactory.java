@@ -44,6 +44,7 @@ public class BuildFactory {
 	}
 	
 	public static boolean link(String name, String rul, String stack, String[] objs) {
+		return false;
 		
 	}
 
