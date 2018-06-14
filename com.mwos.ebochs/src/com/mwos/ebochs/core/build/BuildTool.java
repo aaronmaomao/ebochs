@@ -1,6 +1,7 @@
 package com.mwos.ebochs.core.build;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -54,6 +55,14 @@ public class BuildTool {
 		String cmd_nask = cmd_nask(file.getProjectRelativePath().toString());
 		RunResult naskResult = EXERunner.run(cmd_nask, prjPath);
 
+		return new BuildResult(naskResult);
+	}
+	
+	public static BuildResult link(String obj, String stack, IProject p, String[] objs) throws IOException, InterruptedException {
+		String prjPath = p.getLocationURI().getPath();
+		//链接
+		String link_cmd = cmd_link(obj, stack, objs);
+		RunResult naskResult = EXERunner.run(link_cmd, prjPath);
 		return new BuildResult(naskResult);
 	}
 
@@ -131,6 +140,7 @@ public class BuildTool {
 		String name = FileUtil.getFileName(file, false);
 		String cmd = getBuildCmd(link);
 		cmd = cmd.replace("%.out", file);
+		cmd = cmd.replace("%.stack", stack);
 		cmd = cmd.replace("%.map", "obj/" + name + ".map");
 		String objStr = "";
 		for (String obj : objs) {

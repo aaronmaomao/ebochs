@@ -132,6 +132,10 @@ public class OSConfigFactory {
 					codePart.setType(attr.getNodeValue());
 				} else if (attr.getNodeName().equalsIgnoreCase("obj")) {
 					codePart.setObj(attr.getNodeValue());
+				} else if (attr.getNodeName().equalsIgnoreCase("link")) {
+					codePart.setLink(attr.getNodeValue());
+				}else if (attr.getNodeName().equalsIgnoreCase("src")) {
+					codePart.setSrc(attr.getNodeValue());
 				}
 			}
 

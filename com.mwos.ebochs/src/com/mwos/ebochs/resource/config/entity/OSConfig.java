@@ -74,12 +74,17 @@ public class OSConfig {
 		codeParts.add(cp);
 	}
 
-	public CodePart getCodePart(ImgFile imgFile) {
+	public List<CodePart> getCodePart(ImgFile imgFile) {
+		List<CodePart> cps = new ArrayList<>();
 		for (CodePart temp : codeParts) {
 			if (temp.getObj().equals(imgFile.getName()) && FileUtil.equalPath(temp.getLocation(), imgFile.getLocation()))
-				return temp;
+				cps.add(temp);
 		}
-		return null;
+		
+		for(ImgFile ifile:imgFile.getSubs()) {
+			cps.addAll(getCodePart(ifile));
+		}
+		return cps;
 	}
 
 	public List<CodePart> getCodeParts() {

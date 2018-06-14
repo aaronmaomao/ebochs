@@ -340,14 +340,16 @@
    <extension
          point="org.eclipse.ui.decorators">
       <decorator
-            class="com.mwos.ebochs.resource.project.OSPrjLabelDecorator"
+            adaptable="true"
+            class="com.mwos.ebochs.ui.decorato.BuildErrorDecorato"
             icon="resource/icons/basket_go.png"
-            id="com.mwos.ebochs.decorator.lib"
-            label="OSProject Library IFolder"
+            id="com.mwos.ebochs.decorator.buildError"
+            label="buildError"
+            lightweight="false"
             state="true">
          <enablement>
             <objectClass
-                  name="org.eclipse.core.resources.IFolder">
+                  name="org.eclipse.core.resources.IResource">
             </objectClass>
          </enablement>
       </decorator>
@@ -357,7 +359,7 @@
          name="编译错误"
          point="org.eclipse.core.resources.markers">
       <persistent
-            value="false">
+            value="true">
       </persistent>
       <super
             type="org.eclipse.core.resources.problemmarker">

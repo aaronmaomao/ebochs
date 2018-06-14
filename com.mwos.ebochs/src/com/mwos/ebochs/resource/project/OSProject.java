@@ -21,6 +21,8 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.IResourceProxyVisitor;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
@@ -56,7 +58,7 @@ public class OSProject extends CProject {
 
 					@Override
 					public boolean visit(IResourceDelta delta) throws CoreException {
-						return false;
+						return true;
 					}
 				};
 			}
@@ -178,7 +180,7 @@ public class OSProject extends CProject {
 		}
 		return projects;
 	}
-	
+
 	public static IProject getCurrentPrj() {
 		IProject p = null;
 		return p;

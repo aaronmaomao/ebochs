@@ -11,6 +11,7 @@ public class ImgFile {
 	private String name;
 	private String location;
 	private List<ImgFile> subs;
+	
 
 	private OSConfig config;
 
@@ -66,7 +67,7 @@ public class ImgFile {
 
 		this.subs.add(f);
 	}
-
+	
 	public boolean equal(ImgFile old) {
 		if (!this.name.equals(old.name))
 			return false;

@@ -218,7 +218,7 @@ public class FileUtil {
 		return temp;
 	}
 
-	public static File makeImage(String path, long size) throws IOException {
+	public static File makeFile(String path, long size) throws IOException {
 		File image = new File(path);
 		if (!image.exists())
 			image.createNewFile();
@@ -262,6 +262,26 @@ public class FileUtil {
 		return (StringUtils.isNotBlank(s) ? s : "") + "/";
 	}
 
+	public static File merge(File f1,File f2) {
+		try {
+			InputStream in = new FileInputStream(f2);
+			OutputStream out = new FileOutputStream(f1, true);
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while((len=in.read(buffer))>0) {
+				out.write(buffer, 0, len);
+			}
+			out.flush();
+			out.close();
+			in.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return f1;
+	}
+	
 	public static void main(String[] args) {
 		System.out.println(new File("asd").getParent().length());
 	}

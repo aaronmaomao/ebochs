@@ -8,6 +8,8 @@ public class CodePart {
 	private String obj;
 	private String location;
 	private OSConfig config;
+	private boolean link = true;
+	private String src="";
 	private List<Code> codes;
 
 	public CodePart(OSConfig config) {
@@ -34,6 +36,17 @@ public class CodePart {
 
 	public List<Code> getCodes() {
 		return codes;
+	}
+
+	public boolean isLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		if (link.trim().equals("false"))
+			this.link = false;
+		else
+			this.link = true;
 	}
 
 	public Code getCode(String name) {
@@ -64,6 +77,15 @@ public class CodePart {
 		} else if (location.startsWith("/")) {
 			this.location = config.getProject().getLocationURI().getPath() + location;
 		}
+	}
+
+	public String getSrc() {
+		return src;
+	}
+
+	public void setSrc(String src) {
+		link=false;
+		this.src = src;
 	}
 
 	public String getObjPath() {
