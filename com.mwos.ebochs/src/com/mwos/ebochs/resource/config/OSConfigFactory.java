@@ -42,8 +42,8 @@ public class OSConfigFactory {
 		if (new File(project.getLocationURI().getPath() + "\\OS.xml").exists()) {
 			OSConfig config = parse(project.getFile("OS.xml"));
 			if (config != null) {
-				config.checkNeedBuild(_map.get(project));
-				_map.put(project, config);
+				// config.checkNeedBuild(_map.get(project));
+				// _map.put(project, config);
 				return config;
 			}
 
@@ -71,11 +71,11 @@ public class OSConfigFactory {
 			for (int i = 0; i < node.getAttributes().getLength(); i++) {
 				Node attr = node.getAttributes().item(i);
 				if (attr.getNodeName().equalsIgnoreCase("name")) {
-					osConfig.setName(attr.getNodeValue());
+					osConfig.setName(attr.getNodeValue().trim());
 				} else if (attr.getNodeName().equalsIgnoreCase("bits")) {
-					osConfig.setBits(attr.getNodeValue());
+					osConfig.setBits(attr.getNodeValue().trim());
 				} else if (attr.getNodeName().equalsIgnoreCase("version")) {
-					osConfig.setVersion(attr.getNodeValue());
+					osConfig.setVersion(attr.getNodeValue().trim());
 				}
 
 			}
@@ -84,7 +84,7 @@ public class OSConfigFactory {
 			for (int i = 0; i < node.getAttributes().getLength(); i++) {
 				Node attr = node.getAttributes().item(i);
 				if (attr.getNodeName().equalsIgnoreCase("arch")) {
-					platform.setArch(attr.getNodeValue());
+					platform.setArch(attr.getNodeValue().trim());
 				}
 			}
 
@@ -94,7 +94,7 @@ public class OSConfigFactory {
 					for (int j = 0; j < child.getChildNodes().getLength(); j++) {
 						Node _child = child.getChildNodes().item(j);
 						if (_child.getNodeName().equalsIgnoreCase("#text")) {
-							platform.addCpu(_child.getNodeValue());
+							platform.addCpu(_child.getNodeValue().trim());
 						}
 					}
 				}
@@ -105,15 +105,15 @@ public class OSConfigFactory {
 			for (int i = 0; i < node.getAttributes().getLength(); i++) {
 				Node attr = node.getAttributes().item(i);
 				if (attr.getNodeName().equalsIgnoreCase("name")) {
-					image.setName(attr.getNodeValue());
+					image.setName(attr.getNodeValue().trim());
 				} else if (attr.getNodeName().equalsIgnoreCase("size")) {
-					image.setSize(attr.getNodeValue());
+					image.setSize(attr.getNodeValue().trim());
 				} else if (attr.getNodeName().equalsIgnoreCase("device")) {
-					image.setDevice(attr.getNodeValue());
+					image.setDevice(attr.getNodeValue().trim());
 				} else if (attr.getNodeName().equalsIgnoreCase("format")) {
-					image.setFormat(attr.getNodeValue());
+					image.setFormat(attr.getNodeValue().trim());
 				} else if (attr.getNodeName().equalsIgnoreCase("mbr")) {
-					image.setMbr(attr.getNodeValue());
+					image.setMbr(attr.getNodeValue().trim());
 				}
 			}
 
@@ -129,13 +129,13 @@ public class OSConfigFactory {
 			for (int i = 0; i < node.getAttributes().getLength(); i++) {
 				Node attr = node.getAttributes().item(i);
 				if (attr.getNodeName().equalsIgnoreCase("type")) {
-					codePart.setType(attr.getNodeValue());
+					codePart.setType(attr.getNodeValue().trim());
 				} else if (attr.getNodeName().equalsIgnoreCase("obj")) {
-					codePart.setObj(attr.getNodeValue());
+					codePart.setObj(attr.getNodeValue().trim());
 				} else if (attr.getNodeName().equalsIgnoreCase("link")) {
-					codePart.setLink(attr.getNodeValue());
-				}else if (attr.getNodeName().equalsIgnoreCase("src")) {
-					codePart.setSrc(attr.getNodeValue());
+					codePart.setLink(attr.getNodeValue().trim());
+				} else if (attr.getNodeName().equalsIgnoreCase("src")) {
+					codePart.setSrc(attr.getNodeValue().trim());
 				}
 			}
 
@@ -144,19 +144,19 @@ public class OSConfigFactory {
 
 				if (child.getNodeName().equalsIgnoreCase("code")) {
 					Code code = codePart.new Code();
-					// for (int j = 0; j < child.getAttributes().getLength(); j++) {
-					// Node attr = child.getAttributes().item(j);
-					// if (attr.getNodeName().equalsIgnoreCase("type")) {
-					// c.setType(attr.getNodeValue());
-					// }
-					// }
-
-					for (int j = 0; j < child.getChildNodes().getLength(); j++) {
-						Node _child = child.getChildNodes().item(j);
-						if (_child.getNodeName().equalsIgnoreCase("#text")) {
-							code.setName(_child.getNodeValue());
+					for (int j = 0; j < child.getAttributes().getLength(); j++) {
+						Node attr = child.getAttributes().item(j);
+						if (attr.getNodeName().equalsIgnoreCase("src")) {
+							code.setSrc(attr.getNodeValue().trim());
 						}
 					}
+
+					// for (int j = 0; j < child.getChildNodes().getLength(); j++) {
+					// Node _child = child.getChildNodes().item(j);
+					// if (_child.getNodeName().equalsIgnoreCase("#text")) {
+					// code.setSrc(_child.getNodeValue());
+					// }
+					// }
 					codePart.addCode(code);
 				}
 			}

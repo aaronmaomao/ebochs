@@ -1,7 +1,10 @@
 package com.mwos.ebochs.resource.config.entity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mwos.ebochs.core.FileUtil;
 
 public class CodePart {
 	private String type;
@@ -51,7 +54,7 @@ public class CodePart {
 
 	public Code getCode(String name) {
 		for (Code c : codes) {
-			if (c.getName().equals(name)) {
+			if (c.getSrc().equals(name)) {
 				return c;
 			}
 		}
@@ -60,7 +63,7 @@ public class CodePart {
 
 	public void addCode(Code c) {
 		for (Code temp : codes) {
-			if (temp.getName().equals(c.getName())) {
+			if (temp.getSrc().equals(c.getSrc())) {
 				return;
 			}
 		}
@@ -91,6 +94,10 @@ public class CodePart {
 	public String getObjPath() {
 		return this.getLocation() + "/" + obj;
 	}
+	
+	public File getObj() {
+		
+	}
 
 	public boolean equal(CodePart old) {
 		if (!this.type.equals(old.type))
@@ -111,22 +118,27 @@ public class CodePart {
 	}
 
 	public class Code {
-		private String name;
+		private String src;
 
-		public String getName() {
-			return name;
+		public String getSrc() {
+			return src;
 		}
 
-		public void setName(String name) {
-			this.name = name;
+		public void setSrc(String src) {
+			this.src = src;
 		}
 
 		public boolean equal(Code old) {
-			if (!this.name.equals(old.name))
+			if (!this.src.equals(old.src))
 				return false;
 			return true;
 		}
-
+		
+		public String getObj() {
+			String obj="obj/";
+			String name = FileUtil.getFileName(src, false);
+			return obj;
+		}
 	}
 
 }

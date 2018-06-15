@@ -88,7 +88,10 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 			return doBuildC(file);
 		} else if (file.getName().endsWith(".asm")) {
 			return doBuildAsm(file);
+		}else if(file.getName().endsWith(".font")) {
+			return true;
 		}
+		ConsoleFactory.outMsg("------ 构建错误:\t未知的文件类型  > " + file.getProjectRelativePath() + "\r\n" , file.getProject());
 		return false;
 	}
 
@@ -179,10 +182,11 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 			return true;
 		} else {
 			for (Code code : cp.getCodes()) {
-				String name = FileUtil.getFileName(code.getName(), false);
-				IFile file = this.getProject().getFile(new Path(code.getName()));
+				String name = FileUtil.getFileName(code.getSrc(), false);
+				IFile file = this.getProject().getFile(new Path(code.getSrc()));
+				
 				if (!file.exists()) {
-					ConsoleFactory.outErrMsg("------ 构建错误, 文件不存在:\t" + cp.getObj() + " > " + code.getName() + "\r\n", file.getProject());
+					ConsoleFactory.outErrMsg("------ 构建错误, 文件不存在:\t" + cp.getObj() + " > " + code.getSrc() + "\r\n", file.getProject());
 					return false;
 				}
 				if (!new File(objDir + name + ".obj").exists()) {

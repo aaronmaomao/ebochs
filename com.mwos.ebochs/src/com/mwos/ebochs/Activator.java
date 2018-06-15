@@ -1,8 +1,13 @@
 package com.mwos.ebochs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
@@ -15,6 +20,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.wb.swt.ResourceManager;
 import org.osgi.framework.BundleContext;
 
+import com.mwos.ebochs.resource.project.OSProjectNature;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
 
 /**
@@ -81,6 +87,20 @@ public class Activator extends AbstractUIPlugin {
 
 		if (store.getDefaultString(OSDevPreference.BOCHS) == null)
 			store.setDefault(OSDevPreference.BOCHS, "");
+	}
+	
+	public static List<IProject> getOSProject() {
+		List<IProject> projects = new ArrayList<>();
+		for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+			try {
+				if (p.exists() && p.isOpen() && p.getNature(OSProjectNature.NatureId) != null) {
+					projects.add(p);
+				}
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+		}
+		return projects;
 	}
 
 	public static IProject getCurrentProject() {

@@ -1,15 +1,15 @@
 package com.mwos.ebochs.resource.project;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.CProjectNature;
 import org.eclipse.cdt.core.model.CoreModel;
-import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.IPathEntry;
-import org.eclipse.cdt.internal.core.model.CProject;
+import org.eclipse.cdt.core.parser.ExtendedScannerInfo;
+import org.eclipse.cdt.core.parser.IScannerInfo;
+import org.eclipse.cdt.core.parser.IScannerInfoProvider;
 import org.eclipse.cdt.internal.ui.util.CoreUtility;
 import org.eclipse.cdt.utils.PathUtil;
 import org.eclipse.core.resources.IFile;
@@ -21,8 +21,6 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
-import org.eclipse.core.resources.IResourceProxyVisitor;
-import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
@@ -30,15 +28,15 @@ import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.osgi.framework.Bundle;
 
 import com.mwos.ebochs.Activator;
+import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
 
-public class OSProject extends CProject {
+public abstract class OSProject implements IProject {
 
-	private OSProject(ICElement parent, IProject project) {
-		super(parent, project);
+	private OSProject(IProject p) {
 	}
 
-	public static IProject create(String name) throws CoreException {
+	public static OSProject create(String name) throws CoreException {
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(name);
 		project.create(null);
 		project.open(null);
@@ -159,30 +157,42 @@ public class OSProject extends CProject {
 		// project);
 
 		project.refreshLocal(IProject.DEPTH_INFINITE, null);
-		return project;
+		OSProject p = (OSProject) project;
+		return p;
 	}
 
-	public static IProject getProject(String name) {
-		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(name);
-		return project;
-	}
-
-	public static List<IProject> getOSProject() {
-		List<IProject> projects = new ArrayList<>();
-		for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
-			try {
-				if (p.exists() && p.isOpen() && p.getNature(OSProjectNature.NatureId) != null) {
-					projects.add(p);
+	public String getIncDir() {
+		String incs = FileUtil.getIncStr(this.getLocationURI().getPath());
+		IScannerInfoProvider provider = CCorePlugin.getDefault().getScannerInfoProvider(this);
+		if (provider != null) {
+			IScannerInfo info = provider.getScannerInformation(this);
+			if (info instanceof ExtendedScannerInfo) {
+				for (String inc : ((ExtendedScannerInfo) info).getIncludePaths()) {
+					if (!incs.contains(inc))
+						incs += (" -I " + inc.trim());
 				}
-			} catch (CoreException e) {
-				e.printStackTrace();
 			}
 		}
-		return projects;
-	}
 
-	public static IProject getCurrentPrj() {
-		IProject p = null;
-		return p;
+		// ICProjectDescription projectDescription =
+		// CoreModel.getDefault().getProjectDescription(project);
+		// ICConfigurationDescription activeConfiguration =
+		// projectDescription.getActiveConfiguration(); // or another config
+		// ICFolderDescription folderDescription =
+		// activeConfiguration.getRootFolderDescription(); // or use
+		// getResourceDescription(IResource),
+		// // or pick one from getFolderDescriptions()
+		// ICLanguageSetting[] languageSettings =
+		// folderDescription.getLanguageSettings();
+		// for (ICLanguageSetting languageSetting : languageSettings) {
+		// for (ICLanguageSettingEntry includePathSetting :
+		// languageSetting.getSettingEntries(ICSettingEntry.INCLUDE_PATH)) {
+		// includePathSetting.getValue();
+		// if (!inc.isEmpty() && !incs.contains(inc)) {
+		// incs += (" -I " + inc.trim());
+		// }
+		// }
+		// }
+		return incs;
 	}
 }
