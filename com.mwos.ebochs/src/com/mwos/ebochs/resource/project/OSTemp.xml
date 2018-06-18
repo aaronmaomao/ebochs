@@ -6,22 +6,22 @@
 	</platform>
 
 	<!-- 镜像/存储配置 -->
-	<image name="mwos.img" size="1440k" device="floppy" format="fat16" mbr="mbr.obj">
+	<image name="mwos.img" size="1440k" device="floppy" format="fat12" mbr="mbr.bin">
 		<file name="os.bin">
 			<sub name="bootloader.obj" />
 			<sub name="core.bin" />
 		</file>
-		<file name="HelloWorld.mwe"/>
+		<file name="HelloWorld.mwe" />
 	</image>
 
 	<!-- 源文件 -->
-	<codepart type="os" src="src/mbr.asm" obj="mbr.obj" />
-	<codepart type="os" src="src/bootloader.asm" obj="bootloader.obj" />
-	
-	<codepart type="os" obj="core.bin">
-		<code>src/OSMain.c</code>
+	<codepart type="os" src="src/mbr.asm" out="mbr.bin" />
+	<codepart type="os" src="src/bootloader.asm" out="bootloader.bin" />
+
+	<codepart type="os" out="core.bin">
+		<code src="src/OSMain.c" />
 	</codepart>
-	<codepart type="app" obj="HelloWorld.mwe">
-		<code>app/main.c</code>
+	<codepart type="app" out="HelloWorld.mwe">
+		<code src="app/main.c" />
 	</codepart>
 </os> 

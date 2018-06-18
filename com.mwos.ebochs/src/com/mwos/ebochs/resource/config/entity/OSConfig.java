@@ -6,7 +6,8 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 
-import com.mwos.ebochs.core.FileUtil;
+import com.mwos.ebochs.resource.config.entity.CodePart.Code;
+import com.mwos.ebochs.resource.project.OSProject;
 
 public class OSConfig {
 	private IProject project;
@@ -67,24 +68,11 @@ public class OSConfig {
 
 	public void addCodePart(CodePart cp) {
 		for (CodePart temp : codeParts) {
-			if (temp.getObj().equals(cp.getObj()))
+			if (temp.getOut().equals(cp.getOut()))
 				return;
 		}
 
 		codeParts.add(cp);
-	}
-
-	public List<CodePart> getCodePart(ImgFile imgFile) {
-		List<CodePart> cps = new ArrayList<>();
-		for (CodePart temp : codeParts) {
-			if (temp.getObj().equals(imgFile.getName()) && FileUtil.equalPath(temp.getLocation(), imgFile.getLocation()))
-				cps.add(temp);
-		}
-		
-		for(ImgFile ifile:imgFile.getSubs()) {
-			cps.addAll(getCodePart(ifile));
-		}
-		return cps;
 	}
 
 	public List<CodePart> getCodeParts() {
@@ -135,5 +123,14 @@ public class OSConfig {
 		// }
 
 		return true;
+	}
+
+	public Code getCode(String src) {
+		for (CodePart cp : codeParts) {
+			Code c = cp.getCode(src);
+			if (c != null)
+				return c;
+		}
+		return null;
 	}
 }

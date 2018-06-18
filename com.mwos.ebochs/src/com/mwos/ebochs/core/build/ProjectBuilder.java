@@ -30,6 +30,7 @@ import com.mwos.ebochs.resource.config.entity.CodePart.Code;
 import com.mwos.ebochs.resource.config.entity.Image;
 import com.mwos.ebochs.resource.config.entity.ImgFile;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
+import com.mwos.ebochs.resource.project.OSProject;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
 import com.mwos.ebochs.ui.view.ConsoleFactory;
 
@@ -60,13 +61,9 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	@Override
 	protected void clean(IProgressMonitor monitor) throws CoreException {
 		super.clean(monitor);
-		BuildTool.cleanAll(this.getProject());
 	}
 
 	private void doBuilds(IResourceDelta deltas[]) {
-		if (OSDevPreference.getValue(OSDevPreference.TOOLCHAIN).isEmpty()) {
-			ConsoleFactory.outInfoMsg("未找到工具链!", getProject());
-		}
 		if (deltas != null) {
 			for (IResourceDelta delta : deltas) {
 				if (new File(delta.getResource().getLocationURI().getPath()).isFile()) {
@@ -84,160 +81,33 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	}
 
 	private boolean doBuild(IFile file) {
-		if (file.getName().endsWith(".c")) {
-			return doBuildC(file);
-		} else if (file.getName().endsWith(".asm")) {
-			return doBuildAsm(file);
-		}else if(file.getName().endsWith(".font")) {
-			return true;
+		try {
+			DefaultBuilder builder = AbstractBuilder.getBuilder(DefaultBuilder.class);
+			String name = file.getProjectRelativePath().toString();
+			Code c = OSConfigFactory.getConfig(getProject()).getCode(name);
+			BuildResult res = null;
+			if (c != null) {
+				res = builder.compile(name, c.getOut(), getProject());
+			} else {
+				res = builder.compile(name,  getProject());
+			}
+
+			if (!res.isSuccess()) {
+				ConsoleFactory.outErrMsg("\r\n----- 编译错误:\t" + name + "\r\n" + res.getAllMsg() + "\r\n", getProject());
+			} else {
+				ConsoleFactory.outMsg("\r\n----- 编译成功:\t" + name + "\r\n" + res.getAllMsg() + "\r\n", getProject());
+			}
+			return res.isSuccess();
+		} catch (Exception e) {
+			e.printStackTrace();
+			ConsoleFactory.outErrMsg("\r\n----- "+e.getMessage()+":\t\r\n" , getProject());
 		}
-		ConsoleFactory.outMsg("------ 构建错误:\t未知的文件类型  > " + file.getProjectRelativePath() + "\r\n" , file.getProject());
 		return false;
-	}
-
-	private boolean doBuildC(IFile file) {
-		try {
-
-			if (hasDomError(file)) {
-				ConsoleFactory.outErrMsg("------ 源码错误:\t" + file.getProjectRelativePath()+"\r\n", file.getProject());
-				return false;
-			}
-
-			BuildResult res = BuildTool.compileC(file);
-			if (!res.isSuccess()) {
-				IMarker marker = file.createMarker("com.ebochs.BuildErrorMarker");
-				marker.setAttribute("Description", "编译错误");
-				ConsoleFactory.outErrMsg("------ 编译错误:\t" + file.getProjectRelativePath() + "\r\n" + res.getAllMsg(), file.getProject());
-				BuildTool.clean(file.getProjectRelativePath().toString(), file.getProject());
-			} else {
-				ConsoleFactory.outMsg("------ 编译成功:\t" + file.getProjectRelativePath() + "\r\n" + res.getAllMsg(), file.getProject());
-				file.deleteMarkers("com.ebochs.BuildErrorMarker", false, IFile.DEPTH_INFINITE);
-			}
-			return res.isSuccess();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	private boolean doBuildAsm(IFile file) {
-		try {
-			if (hasDomError(file)) {
-				ConsoleFactory.outErrMsg("------ 源码错误:\t" + file.getProjectRelativePath(), file.getProject());
-				return false;
-			}
-			BuildResult res = BuildTool.compileAsm(file);
-			if (!res.isSuccess()) {
-				IMarker marker = file.createMarker("com.ebochs.BuildErrorMarker");
-				marker.setAttribute("Description", "编译错误");
-				ConsoleFactory.outErrMsg("------ 编译错误:\t" + file.getProjectRelativePath() + "\r\n" + res.getAllMsg(), file.getProject());
-				BuildTool.clean(file.getProjectRelativePath().toString(), file.getProject());
-			} else {
-				ConsoleFactory.outMsg("------ 编译成功:\t" + file.getProjectRelativePath() + "\r\n" + res.getAllMsg(), file.getProject());
-				file.deleteMarkers("com.ebochs.BuildErrorMarker", false, IFile.DEPTH_INFINITE);
-			}
-			return res.isSuccess();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
 	}
 
 	private boolean doBuildOSXml() {
-		try {
-			OSConfig config = OSConfigFactory.getBuildConfig(getProject());
-			for (Image img : config.getImages()) {
-				for (ImgFile ifile : img.getImgFiles()) {
-					List<CodePart> cps = config.getCodePart(ifile);
-					for (CodePart cp : cps) {
-						boolean b = buildCodePart(cp);
-						if (!b)
-							return b;
-					}
-					if(mergeImgFile(ifile)==null)
-						return false;
-				}
-			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		return false;
-	}
-
-	private boolean buildCodePart(CodePart cp) {
-		String objDir = this.getProject().getLocationURI().getPath() + "/obj/";
-		List<String> objs = new ArrayList<>();
-		if (!cp.getSrc().isEmpty()) {
-			String name = FileUtil.getFileName(cp.getSrc(), false);
-			IFile file = this.getProject().getFile(new Path(cp.getSrc()));
-			if (!file.exists()) {
-				ConsoleFactory.outErrMsg("------ 构建错误, 文件不存在:\t" + cp.getObj() + " > " + cp.getSrc() + "\r\n", file.getProject());
-				return false;
-			}
-			if (!new File(objDir + name + ".obj").exists()) {
-				if (!doBuild(file))
-					return false;
-			}
-			return true;
-		} else {
-			for (Code code : cp.getCodes()) {
-				String name = FileUtil.getFileName(code.getSrc(), false);
-				IFile file = this.getProject().getFile(new Path(code.getSrc()));
-				
-				if (!file.exists()) {
-					ConsoleFactory.outErrMsg("------ 构建错误, 文件不存在:\t" + cp.getObj() + " > " + code.getSrc() + "\r\n", file.getProject());
-					return false;
-				}
-				if (!new File(objDir + name + ".obj").exists()) {
-					if (!doBuild(file))
-						return false;
-				}
-				objs.add("obj/" + name + ".obj");
-			}
-
-			try {
-				BuildResult res = BuildTool.link(cp.getObj(), "3325k", this.getProject(), objs.toArray(new String[0]));
-				if (!res.isSuccess()) {
-					ConsoleFactory.outErrMsg("------ 构建错误:\t" + cp.getObj() + "\r\n" + res.getAllMsg(), getProject());
-				} else {
-					ConsoleFactory.outMsg("------ 构建成功:\t" + cp.getObj() + "\r\n" + res.getAllMsg(), getProject());
-				}
-				return res.isSuccess();
-			} catch (Exception e) {
-				e.printStackTrace();
-				ConsoleFactory.outErrMsg("------ 链接错误:\t" + cp.getObj() + " : " + cp.getObj() + "\r\n", getProject());
-				return false;
-			}
-		}
-
-	}
-	
-
-	private File mergeImgFile(ImgFile img) {
-		File file = new File(img.getLocation());
-		if(!file.exists()&&img.getSubs().size()<=0) {
-			return null;
-		}
-		if(!file.exists()&&img.getSubs().size()>0) {
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		for(ImgFile sub:img.getSubs()) {
-			File subF = mergeImgFile(sub);
-			if(subF==null) {
-				return null;
-			}else {
-				file = FileUtil.merge(file, subF);
-			}
-		}
-		
-		return file;
-		
 	}
 
 	public static boolean hasDomError(IFile file) {
@@ -245,7 +115,8 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 		IASTTranslationUnit ast = null;
 		try {
 			ICProject cproject = CoreModel.getDefault().getCModel().getCProject(file.getProject().getName());
-			ICElement element = cproject.findElement(file.getProjectRelativePath()); // this apparently throws exception for non-source files instead of returning
+			ICElement element = cproject.findElement(file.getProjectRelativePath()); // this apparently throws exception for non-source
+																						// files instead of returning
 																						// null
 			ITranslationUnit unit = (ITranslationUnit) element; // not clear whether we need to check for null or instanceof
 			ast = unit.getAST();

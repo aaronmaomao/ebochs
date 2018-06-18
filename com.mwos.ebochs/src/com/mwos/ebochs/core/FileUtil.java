@@ -209,13 +209,13 @@ public class FileUtil {
 		}
 	}
 
-	public static String getIncStr(String path) {
+	public static List<String> getIncStr(String path) {
 		List<File> incs = listDir(path, new String[] { "obj", ".settings" }, false);
-		String temp = "";
+		List<String> incDir = new ArrayList<>();
 		for (File f : incs) {
-			temp += (" -I " + f.getAbsolutePath());
+			incDir.add(f.getAbsolutePath());
 		}
-		return temp;
+		return incDir;
 	}
 
 	public static File makeFile(String path, long size) throws IOException {

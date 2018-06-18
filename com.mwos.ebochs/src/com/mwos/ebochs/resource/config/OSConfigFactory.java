@@ -20,6 +20,7 @@ import com.mwos.ebochs.resource.config.entity.CodePart.Code;
 import com.mwos.ebochs.resource.config.entity.Image;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 import com.mwos.ebochs.resource.config.entity.Platform;
+import com.mwos.ebochs.resource.project.OSProject;
 import com.mwos.ebochs.resource.config.entity.ImgFile;
 
 public class OSConfigFactory {
@@ -35,15 +36,14 @@ public class OSConfigFactory {
 			return getBuildConfig(project);
 		}
 
-		return null;
+		return config;
 	}
 
 	public static OSConfig getBuildConfig(IProject project) throws ParserConfigurationException, SAXException, IOException {
 		if (new File(project.getLocationURI().getPath() + "\\OS.xml").exists()) {
 			OSConfig config = parse(project.getFile("OS.xml"));
 			if (config != null) {
-				// config.checkNeedBuild(_map.get(project));
-				// _map.put(project, config);
+				_map.put(project, config);
 				return config;
 			}
 
@@ -130,10 +130,8 @@ public class OSConfigFactory {
 				Node attr = node.getAttributes().item(i);
 				if (attr.getNodeName().equalsIgnoreCase("type")) {
 					codePart.setType(attr.getNodeValue().trim());
-				} else if (attr.getNodeName().equalsIgnoreCase("obj")) {
+				} else if (attr.getNodeName().equalsIgnoreCase("out")) {
 					codePart.setObj(attr.getNodeValue().trim());
-				} else if (attr.getNodeName().equalsIgnoreCase("link")) {
-					codePart.setLink(attr.getNodeValue().trim());
 				} else if (attr.getNodeName().equalsIgnoreCase("src")) {
 					codePart.setSrc(attr.getNodeValue().trim());
 				}
@@ -148,6 +146,8 @@ public class OSConfigFactory {
 						Node attr = child.getAttributes().item(j);
 						if (attr.getNodeName().equalsIgnoreCase("src")) {
 							code.setSrc(attr.getNodeValue().trim());
+						} else if (attr.getNodeName().equalsIgnoreCase("out")) {
+							code.setOut(attr.getNodeValue().trim());
 						}
 					}
 

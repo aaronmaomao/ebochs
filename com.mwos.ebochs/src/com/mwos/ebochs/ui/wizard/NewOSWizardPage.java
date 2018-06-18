@@ -1,25 +1,16 @@
 package com.mwos.ebochs.ui.wizard;
 
-import java.io.File;
-
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.wb.swt.ResourceManager;
-
-import com.mwos.ebochs.resource.project.OSProject;
 
 public class NewOSWizardPage extends WizardPage {
 	private Text textPrjName;
@@ -67,7 +58,7 @@ public class NewOSWizardPage extends WizardPage {
 
 				String text = textPrjName.getText().trim();
 				if (!text.isEmpty()) {
-					if (!OSProject.getProject(text).exists()) {
+					if (!ResourcesPlugin.getWorkspace().getRoot().getProject(text).exists()) {
 						setMessage("创建x86操作系统工程");
 						setErrorMessage(null);
 						projName = text;

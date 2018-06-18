@@ -28,7 +28,7 @@ import com.mwos.ebochs.Activator;
 
 public class OSDevPreference extends PreferencePage implements IWorkbenchPreferencePage {
 
-	public static final String TOOLCHAIN = Activator.PLUGIN_ID + ":toolchain";
+	public static final String TOOLCHAIN = Activator.PLUGIN_ID + ":default_toolchain";
 	public static final String BOCHS = Activator.PLUGIN_ID + ":bochs";
 
 	private Text textToolchain;

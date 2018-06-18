@@ -1,6 +1,7 @@
 package com.mwos.ebochs.resource.project;
 
 import java.net.URL;
+import java.util.List;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.CProjectNature;
@@ -31,12 +32,9 @@ import com.mwos.ebochs.Activator;
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
 
-public abstract class OSProject implements IProject {
+public class OSProject {
 
-	private OSProject(IProject p) {
-	}
-
-	public static OSProject create(String name) throws CoreException {
+	public static IProject create(String name) throws CoreException {
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(name);
 		project.create(null);
 		project.open(null);
@@ -157,19 +155,18 @@ public abstract class OSProject implements IProject {
 		// project);
 
 		project.refreshLocal(IProject.DEPTH_INFINITE, null);
-		OSProject p = (OSProject) project;
-		return p;
+		return project;
 	}
 
-	public String getIncDir() {
-		String incs = FileUtil.getIncStr(this.getLocationURI().getPath());
-		IScannerInfoProvider provider = CCorePlugin.getDefault().getScannerInfoProvider(this);
+	public static List<String> getIncDirs(IProject p) {
+		List<String> incDirs = FileUtil.getIncStr(p.getLocationURI().getPath());
+		IScannerInfoProvider provider = CCorePlugin.getDefault().getScannerInfoProvider(p);
 		if (provider != null) {
-			IScannerInfo info = provider.getScannerInformation(this);
+			IScannerInfo info = provider.getScannerInformation(p);
 			if (info instanceof ExtendedScannerInfo) {
 				for (String inc : ((ExtendedScannerInfo) info).getIncludePaths()) {
-					if (!incs.contains(inc))
-						incs += (" -I " + inc.trim());
+					if (!incDirs.contains(inc))
+						incDirs.add(inc);
 				}
 			}
 		}
@@ -193,6 +190,6 @@ public abstract class OSProject implements IProject {
 		// }
 		// }
 		// }
-		return incs;
+		return incDirs;
 	}
 }

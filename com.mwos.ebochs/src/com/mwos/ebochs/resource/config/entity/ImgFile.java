@@ -1,5 +1,6 @@
 package com.mwos.ebochs.resource.config.entity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +57,8 @@ public class ImgFile {
 	public List<ImgFile> getSubs() {
 		return subs;
 	}
+	
+	public File getFile() {}
 
 	public void addSubFile(ImgFile f) {
 

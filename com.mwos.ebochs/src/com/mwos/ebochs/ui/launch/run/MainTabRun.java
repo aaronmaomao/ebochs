@@ -3,28 +3,23 @@ package com.mwos.ebochs.ui.launch.run;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
-import org.eclipse.debug.ui.ILaunchConfigurationDialog;
-import org.eclipse.debug.ui.ILaunchConfigurationTab;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.mwos.ebochs.resource.project.OSProject;
+import com.mwos.ebochs.Activator;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
-import org.eclipse.swt.widgets.Combo;
 
 public class MainTabRun extends AbstractLaunchConfigurationTab {
 	private Text textBochs;
@@ -52,7 +47,7 @@ public class MainTabRun extends AbstractLaunchConfigurationTab {
 
 			Combo comboProject = new Combo(groupPrj, SWT.READ_ONLY);
 			
-			List<IProject> projects = OSProject.getOSProject();
+			List<IProject> projects = Activator.getOSProject();
 			for(IProject p:projects) {
 				comboProject.add(p.getName());
 			}

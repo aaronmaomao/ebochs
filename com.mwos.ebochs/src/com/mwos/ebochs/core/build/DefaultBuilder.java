@@ -1,48 +1,104 @@
 package com.mwos.ebochs.core.build;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.core.resources.IProject;
+
 import com.mwos.ebochs.core.FileUtil;
+import com.mwos.ebochs.core.exe.EXERunner;
+import com.mwos.ebochs.core.exe.RunResult;
 import com.mwos.ebochs.resource.project.OSProject;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
-import com.mwos.ebochs.ui.view.ConsoleFactory;
 
-public class DefaultBuilder extends AbstractBuilder{
-	
-	public static final String c2gas = "c2gas";
-	public static final String c2asm = "c2asm";
-	public static final String gas2asm = "gas2asm";
-	public static final String nask = "nask";
-	public static final String link = "obj2bim";
-	
+public class DefaultBuilder extends AbstractBuilder {
+
+	public DefaultBuilder() throws Exception {
+		super();
+	}
+
+	private static final String c2gas = "c2gas";
+	private static final String c2asm = "c2asm";
+	private static final String gas2asm = "gas2asm";
+	private static final String nask = "nask";
+	private static final String link = "obj2bim";
+
 	public static final String toolchain = "default_toolchain";
 
-	public DefaultBuilder(OSProject project) throws Exception {
-		super(project,toolchain);
+	private static Map<IProject, DefaultBuilder> _instance = new HashMap<>();
+
+	@Override
+	public BuildResult compileC(String src, String out, IProject project) throws Exception {
+		String prjPath = project.getLocationURI().getPath();
+		String name = FileUtil.getFileName(src, false);
+		List<String> incs = OSProject.getIncDirs(project);
+
+		// 汇编为AT汇编
+		String cmd_c2gas = cmd_c2gas(src, getIncStr(incs));
+		RunResult c2gasResult = EXERunner.run(cmd_c2gas, prjPath);
+		if (c2gasResult.exitValue() != 0) {
+			return new BuildResult(c2gasResult);
+		}
+
+		// 汇编为intel汇编
+		String cmd_c2asm = cmd_c2asm(src, getIncStr(incs));
+		EXERunner.run(cmd_c2asm, prjPath);
+
+		// AT转intel汇编
+		String cmd_gas2asm = cmd_gas2asm(src);
+		EXERunner.run(cmd_gas2asm, prjPath);
+
+		// 编译
+		String cmd_nask = cmd_nask("obj/" + name + ".asm", out);
+		RunResult naskResult = EXERunner.run(cmd_nask, prjPath);
+
+		return new BuildResult(c2gasResult).merge(new BuildResult(naskResult));
 	}
 
 	@Override
-	public BuildResult compileC(String src, String obj, String inc) {
-		// TODO Auto-generated method stub
-		return null;
+	public BuildResult compileAsm(String src, String out, IProject project) throws Exception {
+		String prjPath = project.getLocationURI().getPath();
+
+		// 编译
+		String cmd_nask = cmd_nask(src, out);
+		RunResult naskResult = EXERunner.run(cmd_nask, prjPath);
+
+		return new BuildResult(naskResult);
 	}
-	
-	private static String getBuildCmd(String type) {
+
+	@Override
+	public BuildResult link(String out, String stack, String objs[], IProject project) throws Exception {
+		String prjPath = project.getLocationURI().getPath();
+
+		// 编译
+		String cmd_link = cmd_link(out, stack, objs);
+		RunResult naskResult = EXERunner.run(cmd_link, prjPath);
+		return new BuildResult(naskResult);
+	}
+
+	@Override
+	public String getToolChain() {
+		return OSDevPreference.TOOLCHAIN;
+	}
+
+	private String getBuildCmd(String type) {
 		String cmd = "";
-		if (type.equals(BuildTool.c2gas)) {
-			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\cc1.exe -m32 -O1 %.c -o %.gas %inc";
-		} else if (type.equals(BuildTool.c2asm)) {
-			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\cc1.exe -m32 -gcoff -masm=intel -O1 %.c -o %.asm %inc";
-		} else if (type.equals(BuildTool.gas2asm)) {
-			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\gas2nask.exe %.gas %.asm";
-		} else if (type.equals(BuildTool.nask)) {
-			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\nask.exe %.asm %.obj %.lst";
-		} else if (type.equals(BuildTool.link)) {
-			cmd = OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "\\obj2bim.exe  @"
-					+ OSDevPreference.getValue(OSDevPreference.TOOLCHAIN) + "/lib/haribote.rul out:%.out stack:%.stack map:%.map %objs";
+		if (type.equals(DefaultBuilder.c2gas)) {
+			cmd = toolchainPath + "\\cc1.exe -m32 -O1 %.c -o %.gas %inc";
+		} else if (type.equals(DefaultBuilder.c2asm)) {
+			cmd = toolchainPath + "\\cc1.exe -m32 -gcoff -masm=intel -O1 %.c -o %.asm %inc";
+		} else if (type.equals(DefaultBuilder.gas2asm)) {
+			cmd = toolchainPath + "\\gas2nask.exe %.gas %.asm";
+		} else if (type.equals(DefaultBuilder.nask)) {
+			cmd = toolchainPath + "\\nask.exe %.asm %.obj %.lst";
+		} else if (type.equals(DefaultBuilder.link)) {
+			cmd = toolchainPath + "\\obj2bim.exe  @" + toolchainPath + "/lib/haribote.rul out:%.out stack:%.stack map:%.map %objs";
 		}
 		return cmd;
 	}
-	
-	private static String cmd_c2gas(String file, String inc) {
+
+	private String cmd_c2gas(String file, String inc) {
 		String name = FileUtil.getFileName(file, false);
 		String cmd = getBuildCmd(c2gas);
 		cmd = cmd.replace("%.c", file);
@@ -51,7 +107,7 @@ public class DefaultBuilder extends AbstractBuilder{
 		return cmd;
 	}
 
-	private static String cmd_c2asm(String file, String inc) {
+	private String cmd_c2asm(String file, String inc) {
 		String name = FileUtil.getFileName(file, false);
 		String cmd = getBuildCmd(c2asm);
 		cmd = cmd.replace("%.c", file);
@@ -60,27 +116,29 @@ public class DefaultBuilder extends AbstractBuilder{
 		return cmd;
 	}
 
-	private static String cmd_gas2asm(String file) {
+	private String cmd_gas2asm(String file) {
 		String name = FileUtil.getFileName(file, false);
 		String cmd = getBuildCmd(gas2asm);
-		cmd = cmd.replace("%.gas", "obj/"+name+".gas");
+		cmd = cmd.replace("%.gas", "obj/" + name + ".gas");
 		cmd = cmd.replace("%.asm", "obj/" + name + ".asm");
 		return cmd;
 	}
 
-	private static String cmd_nask(String file) {
+	private String cmd_nask(String file, String out) {
 		String name = FileUtil.getFileName(file, false);
 		String cmd = getBuildCmd(nask);
 		cmd = cmd.replace("%.asm", file);
-		cmd = cmd.replace("%.obj", "obj/" + name + ".obj");
+		if (out.startsWith("/"))
+			out = out.substring(1, out.length());
+		cmd = cmd.replace("%.obj", out);
 		cmd = cmd.replace("%.lst", "obj/" + name + ".lst");
 		return cmd;
 	}
 
-	private static String cmd_link(String file, String stack, String[] objs) {
-		String name = FileUtil.getFileName(file, false);
+	private String cmd_link(String out, String stack, String[] objs) {
+		String name = FileUtil.getFileName(out, false);
 		String cmd = getBuildCmd(link);
-		cmd = cmd.replace("%.out", file);
+		cmd = cmd.replace("%.out", out);
 		cmd = cmd.replace("%.stack", stack);
 		cmd = cmd.replace("%.map", "obj/" + name + ".map");
 		String objStr = "";
@@ -89,5 +147,13 @@ public class DefaultBuilder extends AbstractBuilder{
 		}
 		cmd = cmd.replace("%objs", objStr);
 		return cmd;
+	}
+
+	private String getIncStr(List<String> incs) {
+		String temp = "";
+		for (String inc : incs) {
+			temp += (" -I " + inc);
+		}
+		return temp;
 	}
 }

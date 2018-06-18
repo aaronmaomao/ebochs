@@ -4,20 +4,23 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.core.resources.IProject;
+
 import com.mwos.ebochs.core.FileUtil;
+import com.mwos.ebochs.core.build.AbstractBuilder;
+import com.mwos.ebochs.core.build.BuildResult;
+import com.mwos.ebochs.ui.view.ConsoleFactory;
 
 public class CodePart {
 	private String type;
-	private String obj;
-	private String location;
 	private OSConfig config;
-	private boolean link = true;
-	private String src="";
+	private String src = "";
+	private String out;
 	private List<Code> codes;
 
 	public CodePart(OSConfig config) {
 		this.config = config;
-		this.location = config.getProject().getLocationURI().getPath() + "/obj";
 		codes = new ArrayList<>();
 	}
 
@@ -29,33 +32,81 @@ public class CodePart {
 		this.type = type;
 	}
 
-	public String getObj() {
-		return obj;
-	}
-
 	public void setObj(String obj) {
-		this.obj = obj;
+		this.out = obj;
 	}
 
 	public List<Code> getCodes() {
 		return codes;
 	}
 
-	public boolean isLink() {
-		return link;
+	public String getOut() {
+		return out;
+	}
+	
+	public String generateOut(AbstractBuilder builder) {
+		if (StringUtils.isNotBlank(src)) {
+			if (new File(config.getProject().getLocationURI().getPath() + out).exists()) {
+				return out;
+			} else {
+				try {
+
+					BuildResult res = builder.compile(src, out, config.getProject());
+					if (!res.isSuccess()) {
+						ConsoleFactory.outErrMsg("\r\n----- 编译错误:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+						return null;
+					} else {
+						ConsoleFactory.outMsg("\r\n----- 编译成功:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+						return out;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					ConsoleFactory.outErrMsg("\r\n----- 系统异常:\t" + src + "\r\n", config.getProject());
+					return null;
+				}
+			}
+		} else {
+			List<String> objs = new ArrayList<>();
+			for (Code code : codes) {
+				String obj = code.getOut();
+				if (obj == null) {
+					ConsoleFactory.outInfoMsg("\r\n----- 构建失败:\t" + out + "\r\n", config.getProject());
+					return null;
+				}
+				objs.add(obj);
+				try {
+					BuildResult res = builder.link(out, "3355k", objs.toArray(new String[] {}), config.getProject());
+					if (!res.isSuccess()) {
+						ConsoleFactory.outErrMsg("\r\n----- 链接失败:\t" + out + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+						return null;
+					} else {
+						ConsoleFactory.outMsg("\r\n----- 链接成功:\t" + out + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+						return out;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					ConsoleFactory.outErrMsg("\r\n----- 链接错误:\t" + out + "\r\n", config.getProject());
+					return null;
+				}
+			}
+		}
+		return null;
 	}
 
-	public void setLink(String link) {
-		if (link.trim().equals("false"))
-			this.link = false;
-		else
-			this.link = true;
+	public void setOut(String out) {
+		this.out = out;
 	}
 
-	public Code getCode(String name) {
-		for (Code c : codes) {
-			if (c.getSrc().equals(name)) {
-				return c;
+	public Code getCode(String src) {
+		if(StringUtils.isNotBlank(this.src)&&src.equals(this.src)) {
+			Code c = new Code();
+			c.setSrc(src);
+			c.setOut(out);
+			return c;
+		}else {
+			for(Code code:codes) {
+				if(code.getSrc().equals(src))
+					return code;
 			}
 		}
 		return null;
@@ -67,19 +118,12 @@ public class CodePart {
 				return;
 			}
 		}
+		c.setCp(this);
 		this.codes.add(c);
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		if (location.contains(":")) {
-			this.location = location;
-		} else if (location.startsWith("/")) {
-			this.location = config.getProject().getLocationURI().getPath() + location;
-		}
+	public OSConfig getConfig() {
+		return config;
 	}
 
 	public String getSrc() {
@@ -87,24 +131,16 @@ public class CodePart {
 	}
 
 	public void setSrc(String src) {
-		link=false;
+		if (StringUtils.isBlank(out)) {
+			out = "/obj/" + FileUtil.getFileName(src, false) + ".obj";
+		}
 		this.src = src;
-	}
-
-	public String getObjPath() {
-		return this.getLocation() + "/" + obj;
-	}
-	
-	public File getObj() {
-		
 	}
 
 	public boolean equal(CodePart old) {
 		if (!this.type.equals(old.type))
 			return false;
-		if (!this.obj.equals(old.obj))
-			return false;
-		if (!this.getObjPath().equals(old.getObjPath()))
+		if (!this.out.equals(old.out))
 			return false;
 		if (this.codes.size() != old.codes.size())
 			return false;
@@ -119,13 +155,30 @@ public class CodePart {
 
 	public class Code {
 		private String src;
+		private String out = "";
+		private CodePart cp;
 
 		public String getSrc() {
 			return src;
 		}
 
 		public void setSrc(String src) {
+			if (StringUtils.isBlank(out)) {
+				out = "/obj/" + FileUtil.getFileName(src, false) + ".obj";
+			}
 			this.src = src;
+		}
+
+		public String getOut() {
+			return out;
+		}
+
+		public void setOut(String out) {
+			this.out = out;
+		}
+
+		public void setCp(CodePart cp) {
+			this.cp = cp;
 		}
 
 		public boolean equal(Code old) {
@@ -133,12 +186,28 @@ public class CodePart {
 				return false;
 			return true;
 		}
-		
-		public String getObj() {
-			String obj="obj/";
-			String name = FileUtil.getFileName(src, false);
-			return obj;
+
+		public String generateOut(AbstractBuilder builder) {
+			IProject prj = cp.getConfig().getProject();
+			File objF = new File(prj.getLocationURI().getPath() + out);
+			if (!objF.exists()) {
+				try {
+					BuildResult res = builder.compile(src, out, prj);
+					if (!res.isSuccess()) {
+						ConsoleFactory.outErrMsg("\r\n----- 编译失败:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", prj);
+						return null;
+					} else {
+						ConsoleFactory.outMsg("\r\n----- 编译成功:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", prj);
+						return out;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					ConsoleFactory.outErrMsg("\r\n----- 系统异常:\t" + src + "\r\n", prj);
+					return null;
+				}
+			} else {
+				return out;
+			}
 		}
 	}
-
 }
