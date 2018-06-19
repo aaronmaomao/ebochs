@@ -2,12 +2,14 @@ package com.mwos.ebochs.resource.config.entity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 
+import com.mwos.ebochs.core.build.AbstractBuilder;
 import com.mwos.ebochs.resource.config.entity.CodePart.Code;
-import com.mwos.ebochs.resource.project.OSProject;
 
 public class OSConfig {
 	private IProject project;
@@ -77,6 +79,33 @@ public class OSConfig {
 
 	public List<CodePart> getCodeParts() {
 		return codeParts;
+	}
+
+	public CodePart getCodePart(String out) {
+		for (CodePart cp : codeParts) {
+			if (cp.getOut().equals(out)) {
+				return cp;
+			}
+		}
+		return null;
+	}
+
+	public CodePart[] getUsedCP() {
+		Map<String, CodePart> cps = new LinkedHashMap<>();
+		for (Image img : images) {
+			for(CodePart cp:img.getCP()) {
+				cps.put(cp.getOut(), cp);
+			}
+		}
+		return cps.values().toArray(new CodePart[] {});
+	}
+
+	public void build(AbstractBuilder builder) {
+		for(CodePart cp:getUsedCP()) {
+			cp.build(builder);
+		}
+		for (Image image : images) {
+		}
 	}
 
 	public IProject getProject() {

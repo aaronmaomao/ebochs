@@ -44,7 +44,7 @@ public class CodePart {
 		return out;
 	}
 	
-	public String generateOut(AbstractBuilder builder) {
+	public String build(AbstractBuilder builder) {
 		if (StringUtils.isNotBlank(src)) {
 			if (new File(config.getProject().getLocationURI().getPath() + out).exists()) {
 				return out;

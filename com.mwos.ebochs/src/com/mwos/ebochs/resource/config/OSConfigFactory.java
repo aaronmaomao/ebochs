@@ -174,10 +174,8 @@ public class OSConfigFactory {
 		for (int j = 0; j < file.getAttributes().getLength(); j++) {
 			Node _attr = file.getAttributes().item(j);
 			if (_attr.getNodeName().equalsIgnoreCase("name")) {
-				imgFile.setName(_attr.getNodeValue().trim());
-			} else if (_attr.getNodeName().equalsIgnoreCase("location")) {
-				imgFile.setLocation(_attr.getNodeValue().trim());
-			}
+				imgFile.setSrc(_attr.getNodeValue().trim());
+			} 
 		}
 
 		for (int j = 0; j < file.getChildNodes().getLength(); j++) {

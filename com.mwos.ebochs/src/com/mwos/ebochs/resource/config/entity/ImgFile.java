@@ -4,30 +4,40 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.cdt.utils.PathUtil;
 import org.eclipse.core.runtime.Path;
 
+import com.mwos.ebochs.core.FileUtil;
+import com.mwos.ebochs.core.build.AbstractBuilder;
+
 public class ImgFile {
 
-	private String name;
-	private String location;
+	private String src;
 	private List<ImgFile> subs;
-	
-
 	private OSConfig config;
 
 	public ImgFile(OSConfig config) {
 		this.config = config;
-		this.location = config.getProject().getLocationURI().getPath() + "/obj";
 		subs = new ArrayList<>();
 	}
 
-	public String getName() {
-		return name;
+	public String getSrc() {
+		return src;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setSrc(String src) {
+		if (!src.contains("/") && !src.contains("\\")) {
+			src = "/obj/" + src;
+		}
+		this.src = src;
+	}
+
+	public String getLocation() {
+		if (src.contains(":"))
+			return src;
+		else
+			return config.getProject().getLocationURI().getPath() + src;
 	}
 
 	public OSConfig getConfig() {
@@ -38,44 +48,39 @@ public class ImgFile {
 		this.config = config;
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		if (location.contains(":")) {
-			this.location = location;
-		} else if (location.startsWith("/")) {
-			this.location = config.getProject().getLocationURI().getPath() + location;
-		}
-	}
-
-	public String getFilePath() {
-		return this.getLocation() + "/" + name;
-	}
-
 	public List<ImgFile> getSubs() {
 		return subs;
 	}
-	
-	public File getFile() {}
+
+	public File generateFile(AbstractBuilder builder) {
+		File file = new File(this.getLocation());
+		for(ImgFile sub:subs) {
+			File subF = sub.generateFile(builder);
+			if(subF==null)
+				return null;
+			FileUtil.concatfile, subF);
+		}
+		CodePart cp = config.getCodePart(this.getSrc());
+		if(cp!=null) {
+			if(cp.build(builder)==null) {
+				return null;
+			}
+		}
+		return file;
+	}
 
 	public void addSubFile(ImgFile f) {
 
 		for (ImgFile file : subs) {
-			if (PathUtil.equalPath(new Path(file.getFilePath()), new Path(f.getFilePath()))) {
+			if (PathUtil.equalPath(new Path(file.getLocation()), new Path(f.getLocation()))) {
 				return;
 			}
 		}
 
 		this.subs.add(f);
 	}
-	
+
 	public boolean equal(ImgFile old) {
-		if (!this.name.equals(old.name))
-			return false;
-		if (!this.getFilePath().equals(old.getFilePath()))
-			return false;
 		if (this.subs.size() != old.subs.size())
 			return false;
 

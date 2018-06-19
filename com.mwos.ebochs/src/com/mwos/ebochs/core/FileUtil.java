@@ -239,10 +239,10 @@ public class FileUtil {
 		return PathUtil.equalPath(new Path(path1), new Path(path2));
 	}
 
-	public static File concat(String path, File[] files) throws IOException {
-		File file = new File(path);
-		file.createNewFile();
-		OutputStream out = new FileOutputStream(file);
+	public static File concat(File file, File[] files) throws IOException {
+		if (!file.exists())
+			file.createNewFile();
+		OutputStream out = new FileOutputStream(file, true);
 		for (File f : files) {
 			InputStream in = new FileInputStream(f);
 			byte[] buffer = new byte[1024];
@@ -262,27 +262,37 @@ public class FileUtil {
 		return (StringUtils.isNotBlank(s) ? s : "") + "/";
 	}
 
-	public static File merge(File f1,File f2) {
+	public static File merge(File f1, File f2, int index) {
 		try {
-			InputStream in = new FileInputStream(f2);
-			OutputStream out = new FileOutputStream(f1, true);
-			byte[] buffer = new byte[1024];
-			int len = 0;
-			while((len=in.read(buffer))>0) {
-				out.write(buffer, 0, len);
+			
+			byte[] buffer1 = new byte[(int) f1.length()];
+			byte[] buffer2 = new byte[(int) f2.length()];
+			
+			InputStream in1 = new FileInputStream(f1);
+			InputStream in2 = new FileInputStream(f2);
+			
+			in1.read(buffer1);
+			in2.read(buffer2);
+			
+			for(int i=0;i<buffer2.length;i++) {
+				buffer1[index+i]=buffer2[i];
 			}
+			
+			OutputStream out = new FileOutputStream(f1);
+			out.write(buffer1);
 			out.flush();
 			out.close();
-			in.close();
+			in1.close();
+			in2.close();
+			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
 		return f1;
 	}
-	
+
 	public static void main(String[] args) {
-		System.out.println(new File("asd").getParent().length());
+		merge(new File("C:\\Users\\mao-zhengjun\\Desktop\\1.txt"), new File("C:\\Users\\mao-zhengjun\\Desktop\\2.txt"), 1);
 	}
 }

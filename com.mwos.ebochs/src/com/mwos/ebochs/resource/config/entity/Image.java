@@ -1,9 +1,14 @@
 package com.mwos.ebochs.resource.config.entity;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.mwos.ebochs.core.FileUtil;
+import com.mwos.ebochs.core.build.AbstractBuilder;
 
 public class Image {
 	private String name;
@@ -64,7 +69,33 @@ public class Image {
 		return mbr;
 	}
 
+	public List<CodePart> getCP() {
+		List<CodePart> cps = new ArrayList<>();
+		CodePart cp = null;
+		cp = config.getCodePart(this.getMbr());
+		if (cp != null) {
+			cps.add(cp);
+		}
+		for (ImgFile imgf : imgFiles) {
+			cp = config.getCodePart(imgf.getSrc());
+			if (cp != null) {
+				cps.add(cp);
+			}
+			for (ImgFile sub : imgf.getSubs()) {
+				cp = config.getCodePart(sub.getSrc());
+				if (cp != null) {
+					cps.add(cp);
+				}
+			}
+		}
+
+		return cps;
+	}
+
 	public void setMbr(String mbr) {
+		if (!mbr.contains("/") && !mbr.contains(":")) {
+			mbr = "/obj/" + mbr;
+		}
 		this.mbr = mbr;
 	}
 
@@ -74,7 +105,7 @@ public class Image {
 
 	public void addImgFile(ImgFile r) {
 		for (ImgFile temp : imgFiles) {
-			if (temp.getFilePath().equals(r.getFilePath()))
+			if (temp.getSrc().equals(r.getSrc()))
 				return;
 		}
 		imgFiles.add(r);
@@ -84,19 +115,15 @@ public class Image {
 		return config;
 	}
 
-	public boolean isResInclude(String path) {
-		if (!path.contains(":")) {
-			if (!path.startsWith("/"))
-				path = "/" + path;
-			path = this.config.getProject().getLocationURI().getPath() + path;
+	public File build(AbstractBuilder builder) {
+		File img = null;
+		try {
+			img = FileUtil.makeFile(this.getConfig().getProject().getLocationURI().getPath() + "/obj/image/" + this.name, this.size);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		for (ImgFile temp : imgFiles) {
-			if (FileUtil.equalPath(temp.getFilePath(), path))
-				return true;
-		}
-
-		return false;
+		return img;
 	}
 
 	public boolean equal(Image old) {

@@ -7,11 +7,11 @@
 
 	<!-- 镜像/存储配置 -->
 	<image name="mwos.img" size="1440k" device="floppy" format="fat12" mbr="mbr.bin">
-		<file name="os.bin">
-			<sub name="bootloader.obj" />
-			<sub name="core.bin" />
+		<file src="os.bin">
+			<sub src="bootloader.bin" />
+			<sub src="core.bin" />
 		</file>
-		<file name="HelloWorld.mwe" />
+		<file src="HelloWorld.mwe" />
 	</image>
 
 	<!-- 源文件 -->
