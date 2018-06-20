@@ -89,24 +89,31 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 			if (c != null) {
 				res = builder.compile(name, c.getOut(), getProject());
 			} else {
-				res = builder.compile(name,  getProject());
+				res = builder.compile(name, getProject());
 			}
 
 			if (!res.isSuccess()) {
-				ConsoleFactory.outErrMsg("\r\n----- 编译错误:\t" + name + "\r\n" + res.getAllMsg() + "\r\n", getProject());
+				ConsoleFactory.outErrMsg("----- 编译错误:\t" + name + "\r\n" + res.getAllMsg() + "\r\n", getProject());
 			} else {
-				ConsoleFactory.outMsg("\r\n----- 编译成功:\t" + name + "\r\n" + res.getAllMsg() + "\r\n", getProject());
+				ConsoleFactory.outMsg("----- 编译成功:\t" + name + "\r\n" + res.getAllMsg() + "\r\n", getProject());
 			}
 			return res.isSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			ConsoleFactory.outErrMsg("\r\n----- "+e.getMessage()+":\t\r\n" , getProject());
+			ConsoleFactory.outErrMsg("----- 系统出错：\r\n" + e.getMessage() + "\r\n", getProject());
 		}
 		return false;
 	}
 
 	private boolean doBuildOSXml() {
-
+		try {
+			DefaultBuilder builder = AbstractBuilder.getBuilder(DefaultBuilder.class);
+			OSConfig config = OSConfigFactory.getBuildConfig(getProject());
+			config.build(builder);
+		} catch (Exception e) {
+			e.printStackTrace();
+			ConsoleFactory.outErrMsg("----- 系统出错：\r\n" + e.getMessage() + "\r\n", getProject());
+		}
 		return false;
 	}
 

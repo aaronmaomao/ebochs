@@ -16,7 +16,7 @@ public class CodePart {
 	private String type;
 	private OSConfig config;
 	private String src = "";
-	private String out;
+	private String out = "";
 	private List<Code> codes;
 
 	public CodePart(OSConfig config) {
@@ -32,10 +32,6 @@ public class CodePart {
 		this.type = type;
 	}
 
-	public void setObj(String obj) {
-		this.out = obj;
-	}
-
 	public List<Code> getCodes() {
 		return codes;
 	}
@@ -43,69 +39,70 @@ public class CodePart {
 	public String getOut() {
 		return out;
 	}
-	
+
 	public String build(AbstractBuilder builder) {
 		if (StringUtils.isNotBlank(src)) {
 			if (new File(config.getProject().getLocationURI().getPath() + out).exists()) {
 				return out;
 			} else {
 				try {
-
 					BuildResult res = builder.compile(src, out, config.getProject());
 					if (!res.isSuccess()) {
-						ConsoleFactory.outErrMsg("\r\n----- 编译错误:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+						ConsoleFactory.outErrMsg("----- 编译错误:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
 						return null;
 					} else {
-						ConsoleFactory.outMsg("\r\n----- 编译成功:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+						ConsoleFactory.outMsg("----- 编译成功:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
 						return out;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					ConsoleFactory.outErrMsg("\r\n----- 系统异常:\t" + src + "\r\n", config.getProject());
+					ConsoleFactory.outErrMsg("----- 系统异常:\t" + src + "\r\n", config.getProject());
 					return null;
 				}
 			}
 		} else {
 			List<String> objs = new ArrayList<>();
 			for (Code code : codes) {
-				String obj = code.getOut();
+				String obj = code.build(builder);
 				if (obj == null) {
-					ConsoleFactory.outInfoMsg("\r\n----- 构建失败:\t" + out + "\r\n", config.getProject());
+					ConsoleFactory.outInfoMsg("----- 构建失败:\t" + out + "\r\n", config.getProject());
 					return null;
 				}
 				objs.add(obj);
-				try {
-					BuildResult res = builder.link(out, "3355k", objs.toArray(new String[] {}), config.getProject());
-					if (!res.isSuccess()) {
-						ConsoleFactory.outErrMsg("\r\n----- 链接失败:\t" + out + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
-						return null;
-					} else {
-						ConsoleFactory.outMsg("\r\n----- 链接成功:\t" + out + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
-						return out;
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					ConsoleFactory.outErrMsg("\r\n----- 链接错误:\t" + out + "\r\n", config.getProject());
+			}
+			try {
+				BuildResult res = builder.link(out, "3136k", objs.toArray(new String[] {}), config.getProject());
+				if (!res.isSuccess()) {
+					ConsoleFactory.outErrMsg("----- 链接失败:\t" + out + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
 					return null;
+				} else {
+					ConsoleFactory.outMsg("----- 链接成功:\t" + out + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+					return out;
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				ConsoleFactory.outErrMsg("----- 链接错误:\t" + out + "\r\n", config.getProject());
+				return null;
 			}
 		}
-		return null;
 	}
 
 	public void setOut(String out) {
+		if (!out.contains("/")) {
+			out = "/obj/" + FileUtil.getFileName(out, true);
+		}
 		this.out = out;
 	}
 
 	public Code getCode(String src) {
-		if(StringUtils.isNotBlank(this.src)&&src.equals(this.src)) {
+		if (StringUtils.isNotBlank(this.src) && src.equals(this.src)) {
 			Code c = new Code();
 			c.setSrc(src);
 			c.setOut(out);
 			return c;
-		}else {
-			for(Code code:codes) {
-				if(code.getSrc().equals(src))
+		} else {
+			for (Code code : codes) {
+				if (code.getSrc().equals(src))
 					return code;
 			}
 		}
@@ -131,7 +128,7 @@ public class CodePart {
 	}
 
 	public void setSrc(String src) {
-		if (StringUtils.isBlank(out)) {
+		if (StringUtils.isEmpty(out)) {
 			out = "/obj/" + FileUtil.getFileName(src, false) + ".obj";
 		}
 		this.src = src;
@@ -157,6 +154,7 @@ public class CodePart {
 		private String src;
 		private String out = "";
 		private CodePart cp;
+		private boolean linkOnly = false;
 
 		public String getSrc() {
 			return src;
@@ -173,7 +171,16 @@ public class CodePart {
 			return out;
 		}
 
+		public void setLinkOnly(String linkOnly) {
+			if (linkOnly.equals("true"))
+				this.linkOnly = true;
+			else
+				this.linkOnly = false;
+		}
+
 		public void setOut(String out) {
+			if (!out.contains("/"))
+				out = "/obj/" + FileUtil.getFileName(out, true);
 			this.out = out;
 		}
 
@@ -187,27 +194,28 @@ public class CodePart {
 			return true;
 		}
 
-		public String generateOut(AbstractBuilder builder) {
-			IProject prj = cp.getConfig().getProject();
-			File objF = new File(prj.getLocationURI().getPath() + out);
-			if (!objF.exists()) {
-				try {
-					BuildResult res = builder.compile(src, out, prj);
-					if (!res.isSuccess()) {
-						ConsoleFactory.outErrMsg("\r\n----- 编译失败:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", prj);
+		public String build(AbstractBuilder builder) {
+			if (!linkOnly) {
+				if (!new File(cp.getConfig().getProject().getLocationURI().getPath() + getOut()).exists()) {
+					try {
+						BuildResult res = builder.compile(src, out, cp.getConfig().getProject());
+						if (!res.isSuccess()) {
+							ConsoleFactory.outErrMsg("----- 编译错误:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", cp.getConfig().getProject());
+							return null;
+						} else {
+							ConsoleFactory.outMsg("----- 编译成功:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", cp.getConfig().getProject());
+							return out;
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						ConsoleFactory.outErrMsg("----- 系统出错：\r\n" + e.getMessage() + "\r\n", cp.getConfig().getProject());
 						return null;
-					} else {
-						ConsoleFactory.outMsg("\r\n----- 编译成功:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", prj);
-						return out;
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					ConsoleFactory.outErrMsg("\r\n----- 系统异常:\t" + src + "\r\n", prj);
-					return null;
+				} else {
+					return out;
 				}
-			} else {
-				return out;
 			}
+			return src;
 		}
 	}
 }

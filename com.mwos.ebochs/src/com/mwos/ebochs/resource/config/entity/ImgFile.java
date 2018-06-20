@@ -4,12 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.cdt.utils.PathUtil;
 import org.eclipse.core.runtime.Path;
 
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.build.AbstractBuilder;
+import com.mwos.ebochs.ui.view.ConsoleFactory;
 
 public class ImgFile {
 
@@ -52,23 +52,22 @@ public class ImgFile {
 		return subs;
 	}
 
-	public File generateFile(AbstractBuilder builder) {
+	public File build(AbstractBuilder builder) {
 		File file = new File(this.getLocation());
-		for(ImgFile sub:subs) {
-			File subF = sub.generateFile(builder);
-			if(subF==null)
-				return null;
-			FileUtil.concatfile, subF);
+		if(subs.size()>0) {
+			file.delete();
 		}
-		CodePart cp = config.getCodePart(this.getSrc());
-		if(cp!=null) {
-			if(cp.build(builder)==null) {
+		for (ImgFile sub : subs) {
+			file = FileUtil.concat(file, new File[] { new File(sub.getLocation()) });
+			if (file == null) {
+				ConsoleFactory.outMsg("----- 文件构建错误:\t" + this.getSrc() + "\r\n", this.getConfig().getProject());
 				return null;
 			}
 		}
+
 		return file;
 	}
-
+	
 	public void addSubFile(ImgFile f) {
 
 		for (ImgFile file : subs) {

@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.build.AbstractBuilder;
+import com.mwos.ebochs.core.build.BuildResult;
+import com.mwos.ebochs.ui.view.ConsoleFactory;
 
 public class Image {
 	private String name;
@@ -116,14 +118,26 @@ public class Image {
 	}
 
 	public File build(AbstractBuilder builder) {
-		File img = null;
-		try {
-			img = FileUtil.makeFile(this.getConfig().getProject().getLocationURI().getPath() + "/obj/image/" + this.name, this.size);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for (ImgFile f : this.imgFiles) {
+			if (f.build(builder) == null) {
+				return null;
+			}
 		}
-		return img;
+		FileUtil.fillFile(this.getConfig().getProject().getLocationURI().getPath() + this.getMbr(), size);
+		try {
+			BuildResult res = builder.buildImg(this);
+			if (!res.isSuccess()) {
+				ConsoleFactory.outErrMsg("----- 镜像构建失败:\t" + this.getName() + "\r\n" + res.getAllMsg() + "\r\n", this.getConfig().getProject());
+				return null;
+			} else {
+				ConsoleFactory.outMsg("----- 镜像构建成功:\t" + this.getName() + "\r\n" + res.getAllMsg() + "\r\n", this.getConfig().getProject());
+				return new File(this.getConfig().getProject().getLocationURI().getPath() + "/images/" + this.getName());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			ConsoleFactory.outErrMsg("----- 系统错误:\t" + "\r\n", this.getConfig().getProject());
+			return null;
+		}
 	}
 
 	public boolean equal(Image old) {

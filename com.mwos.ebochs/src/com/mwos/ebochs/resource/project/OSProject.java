@@ -75,6 +75,8 @@ public class OSProject {
 		IFolder src = project.getFolder("src");
 		// src.create(true, true, null);
 		IFolder obj = project.getFolder("obj");
+		
+		IFolder img = project.getFolder("obj/images");
 
 		IPathEntry incEntry = CoreModel.newSourceEntry(inc.getFullPath());
 		IPathEntry srcEntry = CoreModel.newSourceEntry(src.getFullPath());
@@ -83,6 +85,7 @@ public class OSProject {
 		IPathEntry pathEntry = null;
 		if (!OSlib.isEmpty()) {
 			pathEntry = CoreModel.newIncludeEntry(null, null, PathUtil.getWorkspaceRelativePath(OSlib + "/lib"), true);
+			cp.setRawPathEntries(new IPathEntry[] { pathEntry }, null);
 		}
 
 		BasicNewResourceWizard.selectAndReveal(inc, Activator.getDefault().getWorkbench().getActiveWorkbenchWindow());
@@ -92,6 +95,8 @@ public class OSProject {
 		CoreUtility.createFolder(inc, true, true, null);
 		CoreUtility.createFolder(src, true, true, null);
 		CoreUtility.createFolder(obj, true, true, null);
+		
+		img.create(true, true, null);
 
 		try {
 			IFile config = project.getFile("OS.xml");
@@ -102,7 +107,11 @@ public class OSProject {
 			e.printStackTrace();
 		}
 
-		cp.setRawPathEntries(new IPathEntry[] { incEntry, srcEntry, objEntry, pathEntry }, null);
+		if (pathEntry != null) {
+			cp.setRawPathEntries(new IPathEntry[] { incEntry, srcEntry, objEntry, pathEntry }, null);
+		} else {
+			cp.setRawPathEntries(new IPathEntry[] { incEntry, srcEntry, objEntry }, null);
+		}
 
 		// IFolder objs = project.getFolder("objs");
 

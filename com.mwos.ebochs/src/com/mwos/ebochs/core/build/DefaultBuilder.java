@@ -1,5 +1,6 @@
 package com.mwos.ebochs.core.build;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,8 @@ import org.eclipse.core.resources.IProject;
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.exe.EXERunner;
 import com.mwos.ebochs.core.exe.RunResult;
+import com.mwos.ebochs.resource.config.entity.Image;
+import com.mwos.ebochs.resource.config.entity.ImgFile;
 import com.mwos.ebochs.resource.project.OSProject;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
 
@@ -23,6 +26,8 @@ public class DefaultBuilder extends AbstractBuilder {
 	private static final String gas2asm = "gas2asm";
 	private static final String nask = "nask";
 	private static final String link = "obj2bim";
+	private static final String edimg = "edimg.exe";
+	private static final String bin2obj = "bin2obj.exe";
 
 	public static final String toolchain = "default_toolchain";
 
@@ -78,6 +83,26 @@ public class DefaultBuilder extends AbstractBuilder {
 	}
 
 	@Override
+	public BuildResult buildImg(Image img) throws Exception {
+		String prjPath = img.getConfig().getProject().getLocationURI().getPath();
+
+		// 构建镜像
+		String cmd_img = cmd_img(img);
+		RunResult naskResult = EXERunner.run(cmd_img, prjPath);
+		return new BuildResult(naskResult);
+	}
+	
+	@Override
+	public BuildResult bin2obj(String src, String out, String name, IProject project) throws Exception {
+		String prjPath = project.getProject().getLocationURI().getPath();
+
+		// 构建镜像
+		String cmd_bin2obj = cmd_bin2obj(src, out, name);
+		RunResult naskResult = EXERunner.run(cmd_bin2obj, prjPath);
+		return new BuildResult(naskResult);
+	}
+
+	@Override
 	public String getToolChain() {
 		return OSDevPreference.TOOLCHAIN;
 	}
@@ -91,9 +116,13 @@ public class DefaultBuilder extends AbstractBuilder {
 		} else if (type.equals(DefaultBuilder.gas2asm)) {
 			cmd = toolchainPath + "\\gas2nask.exe %.gas %.asm";
 		} else if (type.equals(DefaultBuilder.nask)) {
-			cmd = toolchainPath + "\\nask.exe %.asm %.obj %.lst";
+			cmd = toolchainPath + "\\nask.exe %.asm %.obj";
 		} else if (type.equals(DefaultBuilder.link)) {
 			cmd = toolchainPath + "\\obj2bim.exe  @" + toolchainPath + "/lib/haribote.rul out:%.out stack:%.stack map:%.map %objs";
+		} else if (type.equals(DefaultBuilder.edimg)) {
+			cmd = toolchainPath + "\\edimg.exe imgin:" + toolchainPath + "/%.fat wbinimg src:%.mbr len:512 from:0 to:0 %.copy imgout:%.name";
+		}else if (type.equals(DefaultBuilder.bin2obj)) {
+			cmd = toolchainPath + "\\bin2obj.exe %.src %.out %.name";
 		}
 		return cmd;
 	}
@@ -138,14 +167,36 @@ public class DefaultBuilder extends AbstractBuilder {
 	private String cmd_link(String out, String stack, String[] objs) {
 		String name = FileUtil.getFileName(out, false);
 		String cmd = getBuildCmd(link);
-		cmd = cmd.replace("%.out", out);
+		cmd = cmd.replace("%.out", FileUtil.getRelPath(out));
 		cmd = cmd.replace("%.stack", stack);
 		cmd = cmd.replace("%.map", "obj/" + name + ".map");
 		String objStr = "";
 		for (String obj : objs) {
-			objStr += (" " + obj);
+			objStr += (" " + FileUtil.getRelPath(obj));
 		}
 		cmd = cmd.replace("%objs", objStr);
+		return cmd;
+	}
+
+	private String cmd_img(Image img) {
+		String cmd = getBuildCmd(edimg);
+		cmd = cmd.replace("%.fat", "fat12.tek");
+		cmd = cmd.replace("%.mbr", FileUtil.getRelPath(img.getMbr()));
+		String files = "";
+		for (ImgFile file : img.getImgFiles()) {
+			files += (" copy from:" + FileUtil.getRelPath(file.getSrc()) + " to:@: ");
+		}
+
+		cmd = cmd.replace("%.copy", files);
+		cmd = cmd.replace("%.name", "obj/images/" + img.getName());
+		return cmd;
+	}
+	
+	private String cmd_bin2obj(String src, String out, String name) {
+		String cmd = getBuildCmd(bin2obj);
+		cmd = cmd.replace("%.src", src);
+		cmd = cmd.replace("%.out", FileUtil.getRelPath(out));
+		cmd = cmd.replace("%.name", name);
 		return cmd;
 	}
 
@@ -156,4 +207,5 @@ public class DefaultBuilder extends AbstractBuilder {
 		}
 		return temp;
 	}
+
 }

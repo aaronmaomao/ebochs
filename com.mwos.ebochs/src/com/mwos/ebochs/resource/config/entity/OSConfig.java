@@ -102,9 +102,12 @@ public class OSConfig {
 
 	public void build(AbstractBuilder builder) {
 		for(CodePart cp:getUsedCP()) {
-			cp.build(builder);
+			if(cp.build(builder)==null) {
+				return;
+			}
 		}
 		for (Image image : images) {
+			image.build(builder);
 		}
 	}
 

@@ -18,10 +18,9 @@ import org.xml.sax.SAXException;
 import com.mwos.ebochs.resource.config.entity.CodePart;
 import com.mwos.ebochs.resource.config.entity.CodePart.Code;
 import com.mwos.ebochs.resource.config.entity.Image;
+import com.mwos.ebochs.resource.config.entity.ImgFile;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 import com.mwos.ebochs.resource.config.entity.Platform;
-import com.mwos.ebochs.resource.project.OSProject;
-import com.mwos.ebochs.resource.config.entity.ImgFile;
 
 public class OSConfigFactory {
 	private static Map<IProject, OSConfig> _map = new HashMap<>();
@@ -131,7 +130,7 @@ public class OSConfigFactory {
 				if (attr.getNodeName().equalsIgnoreCase("type")) {
 					codePart.setType(attr.getNodeValue().trim());
 				} else if (attr.getNodeName().equalsIgnoreCase("out")) {
-					codePart.setObj(attr.getNodeValue().trim());
+					codePart.setOut(attr.getNodeValue().trim());
 				} else if (attr.getNodeName().equalsIgnoreCase("src")) {
 					codePart.setSrc(attr.getNodeValue().trim());
 				}
@@ -148,6 +147,8 @@ public class OSConfigFactory {
 							code.setSrc(attr.getNodeValue().trim());
 						} else if (attr.getNodeName().equalsIgnoreCase("out")) {
 							code.setOut(attr.getNodeValue().trim());
+						} else if (attr.getNodeName().equalsIgnoreCase("linkonly")) {
+							code.setLinkOnly(attr.getNodeValue().trim());
 						}
 					}
 
@@ -173,7 +174,7 @@ public class OSConfigFactory {
 		ImgFile imgFile = new ImgFile(img.getConfig());
 		for (int j = 0; j < file.getAttributes().getLength(); j++) {
 			Node _attr = file.getAttributes().item(j);
-			if (_attr.getNodeName().equalsIgnoreCase("name")) {
+			if (_attr.getNodeName().equalsIgnoreCase("src")) {
 				imgFile.setSrc(_attr.getNodeValue().trim());
 			} 
 		}
