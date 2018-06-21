@@ -9,7 +9,7 @@
 	<image name="mwos.img" size="1440k" device="floppy" format="fat12" mbr="mbr.bin">
 		<file src="os.bin">
 			<sub src="bootloader.bin" />
-			<sub src="core.bin" />
+			<sub src="core.mwe" />
 		</file>
 		<file src="HelloWorld.mwe" />
 	</image>
@@ -18,7 +18,7 @@
 	<codepart type="os" src="src/mbr.asm" out="mbr.bin" />
 	<codepart type="os" src="src/bootloader.asm" out="bootloader.bin" />
 
-	<codepart type="os" out="core.bin">
+	<codepart type="os" out="core.mwe">
 		<code src="src/OSMain.c" />
 	</codepart>
 	<codepart type="app" out="HelloWorld.mwe">

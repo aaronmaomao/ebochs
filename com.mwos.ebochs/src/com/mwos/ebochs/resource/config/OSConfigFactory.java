@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 
 import com.mwos.ebochs.resource.config.entity.CodePart;
 import com.mwos.ebochs.resource.config.entity.CodePart.Code;
+import com.mwos.ebochs.ui.view.ConsoleFactory;
 import com.mwos.ebochs.resource.config.entity.Image;
 import com.mwos.ebochs.resource.config.entity.ImgFile;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
@@ -29,7 +30,7 @@ public class OSConfigFactory {
 
 	}
 
-	public static OSConfig getConfig(IProject project) throws ParserConfigurationException, SAXException, IOException {
+	public static OSConfig getConfig(IProject project) {
 		OSConfig config = _map.get(project);
 		if (config == null) {
 			return getBuildConfig(project);
@@ -38,14 +39,19 @@ public class OSConfigFactory {
 		return config;
 	}
 
-	public static OSConfig getBuildConfig(IProject project) throws ParserConfigurationException, SAXException, IOException {
+	public static OSConfig getBuildConfig(IProject project) {
 		if (new File(project.getLocationURI().getPath() + "\\OS.xml").exists()) {
-			OSConfig config = parse(project.getFile("OS.xml"));
-			if (config != null) {
-				_map.put(project, config);
-				return config;
+			OSConfig config;
+			try {
+				config = parse(project.getFile("OS.xml"));
+				if (config != null) {
+					_map.put(project, config);
+					return config;
+				}
+			} catch (Exception e) {
+				ConsoleFactory.outErrMsg("----- OS.xml 出错：\r\n", project);
+				e.printStackTrace();
 			}
-
 		}
 		return null;
 	}
@@ -176,7 +182,7 @@ public class OSConfigFactory {
 			Node _attr = file.getAttributes().item(j);
 			if (_attr.getNodeName().equalsIgnoreCase("src")) {
 				imgFile.setSrc(_attr.getNodeValue().trim());
-			} 
+			}
 		}
 
 		for (int j = 0; j < file.getChildNodes().getLength(); j++) {

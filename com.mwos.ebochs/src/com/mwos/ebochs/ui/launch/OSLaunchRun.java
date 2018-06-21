@@ -1,10 +1,10 @@
-package com.mwos.ebochs.ui.launch.debug;
+package com.mwos.ebochs.ui.launch;
 
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorPart;
 
-public class OSLaunchDebug implements ILaunchShortcut {
+public class OSLaunchRun implements ILaunchShortcut {
 
 	@Override
 	public void launch(ISelection selection, String mode) {

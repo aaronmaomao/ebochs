@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.core.resources.IProject;
 
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.build.AbstractBuilder;
@@ -61,27 +60,18 @@ public class CodePart {
 				}
 			}
 		} else {
-			List<String> objs = new ArrayList<>();
-			for (Code code : codes) {
-				String obj = code.build(builder);
-				if (obj == null) {
-					ConsoleFactory.outInfoMsg("----- 构建失败:\t" + out + "\r\n", config.getProject());
-					return null;
-				}
-				objs.add(obj);
-			}
 			try {
-				BuildResult res = builder.link(out, "3136k", objs.toArray(new String[] {}), config.getProject());
+				BuildResult res = builder.buildMWE(this);
 				if (!res.isSuccess()) {
-					ConsoleFactory.outErrMsg("----- 链接失败:\t" + out + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+					ConsoleFactory.outErrMsg("----- 构建失败:\t" + getOut() + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
 					return null;
 				} else {
-					ConsoleFactory.outMsg("----- 链接成功:\t" + out + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+					ConsoleFactory.outMsg("----- 构建成功:\t" + getOut() + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
 					return out;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				ConsoleFactory.outErrMsg("----- 链接错误:\t" + out + "\r\n", config.getProject());
+				ConsoleFactory.outErrMsg("----- 系统异常:\t" + getOut() + "\r\n", config.getProject());
 				return null;
 			}
 		}

@@ -1,10 +1,6 @@
 package com.mwos.ebochs.core.build;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.cdt.core.dom.ast.IASTProblem;
@@ -15,23 +11,14 @@ import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.core.model.ITranslationUnit;
 import org.eclipse.cdt.internal.core.dom.parser.c.CVisitor;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 
-import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.resource.config.OSConfigFactory;
-import com.mwos.ebochs.resource.config.entity.CodePart;
 import com.mwos.ebochs.resource.config.entity.CodePart.Code;
-import com.mwos.ebochs.resource.config.entity.Image;
-import com.mwos.ebochs.resource.config.entity.ImgFile;
-import com.mwos.ebochs.resource.config.entity.OSConfig;
-import com.mwos.ebochs.resource.project.OSProject;
-import com.mwos.ebochs.ui.preference.OSDevPreference;
 import com.mwos.ebochs.ui.view.ConsoleFactory;
 
 public class ProjectBuilder extends IncrementalProjectBuilder {
@@ -106,14 +93,7 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 	}
 
 	private boolean doBuildOSXml() {
-		try {
-			DefaultBuilder builder = AbstractBuilder.getBuilder(DefaultBuilder.class);
-			OSConfig config = OSConfigFactory.getBuildConfig(getProject());
-			config.build(builder);
-		} catch (Exception e) {
-			e.printStackTrace();
-			ConsoleFactory.outErrMsg("----- 系统出错：\r\n" + e.getMessage() + "\r\n", getProject());
-		}
+		OSConfigFactory.getBuildConfig(getProject());
 		return false;
 	}
 

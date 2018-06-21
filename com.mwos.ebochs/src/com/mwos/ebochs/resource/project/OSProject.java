@@ -30,6 +30,8 @@ import org.osgi.framework.Bundle;
 
 import com.mwos.ebochs.Activator;
 import com.mwos.ebochs.core.FileUtil;
+import com.mwos.ebochs.core.build.AbstractBuilder;
+import com.mwos.ebochs.resource.config.OSConfigFactory;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
 
 public class OSProject {
@@ -200,5 +202,14 @@ public class OSProject {
 		// }
 		// }
 		return incDirs;
+	}
+	
+	public static boolean build(IProject p, AbstractBuilder builder) {
+		try {
+			 return OSConfigFactory.getConfig(p).build(builder);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

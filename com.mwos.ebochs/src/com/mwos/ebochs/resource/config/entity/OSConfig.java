@@ -100,15 +100,18 @@ public class OSConfig {
 		return cps.values().toArray(new CodePart[] {});
 	}
 
-	public void build(AbstractBuilder builder) {
+	public boolean build(AbstractBuilder builder) {
 		for(CodePart cp:getUsedCP()) {
 			if(cp.build(builder)==null) {
-				return;
+				return false;
 			}
 		}
 		for (Image image : images) {
-			image.build(builder);
+			if(image.build(builder)==null) {
+				return false;
+			}
 		}
+		return true;
 	}
 
 	public IProject getProject() {

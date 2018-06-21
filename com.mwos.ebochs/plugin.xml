@@ -270,7 +270,7 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="com.mwos.ebochs.ui.launch.run.OSLaunchRun"
+            class="com.mwos.ebochs.ui.launch.OSLaunchRun"
             icon="resource/icons/pilcrow.png"
             id="com.mwos.ebochs.launch.run"
             label="Launch OS Run"
@@ -295,24 +295,12 @@
                   </iterate>
                </with></enablement></contextualLaunch>
       </shortcut>
-      <shortcut
-            class="com.mwos.ebochs.ui.launch.debug.OSLaunchDebug"
-            icon="resource/icons/chart_curve.png"
-            id="com.mwos.ebochs.launch.debug"
-            label="Launch OS Debug"
-            modes="debug">
-      </shortcut>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="com.mwos.ebochs.ui.launch.run.LaunchTabGroupRun"
+            class="com.mwos.ebochs.ui.launch.LaunchTabGroup"
             id="com.mwos.ebochs.launchConfigurationTabGroup.run"
-            type="com.mwos.ebochs.launchConfigurationType">
-      </launchConfigurationTabGroup>
-      <launchConfigurationTabGroup
-            class="com.mwos.ebochs.ui.launch.debug.LaunchTabGroupDebug"
-            id="com.mwos.ebochs.launchConfigurationTabGroup.debug"
             type="com.mwos.ebochs.launchConfigurationType">
       </launchConfigurationTabGroup>
    </extension>

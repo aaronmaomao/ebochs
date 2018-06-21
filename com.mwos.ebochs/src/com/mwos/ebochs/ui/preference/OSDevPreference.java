@@ -16,7 +16,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -25,11 +24,13 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.mwos.ebochs.Activator;
+import com.mwos.ebochs.ui.UiUtil;
 
 public class OSDevPreference extends PreferencePage implements IWorkbenchPreferencePage {
 
 	public static final String TOOLCHAIN = Activator.PLUGIN_ID + ":default_toolchain";
 	public static final String BOCHS = Activator.PLUGIN_ID + ":bochs";
+	public static final String VBOX = Activator.PLUGIN_ID + ":vbox";
 
 	private Text textToolchain;
 	private Text textBochs;
@@ -37,6 +38,7 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 	private int isVaild = 0x11;
 	private static final int toolChainVaild = 0x01;
 	private static final int bochsVaild = 0x10;
+	private Text textVBox;
 
 	/**
 	 * @wbp.parser.constructor
@@ -98,7 +100,7 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 		btnToolchain.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String toochain = chooseFolder("工具链", container);
+				String toochain = UiUtil.chooseFolder("工具链", container);
 				if (StringUtils.isNotEmpty(toochain)) {
 					textToolchain.setText(toochain);
 				}
@@ -136,13 +138,40 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 		btnBochs.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String bochs = chooseFolder("bochs", container);
+				String bochs = UiUtil.chooseFolder("bochs", container);
 				if (StringUtils.isNotEmpty(bochs)) {
 					textBochs.setText(bochs);
 				}
 			}
 		});
 		btnBochs.setText("浏览...");
+		
+		Group grpVirtualbox = new Group(container, SWT.NONE);
+		grpVirtualbox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpVirtualbox.setText("VirtualBox虚拟机设置");
+		grpVirtualbox.setLayout(new GridLayout(3, false));
+		
+		Label lblVbox = new Label(grpVirtualbox, SWT.NONE);
+		lblVbox.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblVbox.setText("VBox ");
+		
+		textVBox = new Text(grpVirtualbox, SWT.BORDER);
+		textVBox.setEditable(false);
+		textVBox.setText(getValue(OSDevPreference.VBOX));
+		textVBox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		textVBox.setText(getValue(OSDevPreference.VBOX));
+		
+		Button btnVbox = new Button(grpVirtualbox, SWT.NONE);
+		btnVbox.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String vbox = UiUtil.chooseFolder("Virtualbox", container);
+				if (StringUtils.isNotEmpty(vbox)) {
+					textVBox.setText(vbox);
+				}
+			}
+		});
+		btnVbox.setText("浏览...");
 
 		return container;
 	}
@@ -151,6 +180,7 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 	protected void performApply() {
 		setValue(OSDevPreference.TOOLCHAIN, textToolchain.getText().trim());
 		setValue(OSDevPreference.BOCHS, textBochs.getText().trim());
+		setValue(OSDevPreference.VBOX, textVBox.getText().trim());
 	}
 
 	@Override
@@ -204,19 +234,5 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 		return null;
 	}
 
-	private String chooseFolder(String name, Composite container) {
-		DirectoryDialog filedlg = new DirectoryDialog(container.getShell(), SWT.OPEN);
-		filedlg.setText("选择" + name);
-		filedlg.setFilterPath("SystemDrive");
-		filedlg.setMessage("");
-		String selected = filedlg.open();
-		if (selected != null) {
-			File file = new File(selected);
-			if (file.exists()) {
-				return selected;
-			}
-		}
-		return null;
-	}
 
 }

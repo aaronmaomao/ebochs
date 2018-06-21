@@ -3,7 +3,6 @@ package com.mwos.ebochs.core;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -323,6 +322,10 @@ public class FileUtil {
 		if (path.startsWith("/"))
 			return path.substring(1, path.length());
 		return path;
+	}
+	
+	public static String getExt(String path) {
+		return path.substring(path.indexOf("."),path.length());
 	}
 
 	public static void main(String[] args) {

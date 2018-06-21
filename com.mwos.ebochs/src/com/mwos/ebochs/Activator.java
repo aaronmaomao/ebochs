@@ -3,19 +3,12 @@ package com.mwos.ebochs;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.ISelectionService;
-import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.wb.swt.ResourceManager;
 import org.osgi.framework.BundleContext;
@@ -87,6 +80,9 @@ public class Activator extends AbstractUIPlugin {
 
 		if (store.getDefaultString(OSDevPreference.BOCHS) == null)
 			store.setDefault(OSDevPreference.BOCHS, "");
+		
+		if (store.getDefaultString(OSDevPreference.VBOX) == null)
+			store.setDefault(OSDevPreference.VBOX, "");
 	}
 	
 	public static List<IProject> getOSProject() {
@@ -125,5 +121,9 @@ public class Activator extends AbstractUIPlugin {
 //        }  
           
         return project;  
+	}
+	
+	public static IProject getOSProject(String name) {
+		return ResourcesPlugin.getWorkspace().getRoot().getProject(name);
 	}
 }

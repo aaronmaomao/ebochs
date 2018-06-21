@@ -28,6 +28,7 @@ public class DefaultBuilder extends AbstractBuilder {
 	private static final String link = "obj2bim";
 	private static final String edimg = "edimg.exe";
 	private static final String bin2obj = "bin2obj.exe";
+	private static final String bim2mwe = "bim2hrb.exe";
 
 	public static final String toolchain = "default_toolchain";
 
@@ -76,7 +77,7 @@ public class DefaultBuilder extends AbstractBuilder {
 	public BuildResult link(String out, String stack, String objs[], IProject project) throws Exception {
 		String prjPath = project.getLocationURI().getPath();
 
-		// 编译
+		// 链接
 		String cmd_link = cmd_link(out, stack, objs);
 		RunResult naskResult = EXERunner.run(cmd_link, prjPath);
 		return new BuildResult(naskResult);
@@ -91,14 +92,24 @@ public class DefaultBuilder extends AbstractBuilder {
 		RunResult naskResult = EXERunner.run(cmd_img, prjPath);
 		return new BuildResult(naskResult);
 	}
-	
+
 	@Override
 	public BuildResult bin2obj(String src, String out, String name, IProject project) throws Exception {
 		String prjPath = project.getProject().getLocationURI().getPath();
 
-		// 构建镜像
+		// 将二进制文件转为可连接目标文件
 		String cmd_bin2obj = cmd_bin2obj(src, out, name);
 		RunResult naskResult = EXERunner.run(cmd_bin2obj, prjPath);
+		return new BuildResult(naskResult);
+	}
+
+	@Override
+	public BuildResult bim2mwe(String src, String out, String dsSize, IProject project) throws Exception {
+		String prjPath = project.getProject().getLocationURI().getPath();
+
+		// 把可执行二进制文件封装为OS可执行文件
+		String cmd_bim2hrb = cmd_bim2hrb(src, out, dsSize);
+		RunResult naskResult = EXERunner.run(cmd_bim2hrb, prjPath);
 		return new BuildResult(naskResult);
 	}
 
@@ -116,13 +127,15 @@ public class DefaultBuilder extends AbstractBuilder {
 		} else if (type.equals(DefaultBuilder.gas2asm)) {
 			cmd = toolchainPath + "\\gas2nask.exe %.gas %.asm";
 		} else if (type.equals(DefaultBuilder.nask)) {
-			cmd = toolchainPath + "\\nask.exe %.asm %.obj";
+			cmd = toolchainPath + "\\nask.exe %.asm %.obj %.lst";
 		} else if (type.equals(DefaultBuilder.link)) {
 			cmd = toolchainPath + "\\obj2bim.exe  @" + toolchainPath + "/lib/haribote.rul out:%.out stack:%.stack map:%.map %objs";
 		} else if (type.equals(DefaultBuilder.edimg)) {
 			cmd = toolchainPath + "\\edimg.exe imgin:" + toolchainPath + "/%.fat wbinimg src:%.mbr len:512 from:0 to:0 %.copy imgout:%.name";
-		}else if (type.equals(DefaultBuilder.bin2obj)) {
+		} else if (type.equals(DefaultBuilder.bin2obj)) {
 			cmd = toolchainPath + "\\bin2obj.exe %.src %.out %.name";
+		} else if (type.equals(DefaultBuilder.bim2mwe)) {
+			cmd = toolchainPath + "\\bim2hrb.exe %.src %.out %.dsSize";
 		}
 		return cmd;
 	}
@@ -167,7 +180,7 @@ public class DefaultBuilder extends AbstractBuilder {
 	private String cmd_link(String out, String stack, String[] objs) {
 		String name = FileUtil.getFileName(out, false);
 		String cmd = getBuildCmd(link);
-		cmd = cmd.replace("%.out", FileUtil.getRelPath(out));
+		cmd = cmd.replace("%.out", "obj/"+name+".bim");
 		cmd = cmd.replace("%.stack", stack);
 		cmd = cmd.replace("%.map", "obj/" + name + ".map");
 		String objStr = "";
@@ -191,12 +204,20 @@ public class DefaultBuilder extends AbstractBuilder {
 		cmd = cmd.replace("%.name", "obj/images/" + img.getName());
 		return cmd;
 	}
-	
+
 	private String cmd_bin2obj(String src, String out, String name) {
 		String cmd = getBuildCmd(bin2obj);
 		cmd = cmd.replace("%.src", src);
 		cmd = cmd.replace("%.out", FileUtil.getRelPath(out));
 		cmd = cmd.replace("%.name", name);
+		return cmd;
+	}
+
+	private String cmd_bim2hrb(String src, String out, String dsSize) {
+		String cmd = getBuildCmd(bim2mwe);
+		cmd = cmd.replace("%.src", src);
+		cmd = cmd.replace("%.out", FileUtil.getRelPath(out));
+		cmd = cmd.replace("%.dsSize", dsSize);
 		return cmd;
 	}
 
