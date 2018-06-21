@@ -13,7 +13,7 @@ import com.mwos.ebochs.ui.view.ConsoleFactory;
 
 public class ImgFile {
 
-	private String src;
+	private String src="";
 	private List<ImgFile> subs;
 	private OSConfig config;
 

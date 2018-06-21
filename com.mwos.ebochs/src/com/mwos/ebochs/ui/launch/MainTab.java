@@ -54,6 +54,11 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
+		try {
+			comboProject.setText(configuration.getAttribute(MainTab.prj, ""));
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 		if (chkBochs.getEnabled()) {
 			try {
 				chkBochs.setSelection((configuration.getAttribute(MainTab.bochsChk, false)));
@@ -101,9 +106,6 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 			for (IProject p : projects) {
 				comboProject.add(p.getName());
 			}
-			if (comboProject.getItemCount() > 0)
-				comboProject.select(0);
-
 			comboProject.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		}
 		this.setControl(container);
