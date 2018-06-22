@@ -328,6 +328,13 @@ public class FileUtil {
 		return path.substring(path.indexOf("."),path.length());
 	}
 
+	public static String formatPath(String path) {
+		if(path.startsWith("/")) {
+			return path.substring(1,path.length());
+		}
+		return path;
+	}
+	
 	public static void main(String[] args) {
 		merge(new File("C:\\Users\\mao-zhengjun\\Desktop\\1.txt"), new File("C:\\Users\\mao-zhengjun\\Desktop\\2.txt"), 1);
 	}
