@@ -1,6 +1,5 @@
 package com.mwos.ebochs.resource.config.entity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -93,7 +92,7 @@ public class OSConfig {
 	public CodePart[] getUsedCP() {
 		Map<String, CodePart> cps = new LinkedHashMap<>();
 		for (Image img : images) {
-			for(CodePart cp:img.getCP()) {
+			for (CodePart cp : img.getCP()) {
 				cps.put(cp.getOut(), cp);
 			}
 		}
@@ -101,13 +100,13 @@ public class OSConfig {
 	}
 
 	public boolean build(AbstractBuilder builder) {
-		for(CodePart cp:getUsedCP()) {
-			if(cp.build(builder)==null) {
+		for (CodePart cp : getUsedCP()) {
+			if (cp.build(builder) == null) {
 				return false;
 			}
 		}
 		for (Image image : images) {
-			if(image.build(builder)==null) {
+			if (image.build(builder) == null) {
 				return false;
 			}
 		}
@@ -118,46 +117,8 @@ public class OSConfig {
 		return project;
 	}
 
-	public boolean checkNeedBuild(OSConfig old) {
-		if (old == null) {
-			needBuild = true;
-			return needBuild;
-		}
-
-		for (Image image : this.images) {
-			if (!new File(project.getLocationURI().getPath() + "\\obj\\" + image.getName()).exists()) {
-				needBuild = true;
-				return needBuild;
-			}
-		}
-		if (!this.equal(old)) {
-			needBuild = true;
-		} else {
-			needBuild = false;
-		}
-		return needBuild;
-	}
-
 	public boolean needBuild() {
 		return needBuild;
-	}
-
-	private boolean equal(OSConfig old) {
-		if (!this.name.equals(old.name))
-			return false;
-		if (this.images.size() != old.images.size())
-			return false;
-		for (int i = 0; i < this.images.size(); i++) {
-			if (!this.images.get(i).equal(old.images.get(i)))
-				return false;
-		}
-
-		// for (int i = 0; i < this.codeParts.size(); i++) {
-		// if (!this.codeParts.get(i).equal(old.codeParts.get(i)))
-		// return false;
-		// }
-
-		return true;
 	}
 
 	public Code getCode(String src) {
@@ -168,4 +129,11 @@ public class OSConfig {
 		}
 		return null;
 	}
+
+	public void clean() {
+		for (Image img : images) {
+			img.clean();
+		}
+	}
+
 }

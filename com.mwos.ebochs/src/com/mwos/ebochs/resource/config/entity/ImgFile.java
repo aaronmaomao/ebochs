@@ -78,16 +78,10 @@ public class ImgFile {
 
 		this.subs.add(f);
 	}
-
-	public boolean equal(ImgFile old) {
-		if (this.subs.size() != old.subs.size())
-			return false;
-
-		for (int i = 0; i < this.subs.size(); i++) {
-			if (!this.subs.get(i).equal(old.subs.get(i))) {
-				return false;
-			}
+	
+	public void clean() {
+		if(!this.getSrc().contains(":")) {
+			new File(this.getLocation()).delete();
 		}
-		return true;
 	}
 }

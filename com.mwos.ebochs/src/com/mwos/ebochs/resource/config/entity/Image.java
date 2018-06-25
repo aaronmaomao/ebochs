@@ -1,11 +1,8 @@
 package com.mwos.ebochs.resource.config.entity;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
 
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.build.AbstractBuilder;
@@ -70,6 +67,13 @@ public class Image {
 	public String getMbr() {
 		return mbr;
 	}
+	
+	public void setMbr(String mbr) {
+		if (!mbr.contains("/") && !mbr.contains(":")) {
+			mbr = "/obj/" + mbr;
+		}
+		this.mbr = mbr;
+	}
 
 	public List<CodePart> getCP() {
 		List<CodePart> cps = new ArrayList<>();
@@ -92,13 +96,6 @@ public class Image {
 		}
 
 		return cps;
-	}
-
-	public void setMbr(String mbr) {
-		if (!mbr.contains("/") && !mbr.contains(":")) {
-			mbr = "/obj/" + mbr;
-		}
-		this.mbr = mbr;
 	}
 
 	public List<ImgFile> getImgFiles() {
@@ -139,25 +136,11 @@ public class Image {
 			return null;
 		}
 	}
-
-	public boolean equal(Image old) {
-		if (!this.name.equals(old.name))
-			return false;
-		if (this.size != old.size)
-			return false;
-		if (!this.device.equals(old.device))
-			return false;
-		if (!this.format.equals(old.format))
-			return false;
-		if (!this.mbr.equals(old.mbr))
-			return false;
-		if (this.imgFiles.size() != old.imgFiles.size())
-			return false;
-
-		for (int i = 0; i < imgFiles.size(); i++) {
-			if (!imgFiles.get(i).equal(old.getImgFiles().get(i)))
-				return false;
+	
+	public void clean() {
+		new File(this.getConfig().getProject().getLocationURI().getPath()+this.getName()).delete();
+		for(ImgFile imgF:imgFiles) {
+			imgF.clean();
 		}
-		return true;
 	}
 }
