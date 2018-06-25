@@ -4,8 +4,6 @@ import org.eclipse.cdt.core.resources.IConsole;
 import org.eclipse.cdt.ui.CUIPlugin;
 import org.eclipse.cdt.ui.IBuildConsoleManager;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsoleManager;
 
 public class ConsoleFactory {
 
@@ -41,5 +39,10 @@ public class ConsoleFactory {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void clean(IProject project) {
+		IBuildConsoleManager manager = CUIPlugin.getDefault().getConsoleManager();
+		manager.getConsoleDocument(project).set("");
 	}
 }

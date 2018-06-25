@@ -9,6 +9,7 @@ import org.eclipse.core.resources.IProject;
 
 import com.mwos.ebochs.core.build.AbstractBuilder;
 import com.mwos.ebochs.resource.config.entity.CodePart.Code;
+import com.mwos.ebochs.ui.view.ConsoleFactory;
 
 public class OSConfig {
 	private IProject project;
@@ -100,6 +101,8 @@ public class OSConfig {
 	}
 
 	public boolean build(AbstractBuilder builder) {
+		this.clean();
+		ConsoleFactory.clean(this.project);
 		for (CodePart cp : getUsedCP()) {
 			if (cp.build(builder) == null) {
 				return false;

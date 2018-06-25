@@ -82,6 +82,9 @@ public class ImgFile {
 	public void clean() {
 		if(!this.getSrc().contains(":")) {
 			new File(this.getLocation()).delete();
+			for(ImgFile f:subs) {
+				f.clean();
+			}
 		}
 	}
 }

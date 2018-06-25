@@ -9,6 +9,8 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -23,8 +25,6 @@ import org.eclipse.swt.widgets.Text;
 import com.mwos.ebochs.Activator;
 import com.mwos.ebochs.ui.UiUtil;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.ModifyEvent;
 
 public class MainTab extends AbstractLaunchConfigurationTab {
 	public static final String bochsCfg = "bochsCfg";
@@ -32,52 +32,48 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 	public static final String bochsChk = "bochsChk";
 	public static final String vboxChk = "vboxChk";
 	public static final String prj = "prj";
+	
+	public static final String default_bxrc = "/obj/default.bxrc";
+	public static final String default_pvbox = "/obj/default.vbox";
 
 	private Text textBochs;
 	private Text textVBox;
-	private boolean hasBochs = false;
-	private boolean hasVbox = false;
 	private Button chkBochs;
 	private Button chkVBox;
 	private Button btnBochs;
 	private Button btnVBox;
 	private Combo comboProject;
 
-	private boolean isDebug;
+	private String mode;
 
-	public MainTab(boolean isDebug) {
-		// TODO Auto-generated constructor stub
-		this.isDebug = isDebug;
-		hasBochs = StringUtils.isNotEmpty(OSDevPreference.getValue(OSDevPreference.BOCHS));
-		hasVbox = StringUtils.isNotEmpty(OSDevPreference.getValue(OSDevPreference.VBOX));
+	public MainTab(String mode) {
+		this.mode = mode;
 	}
 
 	@Override
 	public void initializeFrom(ILaunchConfiguration configuration) {
 		try {
+			initCfg(configuration.getWorkingCopy(), "", mode);
 			comboProject.setText(configuration.getAttribute(MainTab.prj, ""));
+
+			chkBochs.setEnabled(hasBochs());
+			if (chkBochs.getEnabled()) {
+				chkBochs.setSelection((configuration.getAttribute(MainTab.bochsChk, false)));
+				textBochs.setText(configuration.getAttribute(MainTab.bochsCfg, default_bxrc));
+			}
+			textBochs.setEnabled(chkBochs.getSelection());
+			btnBochs.setEnabled(chkBochs.getSelection());
+
+			chkVBox.setEnabled(hasVbox() && mode.equals("debug") ? false : true);
+			if (chkVBox.getEnabled()) {
+				chkVBox.setSelection((configuration.getAttribute(MainTab.vboxChk, false)));
+				textVBox.setText(configuration.getAttribute(MainTab.vboxCfg, default_pvbox));
+			}
+			textVBox.setEnabled(chkVBox.getSelection());
+			btnVBox.setEnabled(chkVBox.getSelection());
+			
 		} catch (CoreException e) {
 			e.printStackTrace();
-		}
-		if (chkBochs.getEnabled()) {
-			try {
-				chkBochs.setSelection((configuration.getAttribute(MainTab.bochsChk, false)));
-				textBochs.setEnabled(chkBochs.getSelection());
-				textBochs.setText(configuration.getAttribute(MainTab.bochsCfg, "<default>"));
-				btnBochs.setEnabled(chkBochs.getSelection());
-			} catch (CoreException e1) {
-				e1.printStackTrace();
-			}
-		}
-		if (chkVBox.getEnabled()) {
-			try {
-				chkVBox.setSelection((configuration.getAttribute(MainTab.vboxChk, false)));
-				textVBox.setEnabled(chkVBox.getSelection());
-				textVBox.setText(configuration.getAttribute(MainTab.vboxCfg, "<default>"));
-				btnVBox.setEnabled(chkVBox.getSelection());
-			} catch (CoreException e1) {
-				e1.printStackTrace();
-			}
 		}
 	}
 
@@ -117,9 +113,9 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 
 		chkBochs = new Button(group, SWT.CHECK);
 		chkBochs.setText("Bochs");
-		chkBochs.setEnabled(hasBochs);
 
 		textBochs = new Text(group, SWT.BORDER);
+		textBochs.setEditable(false);
 		MainTab tab = this;
 		textBochs.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -136,6 +132,7 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 				String bochsCfg = UiUtil.chooseFile(".bxrc", container);
 				if (StringUtils.isNotEmpty(bochsCfg)) {
 					textBochs.setText(bochsCfg);
+					tab.updateLaunchConfigurationDialog();
 				}
 			}
 		});
@@ -145,14 +142,15 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 			public void widgetSelected(SelectionEvent e) {
 				textBochs.setEnabled(chkBochs.getSelection());
 				btnBochs.setEnabled(chkBochs.getSelection());
+				tab.updateLaunchConfigurationDialog();
 			}
 		});
 
 		chkVBox = new Button(group, SWT.CHECK);
 		chkVBox.setText("VBox ");
-		chkVBox.setEnabled(hasVbox && !isDebug);
 
 		textVBox = new Text(group, SWT.BORDER);
+		textVBox.setEditable(false);
 		textVBox.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				setDirty(true);
@@ -168,6 +166,7 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 				String vboxCfg = UiUtil.chooseFile(".vbox", container);
 				if (StringUtils.isNotEmpty(vboxCfg)) {
 					textVBox.setText(vboxCfg);
+					tab.updateLaunchConfigurationDialog();
 				}
 			}
 		});
@@ -177,6 +176,7 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 			public void widgetSelected(SelectionEvent e) {
 				textVBox.setEnabled(chkVBox.getSelection());
 				btnVBox.setEnabled(chkVBox.getSelection());
+				tab.updateLaunchConfigurationDialog();
 			}
 		});
 
@@ -189,6 +189,10 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 
 	@Override
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
+		if (textBochs.getText().trim().isEmpty())
+			textBochs.setText(default_bxrc);
+		if (textVBox.getText().trim().isEmpty())
+			textVBox.setText(default_pvbox);
 		configuration.setAttribute(MainTab.bochsChk, chkBochs.getSelection());
 		configuration.setAttribute(MainTab.vboxChk, chkVBox.getSelection());
 		configuration.setAttribute(MainTab.bochsCfg, textBochs.getText());
@@ -209,5 +213,31 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 	@Override
 	public String getName() {
 		return "Main";
+	}
+
+	private static boolean hasBochs() {
+		return StringUtils.isNotEmpty(OSDevPreference.getValue(OSDevPreference.BOCHS));
+	}
+
+	private boolean hasVbox() {
+		return StringUtils.isNotEmpty(OSDevPreference.getValue(OSDevPreference.VBOX));
+	}
+
+	public static ILaunchConfigurationWorkingCopy initCfg(ILaunchConfigurationWorkingCopy wc, String name, String mode) {
+		try {
+			if (!wc.hasAttribute(MainTab.prj))
+				wc.setAttribute(MainTab.prj, name);
+			if (!wc.hasAttribute(MainTab.bochsChk))
+				wc.setAttribute(MainTab.bochsChk, hasBochs());
+			if (!wc.hasAttribute(MainTab.vboxChk))
+				wc.setAttribute(MainTab.vboxChk, false);
+			if (!wc.hasAttribute(MainTab.bochsCfg))
+				wc.setAttribute(MainTab.bochsCfg, default_bxrc);
+			if (!wc.hasAttribute(MainTab.vboxCfg))
+				wc.setAttribute(MainTab.vboxCfg, default_bxrc);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+		return wc;
 	}
 }

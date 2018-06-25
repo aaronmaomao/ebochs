@@ -270,11 +270,11 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="com.mwos.ebochs.ui.launch.OSLaunchRun"
-            icon="resource/icons/pilcrow.png"
+            class="com.mwos.ebochs.ui.launch.ShortLaunch"
+            icon="resource/icons/script_palette.png"
             id="com.mwos.ebochs.launch.run"
-            label="Launch OS Run"
-            modes="run">
+            label="Launch OS"
+            modes="run,debug">
          <configurationType
                id="com.mwos.ebochs.launchConfigurationType">
          </configurationType>
@@ -288,12 +288,20 @@
                   <iterate>
                      <or>
                         <test
-                              property="org.eclipse.debug.ui.matchesPattern"
-                              value="*.c">
+                              forcePluginActivation="true"
+                              property="com.mwos.ebochs.propertyTester.isOSProject">
                         </test>
                      </or>
                   </iterate>
-               </with></enablement></contextualLaunch>
+               </with></enablement>
+            <contextLabel
+                  label="Run OS"
+                  mode="run">
+            </contextLabel>
+            <contextLabel
+                  label="Debug OS"
+                  mode="debug">
+            </contextLabel></contextualLaunch>
       </shortcut>
    </extension>
    <extension
@@ -352,6 +360,16 @@
       <super
             type="org.eclipse.core.resources.problemmarker">
       </super>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.mwos.ebochs.ui.Tester"
+            id="com.mwos.ebochs.propertyTester"
+            namespace="com.mwos.ebochs.propertyTester"
+            properties="isOSProject"
+            type="java.lang.Object">
+      </propertyTester>
    </extension>
 
 </plugin>

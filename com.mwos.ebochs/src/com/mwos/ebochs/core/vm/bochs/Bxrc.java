@@ -1,20 +1,21 @@
-package com.mwos.ebochs.core;
+package com.mwos.ebochs.core.vm.bochs;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Properties;
 
-public class BochsBxrc implements Localizable {
+import com.mwos.ebochs.core.FileUtil;
+import com.mwos.ebochs.core.Localizable;
+
+public class Bxrc implements Localizable {
 	private Properties properties;
 	private String bochs;
 
-	public BochsBxrc(File temp, String bochs) {
+	public Bxrc(File temp, String bochs) {
 		properties = new Properties();
 		this.bochs = bochs;
 		try {
@@ -25,7 +26,7 @@ public class BochsBxrc implements Localizable {
 		init();
 	}
 	
-	public BochsBxrc(InputStream in, String bochs) {
+	public Bxrc(InputStream in, String bochs) {
 		properties = new Properties();
 		this.bochs = bochs;
 		try {

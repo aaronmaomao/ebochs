@@ -138,7 +138,7 @@ public class Image {
 	}
 	
 	public void clean() {
-		new File(this.getConfig().getProject().getLocationURI().getPath()+this.getName()).delete();
+		new File(this.getConfig().getProject().getLocationURI().getPath()+"/obj/images/"+this.getName()).delete();
 		for(ImgFile imgF:imgFiles) {
 			imgF.clean();
 		}
