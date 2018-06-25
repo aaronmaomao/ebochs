@@ -15,9 +15,10 @@ public class Bochs extends AbstractVM implements IDebugVM{
 	}
 
 	@Override
-	public Process debug(String arg) {
-		// TODO Auto-generated method stub
-		return null;
+	public Process debug(String arg) throws Exception {
+		String exe = this.getDir() + "/bochsdbg.exe -q -f " + arg;
+		Process process = Runtime.getRuntime().exec(exe);
+		return process;
 	}
 
 }
