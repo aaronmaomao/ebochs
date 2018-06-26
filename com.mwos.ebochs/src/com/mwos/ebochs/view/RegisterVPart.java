@@ -13,11 +13,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.ResourceManager;
-import com.mwos.ebochs.core.CmdHandler;
-import com.mwos.ebochs.core.CmdableUI;
-import com.mwos.ebochs.core.Command;
 
-public class RegisterVPart extends ViewPart implements CmdableUI {
+public class RegisterVPart extends ViewPart  {
 	public static final String ID = "com.mwos.ebochs.view.registerVPart"; //$NON-NLS-1$
 	private Text text_18;
 	private Text text_19;
@@ -40,10 +37,8 @@ public class RegisterVPart extends ViewPart implements CmdableUI {
 	private Text text_34;
 	private Text text_35;
 
-	private CmdHandler handler;
 	
 	public RegisterVPart() {
-		handler = CmdHandler.getHandler();
 	}
 
 	/**
@@ -307,7 +302,6 @@ public class RegisterVPart extends ViewPart implements CmdableUI {
 	
 	@Override
 	public void dispose() {
-		handler.dispose(this);
 		super.dispose();
 	}
 
@@ -335,18 +329,5 @@ public class RegisterVPart extends ViewPart implements CmdableUI {
 	@Override
 	public void setFocus() {
 		// Set the focus
-	}
-
-
-	@Override
-	public void ackData(Object data) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyUI(Command cmd, Object notifyData) {
-		// TODO Auto-generated method stub
-		
 	}
 }

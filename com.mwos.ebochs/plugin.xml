@@ -54,6 +54,13 @@
             id="com.mwos.ebochs.view.GIdtVPart"
             name="全局描述符表">
       </view>
+      <view
+            category="com.mwos.ebochs.view.category"
+            class="com.mwos.ebochs.ui.view.CPUView"
+            icon="resource/icons/car.png"
+            id="com.mwos.ebochs.ui.view.CPUView"
+            name="CPU">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">

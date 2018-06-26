@@ -1,37 +1,28 @@
 package com.mwos.ebochs.view;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.part.ViewPart;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.jface.action.Action;
-import org.eclipse.wb.swt.ResourceManager;
-
-import com.mwos.ebochs.Activator;
-import com.mwos.ebochs.view.entity.Memory;
-import com.mwos.ebochs.view.provider.MemContentProvider;
-import com.mwos.ebochs.view.provider.MemLabelProvider;
-
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.part.ViewPart;
+import org.eclipse.wb.swt.ResourceManager;
+
+import com.mwos.ebochs.view.entity.Memory;
+import com.mwos.ebochs.view.provider.MemContentProvider;
+import com.mwos.ebochs.view.provider.MemLabelProvider;
 
 public class MemVPart extends ViewPart {
 

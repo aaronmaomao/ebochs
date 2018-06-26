@@ -92,6 +92,8 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 						System.out.println(text);
 					}
 				});
+				
+				
 			}
 
 			DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(new IBreakpointListener() {
