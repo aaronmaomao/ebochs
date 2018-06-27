@@ -212,7 +212,7 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="com.mwos.ebochs.perspective.OSDebugPerspective"
+            class="com.mwos.ebochs.ui.view.OSDebugPerspective"
             icon="resource/image/os.png"
             id="com.mwos.ebochs.perspective.OSDebugPerspective"
             name="OS Debug">

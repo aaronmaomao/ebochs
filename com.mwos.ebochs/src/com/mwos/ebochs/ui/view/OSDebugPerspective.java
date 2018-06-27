@@ -1,4 +1,4 @@
-package com.mwos.ebochs.perspective;
+package com.mwos.ebochs.ui.view;
 
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;

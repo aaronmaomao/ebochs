@@ -34,7 +34,7 @@ public class CPUView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		
-		ExpandBar expandBar = new ExpandBar(parent, SWT.NONE);
+		ExpandBar expandBar = new ExpandBar(parent, SWT.V_SCROLL);
 		expandBar.setToolTipText("");
 		
 		ExpandItem genRegExp = new ExpandItem(expandBar, SWT.NONE);

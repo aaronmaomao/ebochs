@@ -13,6 +13,7 @@ import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
+import org.eclipse.ui.PlatformUI;
 
 import com.mwos.ebochs.Activator;
 import com.mwos.ebochs.core.FileUtil;
@@ -88,8 +89,9 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 				IProcess iProcess = DebugPlugin.newProcess(launch, process, "Debug " + project.getName() + " on " + bochs.getName());
 				
 				DebugCenter center = new DebugCenter(iProcess) ;
-				
 				BPManager bpManager = new BPManager(project);
+				
+				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective",PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 				
 			}
 		} catch (Exception e) {
