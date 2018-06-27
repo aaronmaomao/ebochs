@@ -378,5 +378,12 @@
             type="java.lang.Object">
       </propertyTester>
    </extension>
+   <extension
+         point="org.eclipse.debug.ui.debugModelPresentations">
+      <debugModelPresentation
+            class="com.mwos.ebochs.ui.debug.model.OSDebugModelPresentation"
+            id="com.mwos.ebochs.debugModelPresentation">
+      </debugModelPresentation>
+   </extension>
 
 </plugin>

@@ -43,6 +43,6 @@ public class ConsoleFactory {
 	
 	public static void clean(IProject project) {
 		IBuildConsoleManager manager = CUIPlugin.getDefault().getConsoleManager();
-		manager.getConsoleDocument(project).set("");
+	//	manager.getConsoleDocument(project).set("");
 	}
 }

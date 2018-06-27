@@ -1,42 +1,44 @@
 package com.mwos.ebochs.core.handler;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
-import org.eclipse.debug.core.model.IStreamsProxy;
 
-public class DebugCenter implements IStreamListener{
+public  class DebugCenter implements IStreamListener {
 	public List<IVMListener> listeners;
-	private IStreamsProxy stream;
-	
-	public DebugCenter(IProcess process) {
+	private String info = "";
+	private IProcess process;
+
+	public DebugCenter(IProcess p) throws Exception {
+		this.process = p;
 		listeners = new ArrayList<>();
-		stream = process.getStreamsProxy();
-		stream.getOutputStreamMonitor().addListener(this);
+		p.getStreamsProxy().getOutputStreamMonitor().addListener(this);
 	}
 
 	public void addListener(IVMListener listener) {
 		listeners.add(listener);
 	}
 
-	public void removeLis tener(IVMListener listener) {
+	public void removeListener(IVMListener listener) {
 		listeners.remove(listener);
 	}
 
-	public String synSend(String cmd) {
+	public synchronized String synSend(String cmd) {
 		try {
-			stream.write(cmd);
-		} catch (IOException e) {
+			info = "";
+			process.getStreamsProxy().write(cmd + "\r\n");
+			this.wait();
+			return getInfo();
+		} catch (Exception e) {
 			e.printStackTrace();
+			return "Error";
 		}
-		return cmd;
 	}
 
-	public String synSend(String cmd, String[] others) {
+	public synchronized String synSend(String cmd, String[] others) {
 		return cmd;
 	}
 
@@ -49,7 +51,19 @@ public class DebugCenter implements IStreamListener{
 	}
 
 	@Override
-	public void streamAppended(String text, IStreamMonitor monitor) {
-		
+	public synchronized void streamAppended(String text, IStreamMonitor monitor) {
+		info += text;
+		if(info.endsWith("> ")) {
+			this.notify();
+		}
 	}
+
+	private synchronized String getInfo() {
+		try {
+			return info;
+		} finally {
+			info = "";
+		}
+	}
+	
 }
