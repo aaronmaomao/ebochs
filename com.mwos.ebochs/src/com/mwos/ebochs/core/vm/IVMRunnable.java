@@ -1,5 +1,5 @@
 package com.mwos.ebochs.core.vm;
 
-public interface IRunVM {
+public interface IVMRunnable {
 	public Process run(String arg) throws Exception;
 }

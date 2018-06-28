@@ -19,7 +19,7 @@ import com.mwos.ebochs.Activator;
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.build.AbstractBuilder;
 import com.mwos.ebochs.core.build.DefaultBuilder;
-import com.mwos.ebochs.core.handler.DebugCenter;
+import com.mwos.ebochs.core.model.InfoCenter;
 import com.mwos.ebochs.core.vm.bochs.Bochs;
 import com.mwos.ebochs.core.vm.bochs.Bxrc;
 import com.mwos.ebochs.resource.config.OSConfigFactory;
@@ -57,7 +57,7 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 						bochsBxrc.localize(out);
 						bxrc = out.getAbsolutePath();
 					}
-					Bochs bochs = new Bochs(bochsDir);
+					Bochs bochs = new Bochs(bochsDir,config);
 					Process process = bochs.run(bxrc);
 					IProcess iProcess = DebugPlugin.newProcess(launch, process, "Run " + project.getName() + " on " + bochs.getName());
 					iProcess.getStreamsProxy().getOutputStreamMonitor().addListener(new IStreamListener() {
@@ -82,14 +82,11 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 					bochsBxrc.localize(out);
 					bxrc = out.getAbsolutePath();
 				}
-				Bochs bochs = new Bochs(bochsDir);
-				Process process = bochs.debug(bxrc);
-				
-				
+				Bochs bochs = new Bochs(bochsDir,config);
+				Process process = bochs.debug();
 				IProcess iProcess = DebugPlugin.newProcess(launch, process, "Debug " + project.getName() + " on " + bochs.getName());
 				
-				DebugCenter center = new DebugCenter(iProcess) ;
-				BPManager bpManager = new BPManager(project);
+				InfoCenter.
 				
 				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective",PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 				

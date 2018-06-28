@@ -17,14 +17,24 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.ResourceManager;
 
-public class CPUView extends ViewPart {
+import com.mwos.ebochs.core.model.IInfoListener;
+import com.mwos.ebochs.core.model.InfoCenter;
+
+public class CPUView extends ViewPart implements IInfoListener{
 
 	public static final String ID = "com.mwos.ebochs.ui.view.CPUView"; //$NON-NLS-1$
 	private Table table;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Table table_1;
+	private InfoCenter infoCenter;
+	private boolean enable=false;
 
 	public CPUView() {
+		infoCenter = InfoCenter.getCurrentInfoCenter();
+		if (infoCenter != null) {
+			infoCenter.addListener(this);
+		}
+		enable = infoCenter == null ? false : true;
 	}
 
 	/**
@@ -164,5 +174,16 @@ public class CPUView extends ViewPart {
 	@Override
 	public void setFocus() {
 		// Set the focus
+	}
+
+	@Override
+	public void notify(String rec) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notify(String cmd, String rec) {
+		// TODO Auto-generated method stub
 	}
 }

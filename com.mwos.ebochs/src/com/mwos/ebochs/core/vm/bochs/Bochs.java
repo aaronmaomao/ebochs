@@ -1,24 +1,16 @@
 package com.mwos.ebochs.core.vm.bochs;
 
-import com.mwos.ebochs.core.vm.AbstractVM;
-import com.mwos.ebochs.core.vm.IDebugVM;
+import com.mwos.ebochs.resource.config.entity.OSConfig;
 
-public class Bochs extends AbstractVM implements IDebugVM{
+public class Bochs extends BaseBochsVM {
+	private OSConfig config;
 
-	public Bochs(String dir) {
-		this.setDir(dir);
-	}
-	
-	@Override
-	public String getName() {
-		return "Bochs";
+	public Bochs(String dir,OSConfig config) {
+		this.config = config;
 	}
 
-	@Override
-	public Process debug(String arg) throws Exception {
-		String exe = this.getDir() + "/bochsdbg.exe -q -f " + arg;
-		Process process = Runtime.getRuntime().exec(exe);
-		return process;
+	private void init() {
+
 	}
 
 }

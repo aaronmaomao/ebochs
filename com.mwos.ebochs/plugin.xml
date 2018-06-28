@@ -25,27 +25,11 @@
             name="操作系统调试">
       </category>
       <view
-            allowMultiple="false"
-            category="com.mwos.ebochs.view.category"
-            class="com.mwos.ebochs.view.RegisterVPart"
-            icon="resource/image/register1.png"
-            id="com.mwos.ebochs.view.registerVPart"
-            inject="true"
-            name="寄存器">
-      </view>
-      <view
             category="com.mwos.ebochs.view.category"
             class="com.mwos.ebochs.view.MemVPart"
             icon="resource/icons/monitor_link.png"
             id="com.mwos.ebochs.view.MemVPart"
             name="内存">
-      </view>
-      <view
-            category="com.mwos.ebochs.view.category"
-            class="com.mwos.ebochs.view.StackVPart"
-            icon="resource/icons/text_align_justify.png"
-            id="com.mwos.ebochs.view.StackVPart"
-            name="堆栈">
       </view>
       <view
             category="com.mwos.ebochs.view.category"
@@ -59,7 +43,21 @@
             class="com.mwos.ebochs.ui.view.CPUView"
             icon="resource/icons/car.png"
             id="com.mwos.ebochs.ui.view.CPUView"
-            name="CPU">
+            name="寄存器">
+      </view>
+      <view
+            category="com.mwos.ebochs.view.category"
+            class="com.mwos.ebochs.ui.view.BreakPointView"
+            icon="resource/icons/photo.png"
+            id="com.mwos.ebochs.ui.view.BreakPointView"
+            name="断点">
+      </view>
+      <view
+            category="com.mwos.ebochs.view.category"
+            class="com.mwos.ebochs.ui.view.HostView"
+            icon="resource/icons/clock_go.png"
+            id="com.mwos.ebochs.ui.view.Host"
+            name="目标主机">
       </view>
    </extension>
    <extension

@@ -1,4 +1,4 @@
-package com.mwos.ebochs.core.handler;
+package com.mwos.ebochs.core.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,22 +7,23 @@ import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 
-public  class DebugCenter implements IStreamListener {
-	public List<IVMListener> listeners;
+public  class InfoCenter implements IStreamListener {
+	
+	private static InfoCenter current = new InfoCenter();
+	
+	private List<IInfoListener> listeners;
 	private String info = "";
 	private IProcess process;
 
-	public DebugCenter(IProcess p) throws Exception {
-		this.process = p;
+	public InfoCenter() throws Exception {
 		listeners = new ArrayList<>();
-		p.getStreamsProxy().getOutputStreamMonitor().addListener(this);
 	}
 
-	public void addListener(IVMListener listener) {
+	public void addListener(IInfoListener listener) {
 		listeners.add(listener);
 	}
 
-	public void removeListener(IVMListener listener) {
+	public void removeListener(IInfoListener listener) {
 		listeners.remove(listener);
 	}
 
@@ -42,11 +43,11 @@ public  class DebugCenter implements IStreamListener {
 		return cmd;
 	}
 
-	public void asynSend(IVMListener sender, String cmd) {
+	public void asynSend(IInfoListener sender, String cmd) {
 
 	}
 
-	public void asynSend(IVMListener sender, String cmd, String[] others) {
+	public void asynSend(IInfoListener sender, String cmd, String[] others) {
 
 	}
 
@@ -66,4 +67,10 @@ public  class DebugCenter implements IStreamListener {
 		}
 	}
 	
+	public static InfoCenter getCurrentInfoCenter() {
+		if(current==null && infoCenters.size()!=0) {
+			current = infoCenters.get(0);
+		}
+		return current;
+	}
 }

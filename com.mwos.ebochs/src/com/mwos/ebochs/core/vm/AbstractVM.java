@@ -1,8 +1,9 @@
 package com.mwos.ebochs.core.vm;
 
-public abstract class AbstractVM implements IRunVM {
+public abstract class AbstractVM implements IVMRunnable {
 
 	protected String dir;
+	protected Process process;
 
 	public String getDir() {
 		return dir;
@@ -15,7 +16,7 @@ public abstract class AbstractVM implements IRunVM {
 	@Override
 	public Process run(String arg) throws Exception {
 		String exe = this.getDir() + "/bochs.exe -q -f " + arg;
-		Process process = Runtime.getRuntime().exec(exe);
+		process = Runtime.getRuntime().exec(exe);
 		return process;
 	}
 
