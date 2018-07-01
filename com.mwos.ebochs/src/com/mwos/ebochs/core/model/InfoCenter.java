@@ -4,18 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.debug.core.IStreamListener;
-import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.WorkbenchException;
 
-public  class InfoCenter implements IStreamListener {
-	
-	private static InfoCenter current = new InfoCenter();
-	
+import com.mwos.ebochs.core.vm.AbstractVM;
+
+public class InfoCenter implements IStreamListener {
+
+	private static InfoCenter infoCenter = new InfoCenter();
+
 	private List<IInfoListener> listeners;
+	private AbstractVM vm;
 	private String info = "";
-	private IProcess process;
 
-	public InfoCenter() throws Exception {
+	private InfoCenter() {
 		listeners = new ArrayList<>();
 	}
 
@@ -27,10 +30,24 @@ public  class InfoCenter implements IStreamListener {
 		listeners.remove(listener);
 	}
 
+	public void active(AbstractVM vm) {
+		try {
+			PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective",
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+		} catch (WorkbenchException e) {
+			e.printStackTrace();
+		}
+		this.vm = vm;
+	}
+
+	public boolean isActive() {
+		return vm != null && vm.isAlive();
+	}
+
 	public synchronized String synSend(String cmd) {
 		try {
 			info = "";
-			process.getStreamsProxy().write(cmd + "\r\n");
+			// process.getStreamsProxy().write(cmd + "\r\n");
 			this.wait();
 			return getInfo();
 		} catch (Exception e) {
@@ -51,10 +68,14 @@ public  class InfoCenter implements IStreamListener {
 
 	}
 
+	public static InfoCenter getInfoCenter() {
+		return infoCenter;
+	}
+
 	@Override
 	public synchronized void streamAppended(String text, IStreamMonitor monitor) {
 		info += text;
-		if(info.endsWith("> ")) {
+		if (info.endsWith("> ")) {
 			this.notify();
 		}
 	}
@@ -65,12 +86,5 @@ public  class InfoCenter implements IStreamListener {
 		} finally {
 			info = "";
 		}
-	}
-	
-	public static InfoCenter getCurrentInfoCenter() {
-		if(current==null && infoCenters.size()!=0) {
-			current = infoCenters.get(0);
-		}
-		return current;
 	}
 }

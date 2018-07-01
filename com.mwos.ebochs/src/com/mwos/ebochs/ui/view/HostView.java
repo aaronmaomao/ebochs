@@ -20,17 +20,14 @@ import org.eclipse.swt.widgets.TreeColumn;
 
 public class HostView extends ViewPart implements IInfoListener {
 
-	public static final String ID = "com.mwos.ebochs.ui.view.Host"; //$NON-NLS-1$
+	public static final String ID = "com.mwos.ebochs.ui.view.HostView"; //$NON-NLS-1$
 
-	private InfoCenter infoCenter;
+	private InfoCenter infoCenter = InfoCenter.getInfoCenter();
 	private boolean enable = false;
 
-	public HostView() { 
-		infoCenter = InfoCenter.getCurrentInfoCenter();
-		if (infoCenter != null) {
-			infoCenter.addListener(this);
-		}
-		enable = infoCenter == null ? false : true;
+	public HostView() {
+		infoCenter.addListener(this);
+		enable = infoCenter.isActive();
 	}
 
 	/**
@@ -89,7 +86,7 @@ public class HostView extends ViewPart implements IInfoListener {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	private void initTree(Tree tree) {
 	}
 }

@@ -1,68 +1,79 @@
 package com.mwos.ebochs.core.vm.bochs;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Writer;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.mwos.ebochs.Activator;
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.Localizable;
+import com.mwos.ebochs.core.vm.IVMProfile;
+import com.mwos.ebochs.resource.config.entity.OSConfig;
 
-public class Bxrc implements Localizable {
-	private Properties properties;
-	private String bochs;
+public class Bxrc implements IVMProfile {
+	private OSConfig config;
+	private String bochsDir;
+	private Map<String, String> text;
 
-	public Bxrc(File temp, String bochs) {
-		properties = new Properties();
-		this.bochs = bochs;
-		try {
-			properties.load(new FileReader(temp));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public Bxrc(OSConfig config, String bochsDir) {
+		this.config = config;
+		this.bochsDir = bochsDir;
+		text = new LinkedHashMap<>();
 		init();
-	}
-	
-	public Bxrc(InputStream in, String bochs) {
-		properties = new Properties();
-		this.bochs = bochs;
-		try {
-			properties.load(in);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		init();
-		// Activator.getDefault().getBundle().getResource("com/mwos/ebochs/core/bochsrc.bxrc");
-	}
-
-	private void init() {
-		properties.setProperty("romimage", "file=\"" + bochs + "/BIOS-bochs-latest\", address=0x0, options=none");
-		properties.setProperty("vgaromimage", "file=\"" + bochs + "/VGABIOS-lgpl-latest\"");
 	}
 
 	@Override
-	public void localize(File out) {
+	public void init() {
+		InputStream bochsTemp;
 		try {
-			Writer w = new FileWriter(out);
-			for(Object key:properties.keySet()) {
-				w.write(key+": "+properties.getProperty((String) key)+"\r\n");
+			bochsTemp = Activator.getDefault().getBundle().getResource("com/mwos/ebochs/core/vm/bochs/default.bxrc").openStream();
+
+			String line = "";
+			BufferedReader br = new BufferedReader(new InputStreamReader(bochsTemp));
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				if (StringUtils.isNotBlank(line)) {
+					String temps[] = line.split(":");
+					text.put(temps[0].trim(), line.substring(temps[0].length()).trim());
+				}
 			}
-			w.flush();
-			w.close();
+			br.close();
+			bochsTemp.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		text.put("romimage", "file=\"" + bochsDir + "/BIOS-bochs-latest\", address=0x0, options=none");
+		text.put("vgaromimage", "file=\"" + bochsDir + "/VGABIOS-lgpl-latest\"");
+		text.put("boot", config.getImages().get(0).getDevice());
+		String img = config.getProject().getLocationURI().getPath() + "/obj/images/" + config.getImages().get(0).getName();
+		text.put("floppya", "type=1_44, 1_44=\"" + FileUtil.getRelPath(img) + "\", status=inserted, write_protected=0");
 	}
 
-	public void setBoot(String value) {
-		properties.setProperty("boot", value);
+	@Override
+	public File localize() {
+		File f = new File(config.getProject().getLocationURI().getPath() + "/obj/bochs.bxrc");
+		try {
+			Writer w = new FileWriter(f);
+			for (String key : text.keySet()) {
+				w.write(key + ": " + text.get(key) + "\r\n");
+			}
+			w.flush();
+			w.close();
+			return f;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
-
-	public void setFloppya(String value) {
-		properties.setProperty("floppya", "type=1_44, 1_44=\"" + FileUtil.formatPath(value) + "\", status=inserted, write_protected=0");
-	}
-
 }

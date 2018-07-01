@@ -56,7 +56,7 @@
             category="com.mwos.ebochs.view.category"
             class="com.mwos.ebochs.ui.view.HostView"
             icon="resource/icons/clock_go.png"
-            id="com.mwos.ebochs.ui.view.Host"
+            id="com.mwos.ebochs.ui.view.HostView"
             name="目标主机">
       </view>
    </extension>

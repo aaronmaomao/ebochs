@@ -1,23 +1,33 @@
 package com.mwos.ebochs.core.vm;
 
-public abstract class AbstractVM implements IVMRunnable {
+public abstract class AbstractVM {
 
-	protected String dir;
+	protected String path;
 	protected Process process;
+	protected IVMProfile profile;
 
-	public String getDir() {
-		return dir;
+	public AbstractVM(String path, IVMProfile profile) {
+		this.path = path;
+		this.profile = profile;
 	}
 
-	public void setDir(String dir) {
-		this.dir = dir;
+	public String getPath() {
+		return path;
 	}
 
-	@Override
-	public Process run(String arg) throws Exception {
-		String exe = this.getDir() + "/bochs.exe -q -f " + arg;
-		process = Runtime.getRuntime().exec(exe);
+	public Process getProcess() {
 		return process;
+	}
+
+	public abstract Process run() throws Exception;
+
+	public abstract Process debug() throws Exception;
+
+	public boolean isAlive() {
+		if (process != null && process.isAlive()) {
+			return true;
+		}
+		return false;
 	}
 
 	public abstract String getName();
