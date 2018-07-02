@@ -45,7 +45,11 @@ public class Bxrc implements IVMProfile {
 				line = line.trim();
 				if (StringUtils.isNotBlank(line)) {
 					String temps[] = line.split(":");
-					text.put(temps[0].trim(), line.substring(temps[0].length()).trim());
+					String value="";
+					for(int i=1;i<temps.length;i++) {
+						value+=temps[i];
+					}
+					text.put(temps[0].trim(), value);
 				}
 			}
 			br.close();
@@ -75,5 +79,11 @@ public class Bxrc implements IVMProfile {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public OSConfig getConfig() {
+		// TODO Auto-generated method stub
+		return this.config;
 	}
 }

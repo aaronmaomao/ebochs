@@ -31,4 +31,8 @@ public abstract class AbstractVM {
 	}
 
 	public abstract String getName();
+	
+	public IVMProfile getProfile() {
+		return profile;
+	}
 }

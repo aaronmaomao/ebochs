@@ -1,53 +1,21 @@
 package com.mwos.ebochs.ui.view.model.host;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 
-public abstract class Node {
-	private String name = "";
-	private String text = "";
-	private Node parent;
-	private List<Node> childs;
+public abstract class Node extends TreeItem{
 
-	public Node() {
-		// TODO Auto-generated constructor stub
-		childs = new ArrayList<>();
+	public Node(Tree parent, int style) {
+		super(parent, style);
 	}
 
-	public String getName() {
-		return name;
+	public Node(Node parent,int style) {
+		super(parent, style);
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	
+	@Override
+	protected void checkSubclass() {
 	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public Node getParent() {
-		return parent;
-	}
-
-	public void setParent(Node parent) {
-		this.parent = parent;
-	}
-
-	public List<Node> getChilds() {
-		return childs;
-	}
-
-	public void addChild(Node node) {
-		this.childs.add(node);
-		node.setParent(this);
-	}
-
-	public void removeChild(Node node) {
-		this.childs.remove(node);
-	}
+	
+	public abstract void showMenu();
 }

@@ -173,13 +173,13 @@ public class CPUView extends ViewPart implements IInfoListener {
 	}
 
 	@Override
-	public void notify(String rec) {
+	public void notify(Object info) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void notify(String cmd, String rec) {
+	public void notify(String cmd, Object info) {
 		// TODO Auto-generated method stub
 	}
 	

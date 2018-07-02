@@ -3,11 +3,18 @@ package com.mwos.ebochs.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IBreakpointListener;
 import org.eclipse.debug.core.IStreamListener;
+import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 
+import com.mwos.ebochs.core.model.handler.BPHandler;
 import com.mwos.ebochs.core.vm.AbstractVM;
 
 public class InfoCenter implements IStreamListener {
@@ -17,6 +24,8 @@ public class InfoCenter implements IStreamListener {
 	private List<IInfoListener> listeners;
 	private AbstractVM vm;
 	private String info = "";
+
+	private BPHandler bpHandler;
 
 	private InfoCenter() {
 		listeners = new ArrayList<>();
@@ -30,24 +39,34 @@ public class InfoCenter implements IStreamListener {
 		listeners.remove(listener);
 	}
 
-	public void active(AbstractVM vm) {
+	public void active(AbstractVM vm, IProcess iProcess) {
 		try {
-			PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective",
-					PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+			PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective", PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+			iProcess.getStreamsProxy().getOutputStreamMonitor().addListener(this);
 		} catch (WorkbenchException e) {
 			e.printStackTrace();
 		}
 		this.vm = vm;
+		bpHandler = new BPHandler(vm.getProfile().getConfig(), this);
+
+		for (IInfoListener infoListener : listeners) {
+			infoListener.notify(InfoCmd.Host_Changed);
+		}
 	}
 
 	public boolean isActive() {
 		return vm != null && vm.isAlive();
 	}
 
-	public synchronized String synSend(String cmd) {
+	public synchronized Object synSend(String cmd) {
 		try {
-			info = "";
-			// process.getStreamsProxy().write(cmd + "\r\n");
+			if(cmd.equals(InfoCmd.BP_Get)) {
+				return bpHandler.handler(cmd);
+			}
+			if (StringUtils.isNotBlank(info))
+				return info;
+			vm.getProcess().getOutputStream().write((cmd + "\r\n").getBytes());
+			vm.getProcess().getOutputStream().flush();
 			this.wait();
 			return getInfo();
 		} catch (Exception e) {
@@ -56,7 +75,7 @@ public class InfoCenter implements IStreamListener {
 		}
 	}
 
-	public synchronized String synSend(String cmd, String[] others) {
+	public synchronized Object synSend(String cmd, String[] others) {
 		return cmd;
 	}
 
@@ -85,6 +104,22 @@ public class InfoCenter implements IStreamListener {
 			return info;
 		} finally {
 			info = "";
+		}
+	}
+
+	public void notify(String cmd, Object obj) {
+		for (IInfoListener listener : listeners) {
+			listener.notify(cmd, obj);
+		}
+	}
+
+	private String handleCmd(String cmd) {
+		switch (cmd) {
+		case InfoCmd.Host_Get:
+			return this.vm.toString();
+
+		default:
+			return null;
 		}
 	}
 }

@@ -2,21 +2,28 @@ package com.mwos.ebochs.ui.view;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mwos.ebochs.core.model.IInfoListener;
 import com.mwos.ebochs.core.model.InfoCenter;
-
-import org.eclipse.swt.custom.TableTree;
-import org.eclipse.jface.viewers.TableTreeViewer;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.layout.TreeColumnLayout;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TreeColumn;
+import com.mwos.ebochs.core.model.InfoCmd;
+import com.mwos.ebochs.ui.view.model.host.HostNode;
+import com.mwos.ebochs.ui.view.model.host.Node;
+import org.eclipse.swt.events.MouseAdapter;
 
 public class HostView extends ViewPart implements IInfoListener {
 
@@ -24,10 +31,11 @@ public class HostView extends ViewPart implements IInfoListener {
 
 	private InfoCenter infoCenter = InfoCenter.getInfoCenter();
 	private boolean enable = false;
+	private HostNode root = null;
+	private Tree hostTree;
 
 	public HostView() {
 		infoCenter.addListener(this);
-		enable = infoCenter.isActive();
 	}
 
 	/**
@@ -40,10 +48,23 @@ public class HostView extends ViewPart implements IInfoListener {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
 
-		Tree hostTree = new Tree(container, SWT.BORDER);
-
+		hostTree = new Tree(container, SWT.BORDER);
+		hostTree.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				if (e.button == 3) {
+					if (hostTree.getSelection().length > 0) {
+						Node node = (Node) hostTree.getSelection()[0];
+						node.showMenu();
+					}
+				}
+			}
+		});
 		hostTree.setLinesVisible(true);
+		root = new HostNode(hostTree, SWT.NONE);
+		// root = new HostNode(hostTree, SWT.NONE);
 
+		init();
 		createActions();
 		initializeToolBar();
 		initializeMenu();
@@ -76,17 +97,38 @@ public class HostView extends ViewPart implements IInfoListener {
 	}
 
 	@Override
-	public void notify(String rec) {
-		// TODO Auto-generated method stub
-
+	public void notify(Object info) {
+		if (info.equals("HostChanged")) {
+			init();
+		}
 	}
 
 	@Override
-	public void notify(String cmd, String rec) {
+	public void notify(String cmd, Object info) {
 		// TODO Auto-generated method stub
 
 	}
 
-	private void initTree(Tree tree) {
+	public void init() {
+		hostTree.select(root);
+		if (!infoCenter.isActive()) {
+			root.setText("no vm run");
+			return;
+		}
+
+		root.setText("Debug Bochs at:" + getHostInfo());
+	}
+
+	private void initTree(Node node) {
+	}
+
+	private String getHostInfo() {
+		return (String) infoCenter.synSend(InfoCmd.Host_Get);
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		infoCenter.removeListener(this);
 	}
 }

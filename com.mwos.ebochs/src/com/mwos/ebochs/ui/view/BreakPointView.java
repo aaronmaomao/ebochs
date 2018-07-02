@@ -1,5 +1,6 @@
 package com.mwos.ebochs.ui.view;
 
+import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
@@ -7,6 +8,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mwos.ebochs.core.model.IInfoListener;
+import com.mwos.ebochs.core.model.InfoCenter;
+import com.mwos.ebochs.core.model.InfoCmd;
 
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Table;
@@ -20,8 +23,10 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 
 	public static final String ID = "com.mwos.ebochs.ui.view.BreakPointView"; //$NON-NLS-1$
 	private Table table;
+	private InfoCenter infoCenter = InfoCenter.getInfoCenter();;
 
 	public BreakPointView() {
+		infoCenter.addListener(this);
 	}
 
 	/**
@@ -102,15 +107,28 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 	}
 
 	@Override
-	public void notify(String rec) {
+	public void notify(Object info) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void notify(String cmd, String rec) {
+	public void notify(String cmd, Object info) {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void init() {
+		if(!infoCenter.isActive()) {
+			return;
+		}
+		
+		infoCenter.synSend(InfoCmd.BP_Get);
+	}
 
+	@Override
+	public void dispose() {
+		super.dispose();
+		infoCenter.removeListener(this);
+	}
 }
