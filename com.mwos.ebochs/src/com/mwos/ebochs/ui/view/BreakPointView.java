@@ -119,11 +119,11 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 	}
 	
 	public void init() {
-		if(!infoCenter.isActive()) {
-			return;
-		}
-		
-		infoCenter.synSend(InfoCmd.BP_Get);
+//		if(!infoCenter.isActive()) {
+//			return;
+//		}
+//		
+//		infoCenter.synSend(InfoCmd.BP_Get);
 	}
 
 	@Override

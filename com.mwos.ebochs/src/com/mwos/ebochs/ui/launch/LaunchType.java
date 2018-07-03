@@ -64,7 +64,9 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 						System.out.println(text);
 					}
 				});
-				InfoCenter.getInfoCenter().active(bochs,iProcess);
+				
+				InfoCenter.getInfoCenter().addVm(bochs);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -110,21 +110,21 @@ public class HostView extends ViewPart implements IInfoListener {
 	}
 
 	public void init() {
-		hostTree.select(root);
-		if (!infoCenter.isActive()) {
-			root.setText("no vm run");
-			return;
-		}
-
-		root.setText("Debug Bochs at:" + getHostInfo());
+//		hostTree.select(root);
+//		if (!infoCenter.isActive()) {
+//			root.setText("no vm run");
+//			return;
+//		}
+//
+//		root.setText("Debug Bochs at:" + getHostInfo());
 	}
 
 	private void initTree(Node node) {
 	}
 
-	private String getHostInfo() {
-		return (String) infoCenter.synSend(InfoCmd.Host_Get);
-	}
+//	private String getHostInfo() {
+//		return (String) infoCenter.synSend(InfoCmd.Host_Get);
+//	}
 
 	@Override
 	public void dispose() {

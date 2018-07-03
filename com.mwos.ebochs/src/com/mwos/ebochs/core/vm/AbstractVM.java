@@ -1,5 +1,7 @@
 package com.mwos.ebochs.core.vm;
 
+import java.net.Socket;
+
 public abstract class AbstractVM {
 
 	protected String path;

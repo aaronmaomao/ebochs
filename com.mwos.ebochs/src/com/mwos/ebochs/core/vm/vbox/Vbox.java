@@ -1,5 +1,7 @@
 package com.mwos.ebochs.core.vm.vbox;
 
+import java.net.Socket;
+
 import com.mwos.ebochs.core.vm.AbstractVM;
 import com.mwos.ebochs.core.vm.IVMProfile;
 
@@ -25,6 +27,12 @@ public class Vbox extends AbstractVM {
 	@Override
 	public String getName() {
 		return "VirtualBox";
+	}
+
+	@Override
+	public Socket getSocket() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
