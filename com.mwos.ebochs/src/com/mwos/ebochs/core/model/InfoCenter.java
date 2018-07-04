@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.cdt.debug.internal.core.breakpoints.CLineBreakpoint;
 import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointListener;
 import org.eclipse.debug.core.IStreamListener;
@@ -16,13 +18,16 @@ import org.eclipse.ui.WorkbenchException;
 
 import com.mwos.ebochs.core.model.handler.BPHandler;
 import com.mwos.ebochs.core.vm.AbstractVM;
+import com.mwos.ebochs.resource.config.entity.CodePart.Code;
+import com.mwos.ebochs.resource.config.entity.OSConfig;
 
-public class InfoCenter implements IStreamListener {
+public class InfoCenter {
 
 	private static InfoCenter infoCenter = new InfoCenter();
 
 	private List<IInfoListener> listeners;
 	private List<AbstractVM> vms;
+	private AbstractVM current;
 
 	private BPHandler bpHandler;
 
@@ -40,6 +45,28 @@ public class InfoCenter implements IStreamListener {
 	}
 	
 	public void addVm(AbstractVM vm) {
+		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(new IBreakpointListener() {
+
+			@Override
+			public void breakpointRemoved(IBreakpoint breakpoint, IMarkerDelta delta) {
+				if (breakpoint.getMarker().getResource().getProject() == vm.getProfile().getConfig().getProject()) {
+					infoCenter.notify(InfoCmd.BP_Del, breakpoint);
+				}
+			}
+
+			@Override
+			public void breakpointChanged(IBreakpoint breakpoint, IMarkerDelta delta) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void breakpointAdded(IBreakpoint breakpoint) {
+				if (breakpoint.getMarker().getResource().getProject() == vm.getProfile().getConfig().getProject()) {
+					infoCenter.notify(InfoCmd.BP_Add, breakpoint);
+				}
+			}
+		});
 		this.vms.add(vm);
 	}
 	
@@ -62,9 +89,9 @@ public class InfoCenter implements IStreamListener {
 //		}
 //	}
 
-//	public boolean isActive() {
-//		return vm != null && vm.isAlive();
-//	}
+	public boolean isActive() {
+		return current != null && current.isAlive();
+	}
 //
 //	public synchronized Object synSend(String cmd) {
 //		try {
@@ -98,14 +125,6 @@ public class InfoCenter implements IStreamListener {
 		return infoCenter;
 	}
 
-	@Override
-	public synchronized void streamAppended(String text, IStreamMonitor monitor) {
-//		info += text;
-//		if (info.endsWith("> ")) {
-//			this.notify();
-//		}
-	}
-
 	private synchronized String getInfo() {
 		return null;
 //		try {
@@ -131,4 +150,30 @@ public class InfoCenter implements IStreamListener {
 //			return null;
 //		}
 	}
+	
+	private void initBp(AbstractVM vm) {
+		
+	}
+	
+//	private void getAllBp(AbstractVM vm) {
+//		List<String[]> bps = new ArrayList<>();
+//		IBreakpoint[] bs = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints("org.eclipse.cdt.debug.core");
+//		for (IBreakpoint bp : bs) {
+//			if (bp instanceof CLineBreakpoint && bp.getMarker().getResource().getProject() == config.getProject()) {
+//				CLineBreakpoint temp = (CLineBreakpoint) bp;
+//				String[] b = new String[5];
+//				b[0] = "" + temp.isEnabled();
+//				b[1] = calculate(temp);
+//				b[2] = temp.getFileName() + "[" + temp.getLineNumber() + "L]";
+//				b[3] = temp.getFunction();
+//			}
+//		}
+//		return bps;
+//	}
+//	
+//	private String calculate(CLineBreakpoint bp) throws CoreException {
+//		int line = bp.getLineNumber();
+//		String function = bp.getFunction();
+//		String fileName = bp.getFileName();
+//	}
 }

@@ -38,6 +38,20 @@ public class CodePart {
 	public String getOut() {
 		return out;
 	}
+	
+	public boolean isInclude(String code) {
+		if(code.equals(src)) {
+			return true;
+		}else {
+			for(Code c:codes) {
+				if(c.getSrc().equals(code)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 
 	public String build(AbstractBuilder builder) {
 		if (StringUtils.isNotBlank(src)) {

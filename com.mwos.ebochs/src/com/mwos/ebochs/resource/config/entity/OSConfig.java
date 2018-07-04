@@ -5,7 +5,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.cdt.debug.internal.core.breakpoints.CLineBreakpoint;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
 import com.mwos.ebochs.core.build.AbstractBuilder;
 import com.mwos.ebochs.resource.config.entity.CodePart.Code;
@@ -138,5 +140,4 @@ public class OSConfig {
 			img.clean();
 		}
 	}
-
 }
