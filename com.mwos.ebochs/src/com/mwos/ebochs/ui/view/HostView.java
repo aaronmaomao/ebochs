@@ -23,7 +23,15 @@ import com.mwos.ebochs.core.model.InfoCenter;
 import com.mwos.ebochs.core.model.InfoCmd;
 import com.mwos.ebochs.ui.view.model.host.HostNode;
 import com.mwos.ebochs.ui.view.model.host.Node;
+
+import org.eclipse.swt.events.HelpEvent;
+import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.jface.action.Action;
+import org.eclipse.wb.swt.ResourceManager;
+import org.eclipse.jface.action.Separator;
 
 public class HostView extends ViewPart implements IInfoListener {
 
@@ -33,6 +41,11 @@ public class HostView extends ViewPart implements IInfoListener {
 	private boolean enable = false;
 	private HostNode root = null;
 	private Tree hostTree;
+	private Action actionStepOver;
+	private Action actionStepInto;
+	private Action actionStepReturn;
+	private Action actionContinue;
+	private Action actionTerminate;
 
 	public HostView() {
 		infoCenter.addListener(this);
@@ -75,6 +88,91 @@ public class HostView extends ViewPart implements IInfoListener {
 	 */
 	private void createActions() {
 		// Create the actions
+		{
+			actionStepOver = new Action("stepover") {
+				@Override
+				public void runWithEvent(Event event) {
+					// TODO Auto-generated method stub
+					System.out.println(event);
+					run();
+				}
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+				}
+			};
+			actionStepOver.setAccelerator(SWT.F6);
+			actionStepOver.setToolTipText("stepover");
+			actionStepOver.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/stepover_co.png"));
+
+		}
+		{
+			actionStepInto = new Action("StepInto") {
+				public void runWithEvent(Event event) {
+					// TODO Auto-generated method stub
+					System.out.println(event);
+					run();
+				}
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+				}
+			};
+			actionStepInto.setAccelerator(SWT.F7);
+			actionStepInto.setToolTipText("StepInto");
+			actionStepInto.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/stepinto_co.png"));
+		}
+		{
+			actionStepReturn = new Action("StepReturn") {
+				public void runWithEvent(Event event) {
+					// TODO Auto-generated method stub
+					System.out.println(event);
+					run();
+				}
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+				}
+			};
+			actionStepReturn.setAccelerator(SWT.F8);
+			actionStepReturn.setToolTipText("StepReturn");
+			actionStepReturn.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/stepreturn_co.png"));
+		}
+		{
+			actionContinue = new Action("continue") {
+				public void runWithEvent(Event event) {
+					// TODO Auto-generated method stub
+					System.out.println(event);
+					run();
+				}
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+				}
+			};
+			actionContinue.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.egit.ui", "/icons/elcl16/continue.png"));
+			actionContinue.setToolTipText("continue");
+		}
+		{
+			actionTerminate = new Action("terminate") {
+				public void runWithEvent(Event event) {
+					// TODO Auto-generated method stub
+					System.out.println(event);
+					run();
+				}
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+				}
+			};
+			actionTerminate.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/terminate_co.png"));
+			actionTerminate.setToolTipText("terminate");
+		}
 	}
 
 	/**
@@ -82,6 +180,14 @@ public class HostView extends ViewPart implements IInfoListener {
 	 */
 	private void initializeToolBar() {
 		IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
+
+		toolbarManager.add(actionContinue);
+		toolbarManager.add(actionTerminate);
+		toolbarManager.add(new Separator());
+		toolbarManager.add(actionStepOver);
+		toolbarManager.add(actionStepInto);
+		toolbarManager.add(actionStepReturn);
+
 	}
 
 	/**
@@ -89,6 +195,11 @@ public class HostView extends ViewPart implements IInfoListener {
 	 */
 	private void initializeMenu() {
 		IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
+		// menuManager.add(actionStepInto);
+		// menuManager.add(actionStepReturn);
+		// menuManager.add(new Separator());
+		// menuManager.add(actionContinue);
+		// menuManager.add(actionTerminate);
 	}
 
 	@Override
@@ -110,21 +221,21 @@ public class HostView extends ViewPart implements IInfoListener {
 	}
 
 	public void init() {
-//		hostTree.select(root);
-//		if (!infoCenter.isActive()) {
-//			root.setText("no vm run");
-//			return;
-//		}
-//
-//		root.setText("Debug Bochs at:" + getHostInfo());
+		// hostTree.select(root);
+		// if (!infoCenter.isActive()) {
+		// root.setText("no vm run");
+		// return;
+		// }
+		//
+		// root.setText("Debug Bochs at:" + getHostInfo());
 	}
 
 	private void initTree(Node node) {
 	}
 
-//	private String getHostInfo() {
-//		return (String) infoCenter.synSend(InfoCmd.Host_Get);
-//	}
+	// private String getHostInfo() {
+	// return (String) infoCenter.synSend(InfoCmd.Host_Get);
+	// }
 
 	@Override
 	public void dispose() {

@@ -6,13 +6,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IMarkerDelta;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.IBreakpointListener;
-import org.eclipse.debug.core.model.IBreakpoint;
-
-import com.mwos.ebochs.core.model.BochsReader;
-import com.mwos.ebochs.core.model.InfoCmd;
 import com.mwos.ebochs.core.model.handler.BP;
 import com.mwos.ebochs.core.vm.AbstractVM;
 import com.mwos.ebochs.core.vm.IVMProfile;
@@ -31,7 +24,7 @@ public class Bochs extends AbstractVM {
 		File f = profile.localize();
 		if (f == null)
 			return null;
-		String cmd[] = { path + "\\bochsrunner.exe", path + "/bochs.exe", "-q", "-f", f.getAbsolutePath(), "8886" };
+		String cmd[] = { path + "\\bochs.exe", "-q", "-f", f.getAbsolutePath() };
 		process = Runtime.getRuntime().exec(cmd);
 		return process;
 	}
@@ -41,11 +34,8 @@ public class Bochs extends AbstractVM {
 		File f = profile.localize();
 		if (f == null)
 			return null;
-		String cmd[] = { path + "\\bochsrunner.exe", path + "\\bochsdbg.exe", "-q", "-f", f.getAbsolutePath(), "8886" };
+		String cmd[] = { path + "\\bochsdbg.exe", "-q", "-f", f.getAbsolutePath() };
 		process = Runtime.getRuntime().exec(cmd);
-		socket = new Socket("localhost", 8886);
-		BochsReader br = new BochsReader(this.getSocket().getInputStream());
-		br.readResult();
 		return process;
 	}
 
@@ -86,6 +76,6 @@ public class Bochs extends AbstractVM {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 }

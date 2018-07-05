@@ -1,4 +1,4 @@
-package com.mwos.ebochs.core.model;
+package com.mwos.ebochs.core.vm.bochs;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,17 +1,17 @@
 package com.mwos.ebochs.core.model.handler;
 
 public class BP {
-	private String enable = "true";
+	private boolean enable = true;
 	private String address = "";
 	private String localtion = "";
 	private String function = "";
 
-	public String getEnable() {
+	public boolean getEnable() {
 		return enable;
 	}
 
-	public void setEnable(String enable) {
-		this.enable = enable;
+	public void setEnable(boolean b) {
+		this.enable = b;
 	}
 
 	public String getAddress() {

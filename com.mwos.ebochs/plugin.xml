@@ -91,87 +91,39 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               id="com.mwos.ebochs.menus.sampleMenu"
-               label="Sample Menu"
-               mnemonic="M">
-            <command
-                  commandId="com.mwos.ebochs.commands.sampleCommand"
-                  id="com.mwos.ebochs.menus.sampleCommand"
-                  mnemonic="S">
-            </command>
-         </menu>
-      </menuContribution>
-      <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
-               id="com.mwos.ebochs.toolbars.by"
-               label="编译工具栏">
+               id="com.mwos.ebochs.toolbars.debug"
+               label="调试工具栏">
             <command
-                  commandId="com.mwos.ebochs.commands.c2asm"
-                  id="com.mwos.ebochs.toolbars.by.c2asm"
-                  label="[C to asm]"
-                  tooltip="把c文件编译为asm文件">
+                  commandId="com.mwos.ebochs.command.stepover"
+                  id="com.mwos.ebochs.toolbars.debug.stepover"
+                  label="[Step over]"
+                  tooltip="step over">
+            </command>
+            <command
+                  commandId="com.mwos.ebochs.command.stepinto"
+                  id="com.mwos.ebochs.toolbars.debug.stepinto"
+                  label="[step into]"
+                  tooltip="step into">
                <visibleWhen
                      checkEnabled="false">
-                  <with
-                        variable="selection">
-                     <iterate
-                           ifEmpty="false"
-                           operator="or">
-                        <adapt
-                              type="org.eclipse.core.resources.IResource">
-                           <test
-                                 property="org.eclipse.core.resources.name"
-                                 value="*.c">
-                           </test>
-                        </adapt>
-                     </iterate>
-                  </with>
                </visibleWhen>
             </command>
             <command
-                  commandId="com.mwos.ebochs.command.asm2obj"
-                  id="com.mwos.ebochs.toolbars.by.asm2obj"
-                  label="[asm to obj]"
-                  tooltip="把asm文件编译为obj文件">
+                  commandId="com.mwos.ebochs.command.stepreturn"
+                  label="step return"
+                  tooltip="step into">
                <visibleWhen
                      checkEnabled="false">
-                  <with
-                        variable="selection">
-                     <iterate
-                           ifEmpty="false"
-                           operator="or">
-                        <adapt
-                              type="org.eclipse.core.resources.IResource">
-                           <test
-                                 property="org.eclipse.core.resources.name"
-                                 value="*.asm">
-                           </test>
-                        </adapt>
-                     </iterate>
-                  </with>
                </visibleWhen>
             </command>
-         </toolbar>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="com.mwos.ebochs.toolbars.rd">
             <command
-                  commandId="com.mwos.ebochs.command.run"
-                  id="com.mwos.ebochs.toolbars.rd.run"
-                  label="[运行]"
-                  tooltip="运行操作系统">
-            </command>
-            <command
-                  commandId="com.mwos.ebochs.command.debug"
-                  id="com.mwos.ebochs.toolbars.rd.debug"
-                  label="[调试]"
-                  tooltip="调试操作系统">
+                  commandId="com.mwos.ebochs.command.terminate"
+                  label="terminate">
+               <visibleWhen
+                     checkEnabled="false">
+               </visibleWhen>
             </command>
          </toolbar>
       </menuContribution>
@@ -179,32 +131,33 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            id="com.mwos.ebochs.commands.category.by"
-            name="编译命令类">
+            id="com.mwos.ebochs.commands.category.debug"
+            name="调试类">
       </category>
       <command
-            categoryId="com.mwos.ebochs.commands.category.by"
-            id="com.mwos.ebochs.commands.c2asm"
-            name="C to asm">
+            categoryId="com.mwos.ebochs.commands.category.debug"
+            id="com.mwos.ebochs.command.stepover"
+            name="step over">
       </command>
       <command
-            categoryId="com.mwos.ebochs.commands.category.by"
-            id="com.mwos.ebochs.commands.asm2obj"
-            name="asm to obj">
-      </command>
-      <category
-            id="com.mwos.ebochs.commands.category.rd"
-            name="运行调试类">
-      </category>
-      <command
-            categoryId="com.mwos.ebochs.commands.category.rd"
-            id="com.mwos.ebochs.command.run"
-            name="运行">
+            categoryId="com.mwos.ebochs.commands.category.debug"
+            id="com.mwos.ebochs.command.stepinto"
+            name="step into">
       </command>
       <command
-            categoryId="com.mwos.ebochs.commands.category.by"
-            id="com.mwos.ebochs.command.debug"
-            name="调试">
+            categoryId="com.mwos.ebochs.commands.category.debug"
+            id="com.mwos.ebochs.command.stepreturn"
+            name="step return">
+      </command>
+      <command
+            categoryId="com.mwos.ebochs.commands.category.debug"
+            id="com.mwos.ebochs.command.terminate"
+            name="terminate">
+      </command>
+      <command
+            categoryId="com.mwos.ebochs.commands.category.debug"
+            id="com.mwos.ebochs.command.continue"
+            name="continue">
       </command>
    </extension>
    <extension
@@ -373,6 +326,13 @@
             id="com.mwos.ebochs.propertyTester"
             namespace="com.mwos.ebochs.propertyTester"
             properties="isOSProject"
+            type="java.lang.Object">
+      </propertyTester>
+      <propertyTester
+            class="com.mwos.ebochs.ui.MenuTester"
+            id="com.mwos.ebochs.tester.MenuTester"
+            namespace="com.mwos.ebochs.tester.MenuTester"
+            properties="isOSDebugView"
             type="java.lang.Object">
       </propertyTester>
    </extension>

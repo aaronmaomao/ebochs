@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
-import com.mwos.ebochs.core.model.BochsReader;
 import com.mwos.ebochs.core.model.handler.BP;
+import com.mwos.ebochs.core.vm.bochs.BochsReader;
 
 public abstract class AbstractVM {
 

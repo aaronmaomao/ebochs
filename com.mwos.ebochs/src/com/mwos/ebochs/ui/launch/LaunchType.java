@@ -1,5 +1,7 @@
 package com.mwos.ebochs.ui.launch;
 
+import java.awt.Toolkit;
+
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
@@ -23,6 +25,7 @@ import com.mwos.ebochs.core.build.AbstractBuilder;
 import com.mwos.ebochs.core.build.DefaultBuilder;
 import com.mwos.ebochs.core.vm.bochs.Bochs;
 import com.mwos.ebochs.core.vm.bochs.Bxrc;
+import com.mwos.ebochs.core.vm.bochs.DebugModel;
 import com.mwos.ebochs.resource.config.OSConfigFactory;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
@@ -56,20 +59,13 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 						}
 					});
 				}
-
 			} else if (mode.equals("debug")) {
 				String bochsDir = OSDevPreference.getValue(OSDevPreference.BOCHS);
 				Bxrc bxrc = new Bxrc(config, bochsDir);
 				Bochs bochs = new Bochs(bochsDir, bxrc);
 				Process process = bochs.debug();
 
-				IProcess iProcess = DebugPlugin.newProcess(launch, process, "Debug " + project.getName() + " on " + bochs.getName());
-				iProcess.getStreamsProxy().getOutputStreamMonitor().addListener(new IStreamListener() {
-					@Override
-					public void streamAppended(String text, IStreamMonitor monitor) {
-						System.out.println(text);
-					}
-				});
+				DebugModel dm = new DebugModel(process, config);
 				
 				//InfoCenter.getInfoCenter().addVm(bochs);
 				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective", PlatformUI.getWorkbench().getActiveWorkbenchWindow());
