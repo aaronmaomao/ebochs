@@ -66,7 +66,7 @@ public class BPModel {
 		if (a > 0xc200) {
 			return _mapBootLoader.get(addr);
 		}
-		return addr;
+		return null;
 	}
 
 	public String getAddr(String local) {
@@ -120,7 +120,13 @@ public class BPModel {
 	}
 
 	private void parseCoreC(String src) {
-		DomCSrc srcDom = new DomCSrc(src, config, domMap);
+		AsmAdapt adapt = new AsmAdapt(src, config, domMap);
+		hasParsed.add(src);
+		Map<String, String> addrs = adapt.getMap();
+		for (String addr : addrs.keySet()) {
+			_mapCore.put(addr, src + ":" + addrs.get(addr));
+		}
+
 	}
 
 }
@@ -139,42 +145,10 @@ class DomCSrc {
 		domAsm = new DomAsmSrc(src, config);
 	}
 
-	public void init() throws IOException {
-		String name = FileUtil.getFileName(src, false);
-		File _asm = new File(config.getProject().getLocationURI().getPath() + "/obj/" + name + "_.asm");
-		BufferedReader br = new BufferedReader(new FileReader(_asm));
-		String line = "";
-		_AsmFun asmFun = new _AsmFun("null");
-		while ((line = br.readLine()) != null) {
-			if (line.trim().isEmpty())
-				continue;
-			if (line.charAt(0) == '_') {
-				asmFun
-			}
-		}
-		br.close();
+	private void init() {
+
 	}
-	
-	private void 
 
-	public class _AsmFun {
-		private String name;
-		private String startLine;
-		private List<String> lineNums;
-
-		public _AsmFun(String name,String text) {
-			this.name = name;
-		}
-
-		public void add(String text) {
-			if (text.startsWith("\t.def\t.bf")) {
-				startLine = text.substring(57, text.length() - 8);
-			}else if(text)
-			
-		}
-		
-	
-	}
 }
 
 class DomAsmSrc {

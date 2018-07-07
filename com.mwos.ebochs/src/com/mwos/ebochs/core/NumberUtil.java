@@ -2,7 +2,9 @@ package com.mwos.ebochs.core;
 
 public class NumberUtil {
 	public static long parseHex(String hex) {
-		hex = hex.toLowerCase().substring(2, hex.length());
+		hex = hex.toLowerCase();
+		if (hex.startsWith("0x"))
+			hex = hex.substring(2, hex.length());
 		long res = 0;
 		for (int i = 0; i < hex.length(); i++) {
 			int n = 0;
