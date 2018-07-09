@@ -183,8 +183,6 @@ public class HostView extends ViewPart implements IInfoListener {
 
 				@Override
 				public void run() {
-					//getViewSite().getActionBars().getToolBarManager().remove(getViewSite().getActionBars().getToolBarManager().getItems()[0]);
-					//getViewSite().getActionBars().getToolBarManager().update(false);
 					this.setChecked(!this.isChecked());
 				}
 			};
@@ -214,7 +212,7 @@ public class HostView extends ViewPart implements IInfoListener {
 	 */
 	private void initializeMenu() {
 		IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
-		menuManager.add(actionBp);
+		//menuManager.add(actionBp);
 		// menuManager.add(actionStepInto);
 		// menuManager.add(actionStepReturn);
 		// menuManager.add(new Separator());
