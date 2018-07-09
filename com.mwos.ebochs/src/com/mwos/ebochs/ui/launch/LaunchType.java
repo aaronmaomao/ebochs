@@ -1,6 +1,7 @@
 package com.mwos.ebochs.ui.launch;
 
 import java.awt.Toolkit;
+import java.util.List;
 
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
@@ -23,6 +24,8 @@ import org.eclipse.ui.PlatformUI;
 import com.mwos.ebochs.Activator;
 import com.mwos.ebochs.core.build.AbstractBuilder;
 import com.mwos.ebochs.core.build.DefaultBuilder;
+import com.mwos.ebochs.core.model.BPModel;
+import com.mwos.ebochs.core.model.handler.BP;
 import com.mwos.ebochs.core.vm.bochs.Bochs;
 import com.mwos.ebochs.core.vm.bochs.Bxrc;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
@@ -65,18 +68,21 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 				Bochs bochs = new Bochs(bochsDir, bxrc);
 				Process process = bochs.debug();
 
-				DebugModel dm = new DebugModel(process, config);
-				
-				//InfoCenter.getInfoCenter().addVm(bochs);
+				// InfoCenter.getInfoCenter().addVm(bochs);
 				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective", PlatformUI.getWorkbench().getActiveWorkbenchWindow());
+
+				BPModel bp = new BPModel(config);
+				DebugModel dm = new DebugModel(process, config, bp);
+
 				ICProject cproject = CoreModel.getDefault().getCModel().getCProject(project.getName());
 				ICElement element = cproject.findElement(project.getFile("src/mbr.asm").getProjectRelativePath());
-				IEditorPart ed=CDTUITools.openInEditor(element);
+				IEditorPart ed = CDTUITools.openInEditor(element);
 				ed.getEditorInput();
-//				IMarker mark = project.getFile("src/mbr.asm").createMarker("com.ebochs.DebugMarker");
-//				mark.setAttribute(IMarker.LINE_NUMBER, 15);
-//				mark.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-//				mark.setAttribute(IMarker, value);
+				// IMarker mark =
+				// project.getFile("src/mbr.asm").createMarker("com.ebochs.DebugMarker");
+				// mark.setAttribute(IMarker.LINE_NUMBER, 15);
+				// mark.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
+				// mark.setAttribute(IMarker, value);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

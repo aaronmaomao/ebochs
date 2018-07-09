@@ -46,6 +46,7 @@ public class HostView extends ViewPart implements IInfoListener {
 	private Action actionStepReturn;
 	private Action actionContinue;
 	private Action actionTerminate;
+	private Action actionBp;
 
 	public HostView() {
 		infoCenter.addListener(this);
@@ -173,6 +174,23 @@ public class HostView extends ViewPart implements IInfoListener {
 			actionTerminate.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/terminate_co.png"));
 			actionTerminate.setToolTipText("terminate");
 		}
+		{
+			actionBp = new Action("breakpoint") {				public void runWithEvent(Event event) {
+					// TODO Auto-generated method stub
+					System.out.println(event);
+					run();
+				}
+
+				@Override
+				public void run() {
+					//getViewSite().getActionBars().getToolBarManager().remove(getViewSite().getActionBars().getToolBarManager().getItems()[0]);
+					//getViewSite().getActionBars().getToolBarManager().update(false);
+					this.setChecked(!this.isChecked());
+				}
+			};
+			actionBp.setId("actionBp");
+			actionBp.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/skip_brkp.png"));
+		}
 	}
 
 	/**
@@ -181,6 +199,7 @@ public class HostView extends ViewPart implements IInfoListener {
 	private void initializeToolBar() {
 		IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
 
+		toolbarManager.add(actionBp);
 		toolbarManager.add(actionContinue);
 		toolbarManager.add(actionTerminate);
 		toolbarManager.add(new Separator());
@@ -195,6 +214,7 @@ public class HostView extends ViewPart implements IInfoListener {
 	 */
 	private void initializeMenu() {
 		IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
+		menuManager.add(actionBp);
 		// menuManager.add(actionStepInto);
 		// menuManager.add(actionStepReturn);
 		// menuManager.add(new Separator());

@@ -51,7 +51,7 @@ public class AsmAdapt {
 
 		if (!src.endsWith(".asm")) {
 
-			BufferedReader br2 = new BufferedReader(new FileReader(new File(config.getProject().getLocationURI().getPath() + "/obj/" + name + "._asm")));
+			BufferedReader br2 = new BufferedReader(new FileReader(new File(config.getProject().getLocationURI().getPath() + "/obj/" + name + "_.asm")));
 			String line2 = "";
 
 			while ((line2 = br2.readLine()) != null) {
@@ -80,7 +80,7 @@ public class AsmAdapt {
 					if (asmFun.getAbsAddr() == 0)
 						break;
 
-					for (int j = 0; j < asmFun.getAddr().size(); j++) {
+					for (int j = 0; j < asmFun.getAddr().size()&&j<_asmFun.getLineNum().size(); j++) {
 						String addr_line = asmFun.getAddr().get(j);
 						Integer cLine = _asmFun.getLineNum().get(j);
 						_map.put(addr_line.split(":")[0], "" + cLine);
@@ -111,8 +111,8 @@ class AsmFun {
 		try {
 			String temp = "";
 			temp = br1.readLine();
-			funName = temp.substring(49, temp.lastIndexOf(":"));
-			relAddr = NumberUtil.parseHex(temp.substring(8, 16));
+			funName = temp.substring(48, temp.lastIndexOf(":"));
+			relAddr = NumberUtil.parseHex(temp.substring(7, 15));
 			if (domMap.getAddr(funName) == null)
 				absAddr = 0;
 			else
@@ -121,8 +121,8 @@ class AsmFun {
 				if (temp.contains("ALIGN\t2")) {
 					break;
 				}
-				long lineAddr = NumberUtil.parseHex(temp.substring(8, 16)) - relAddr + absAddr;
-				addr_line.add("0x" + lineAddr + ":" + temp.substring(0, 7).trim());
+				long lineAddr = NumberUtil.parseHex(temp.substring(7, 15)) - relAddr + absAddr;
+				addr_line.add("0x" + Long.toHexString(lineAddr) + ":" + temp.substring(0, 6).trim());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -156,11 +156,11 @@ class _AsmFun {
 			temp = br2.readLine();
 			funName = temp.substring(0, temp.indexOf(":"));
 			temp = br2.readLine();
-			funLine = Integer.parseInt(temp.substring(57, temp.lastIndexOf(":"))) - 1;
+			funLine = Integer.parseInt(temp.substring(35, temp.lastIndexOf(";"))) - 1;
 			lineN = funLine;
 			while (!(temp = br2.readLine()).startsWith("\t.def\t.ef;")) {
 				if (temp.startsWith("\t.ln")) {
-					lineN = Integer.parseInt(temp.substring(7, temp.length())) + funLine;
+					lineN = Integer.parseInt(temp.substring(5, temp.length())) + funLine;
 					continue;
 				}
 				if (temp.startsWith("\t."))

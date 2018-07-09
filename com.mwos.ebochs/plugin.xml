@@ -61,106 +61,6 @@
       </view>
    </extension>
    <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="com.mwos.ebochs.handlers.Asm2objHandler"
-            commandId="com.mwos.ebochs.commands.asm2obj">
-      </handler>
-      <handler
-            class="com.mwos.ebochs.handlers.C2asmHandler"
-            commandId="com.mwos.ebochs.commands.c2asm">
-      </handler>
-      <handler
-            class="com.mwos.ebochs.handlers.RunHandler"
-            commandId="com.mwos.ebochs.command.run">
-      </handler>
-      <handler
-            class="com.mwos.ebochs.handlers.DebugHandler"
-            commandId="com.mwos.ebochs.command.debug">
-      </handler>
-   </extension>
-   <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="com.mwos.ebochs.commands.sampleCommand"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+6">
-      </key>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="com.mwos.ebochs.toolbars.debug"
-               label="调试工具栏">
-            <command
-                  commandId="com.mwos.ebochs.command.stepover"
-                  id="com.mwos.ebochs.toolbars.debug.stepover"
-                  label="[Step over]"
-                  tooltip="step over">
-            </command>
-            <command
-                  commandId="com.mwos.ebochs.command.stepinto"
-                  id="com.mwos.ebochs.toolbars.debug.stepinto"
-                  label="[step into]"
-                  tooltip="step into">
-               <visibleWhen
-                     checkEnabled="false">
-               </visibleWhen>
-            </command>
-            <command
-                  commandId="com.mwos.ebochs.command.stepreturn"
-                  label="step return"
-                  tooltip="step into">
-               <visibleWhen
-                     checkEnabled="false">
-               </visibleWhen>
-            </command>
-            <command
-                  commandId="com.mwos.ebochs.command.terminate"
-                  label="terminate">
-               <visibleWhen
-                     checkEnabled="false">
-               </visibleWhen>
-            </command>
-         </toolbar>
-      </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <category
-            id="com.mwos.ebochs.commands.category.debug"
-            name="调试类">
-      </category>
-      <command
-            categoryId="com.mwos.ebochs.commands.category.debug"
-            id="com.mwos.ebochs.command.stepover"
-            name="step over">
-      </command>
-      <command
-            categoryId="com.mwos.ebochs.commands.category.debug"
-            id="com.mwos.ebochs.command.stepinto"
-            name="step into">
-      </command>
-      <command
-            categoryId="com.mwos.ebochs.commands.category.debug"
-            id="com.mwos.ebochs.command.stepreturn"
-            name="step return">
-      </command>
-      <command
-            categoryId="com.mwos.ebochs.commands.category.debug"
-            id="com.mwos.ebochs.command.terminate"
-            name="terminate">
-      </command>
-      <command
-            categoryId="com.mwos.ebochs.commands.category.debug"
-            id="com.mwos.ebochs.command.continue"
-            name="continue">
-      </command>
-   </extension>
-   <extension
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.mwos.ebochs.ui.view.OSDebugPerspective"
@@ -292,23 +192,6 @@
       </builder>
    </extension>
    <extension
-         point="org.eclipse.ui.decorators">
-      <decorator
-            adaptable="true"
-            class="com.mwos.ebochs.ui.decorato.BuildErrorDecorato"
-            icon="resource/icons/basket_go.png"
-            id="com.mwos.ebochs.decorator.buildError"
-            label="buildError"
-            lightweight="false"
-            state="true">
-         <enablement>
-            <objectClass
-                  name="org.eclipse.core.resources.IResource">
-            </objectClass>
-         </enablement>
-      </decorator>
-   </extension>
-   <extension
          id="com.ebochs.BuildErrorMarker"
          name="编译错误"
          point="org.eclipse.core.resources.markers">
@@ -335,13 +218,6 @@
             properties="isOSDebugView"
             type="java.lang.Object">
       </propertyTester>
-   </extension>
-   <extension
-         point="org.eclipse.debug.ui.debugModelPresentations">
-      <debugModelPresentation
-            class="com.mwos.ebochs.ui.debug.model.OSDebugModelPresentation"
-            id="com.mwos.ebochs.debugModelPresentation">
-      </debugModelPresentation>
    </extension>
    <extension
          id="com.ebochs.DebugMarker"

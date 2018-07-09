@@ -17,7 +17,6 @@ import org.eclipse.debug.core.model.IBreakpoint;
 
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.NumberUtil;
-import com.mwos.ebochs.core.model.DomAsmSrc.AsmFun;
 import com.mwos.ebochs.core.model.handler.BP;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 
@@ -44,8 +43,8 @@ public class BPModel {
 				CLineBreakpoint temp = (CLineBreakpoint) bp;
 				BP b = new BP();
 				b.setEnable(temp.isEnabled());
-				b.setAddress(getAddr(temp.getFileName() + ":" + temp.getLineNumber()));
-				b.setLocaltion(temp.getFileName() + ":" + temp.getLineNumber());
+				b.setAddress(getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber()));
+				b.setLocaltion(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
 				b.setFunction(temp.getFunction());
 				bps.add(b);
 			}
@@ -79,7 +78,7 @@ public class BPModel {
 			_source = _mapMbr;
 		} else if (temp[0].equals("src/bootloader.asm")) {
 			if (!hasParsed.contains(temp[0])) {
-				parseMbrAsm();
+				parseBootAsm();
 			}
 			_source = _mapBootLoader;
 		} else {
@@ -101,10 +100,8 @@ public class BPModel {
 		DomAsmSrc mbr = new DomAsmSrc("src/mbr.asm", config);
 		hasParsed.add("src/mbr.asm");
 		_mapMbr.clear();
-		for (AsmFun fun : mbr.getFuns()) {
-			for (String addr : fun.getAddr_line().keySet()) {
-				_mapMbr.put(addr, "src/mbr.asm:" + fun.getAddr_line().get(addr));
-			}
+		for (String addr : mbr.getAddr_line().keySet()) {
+			_mapMbr.put(addr, "src/mbr.asm:"+mbr.getAddr_line().get(addr));
 		}
 	}
 
@@ -112,10 +109,8 @@ public class BPModel {
 		DomAsmSrc boot = new DomAsmSrc("src/bootloader.asm", config);
 		hasParsed.add("src/bootloader.asm");
 		_mapBootLoader.clear();
-		for (AsmFun fun : boot.getFuns()) {
-			for (String addr : fun.getAddr_line().keySet()) {
-				_mapBootLoader.put(addr, "src/mbr.asm:" + fun.getAddr_line().get(addr));
-			}
+		for (String addr : boot.getAddr_line().keySet()) {
+			_mapBootLoader.put(addr, "src/bootloader.asm:"+boot.getAddr_line().get(addr));
 		}
 	}
 
@@ -131,41 +126,17 @@ public class BPModel {
 
 }
 
-class DomCSrc {
-	private String src;
-	private OSConfig config;
-	private DomAsmSrc domAsm;
-
-	private Map<String, String> _dom;
-
-	public DomCSrc(String src, OSConfig config, DomMap domMap) {
-		this.src = src;
-		this.config = config;
-		_dom = new LinkedHashMap<>();
-		domAsm = new DomAsmSrc(src, config);
-	}
-
-	private void init() {
-
-	}
-
-}
-
 class DomAsmSrc {
 	private String src;
 	private OSConfig config;
 
-	private List<AsmFun> funs;
-
-	public List<AsmFun> getFuns() {
-		return funs;
-	}
+	private Map<String, String> addr_line;
 
 	public DomAsmSrc(String src, OSConfig config) {
 		// TODO Auto-generated constructor stub
 		this.src = src;
 		this.config = config;
-		funs = new ArrayList<>();
+		addr_line = new LinkedHashMap<>();
 		try {
 			init();
 		} catch (IOException e) {
@@ -176,56 +147,27 @@ class DomAsmSrc {
 	private void init() throws IOException {
 		String name = FileUtil.getFileName(src, false);
 		String path = "";
-		if (src.endsWith(".asm")) {
-			path = config.getProject().getLocationURI().getPath() + "/obj/" + name + ".lst";
-		} else if (src.endsWith(".c")) {
-			path = config.getProject().getLocationURI().getPath() + "/obj/" + name + ".lst";
-		}
+		path = config.getProject().getLocationURI().getPath() + "/obj/" + name + ".lst";
 		File lst = new File(path);
 		BufferedReader br = new BufferedReader(new FileReader(lst));
 		String line = "";
-		AsmFun fun = new AsmFun("null", "0x00000000", "0");
 		while ((line = br.readLine()) != null) {
-			if (line.trim().isEmpty())
-				continue;
-			if (NumberUtil.isFun(line.charAt(49))) {
-				fun = new AsmFun(line.substring(49, line.length()), line.substring(8, 16).trim(), line.substring(8, 16).trim());
+			if (line.trim().isEmpty()) {
 				continue;
 			}
-
-			String lineNum = line.substring(0, 7).trim();
-			String relAddr = line.substring(8, 16).trim();
+			String lineNum = line.substring(0, 6).trim();
+			String relAddr = line.substring(7, 15).trim();
 			if (lineNum.isEmpty() || relAddr.isEmpty())
 				continue;
-			fun.add(relAddr, lineNum);
+			addr_line.put("0x" + relAddr, lineNum);
 		}
 		br.close();
 	}
 
-	class AsmFun {
-		private String name = "null";
-		private String addr;
-		private String line;
-
-		private Map<String, String> addr_line;
-
-		public AsmFun(String name, String addr, String line) {
-			// TODO Auto-generated constructor stub
-			this.name = name;
-			this.addr = addr;
-			this.line = line;
-			addr_line = new LinkedHashMap<>();
-		}
-
-		public void add(String addr, String line) {
-			this.addr_line.put(addr, line);
-		}
-
-		public Map<String, String> getAddr_line() {
-			return addr_line;
-		}
-
+	public Map<String, String> getAddr_line() {
+		return addr_line;
 	}
+
 }
 
 class DomMap {
@@ -248,12 +190,12 @@ class DomMap {
 		while ((line = br.readLine()) != null) {
 			line = line.trim();
 			if (line.isEmpty())
-				break;
+				continue;
 			String temp[] = line.split(":");
 			if (temp.length != 2)
-				break;
-			if (temp[0].startsWith("0x") && temp[1].startsWith("_")) {
-				_dom.put(temp[1], temp[0]);
+				continue;
+			if (temp[0].trim().startsWith("0x") && temp[1].trim().startsWith("_")) {
+				_dom.put(temp[1].trim(), temp[0].trim());
 			}
 		}
 		br.close();

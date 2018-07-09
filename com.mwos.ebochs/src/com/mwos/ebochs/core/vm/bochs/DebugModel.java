@@ -4,17 +4,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
+import com.mwos.ebochs.core.model.BPModel;
+import com.mwos.ebochs.core.model.handler.BP;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 import com.mwos.ebochs.ui.view.ConsoleFactory;
 
 public class DebugModel {
 	private Process process;
 	private OSConfig config;
+	private BPModel bp;
 
-	public DebugModel(Process process, OSConfig config) {
+	public DebugModel(Process process, OSConfig config, BPModel bp) {
 		this.process = process;
 		this.config = config;
+		this.bp = bp;
 		new Thread(new HandlerErr()).start();
 		try {
 			rec();
@@ -36,7 +41,6 @@ public class DebugModel {
 		ConsoleFactory.outMsg(res + "\r\n", config.getProject());
 		return res;
 	}
-
 
 	private class HandlerErr implements Runnable {
 

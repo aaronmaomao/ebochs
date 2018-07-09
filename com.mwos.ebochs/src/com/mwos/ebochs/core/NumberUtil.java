@@ -49,7 +49,6 @@ public class NumberUtil {
 	}
 
 	public static void main(String[] args) {
-		int a = 'Z';
-		System.out.println(a);
+		parseHex("00000000");
 	}
 }
