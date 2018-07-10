@@ -1,4 +1,4 @@
-package com.mwos.ebochs.core.model.handler;
+package com.mwos.ebochs.core.model;
 
 public class BP {
 	private boolean enable = true;

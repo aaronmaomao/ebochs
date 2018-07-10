@@ -1,13 +1,9 @@
 package com.mwos.ebochs.ui.launch;
 
-import java.awt.Toolkit;
-import java.util.List;
-
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.ui.CDTUITools;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,8 +20,6 @@ import org.eclipse.ui.PlatformUI;
 import com.mwos.ebochs.Activator;
 import com.mwos.ebochs.core.build.AbstractBuilder;
 import com.mwos.ebochs.core.build.DefaultBuilder;
-import com.mwos.ebochs.core.model.BPModel;
-import com.mwos.ebochs.core.model.handler.BP;
 import com.mwos.ebochs.core.vm.bochs.Bochs;
 import com.mwos.ebochs.core.vm.bochs.Bxrc;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
@@ -71,8 +65,7 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 				// InfoCenter.getInfoCenter().addVm(bochs);
 				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective", PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 
-				BPModel bp = new BPModel(config);
-				DebugModel dm = new DebugModel(process, config, bp);
+				new DebugModel(process, config);
 
 				ICProject cproject = CoreModel.getDefault().getCModel().getCProject(project.getName());
 				ICElement element = cproject.findElement(project.getFile("src/mbr.asm").getProjectRelativePath());

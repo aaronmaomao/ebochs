@@ -17,10 +17,9 @@ import org.eclipse.debug.core.model.IBreakpoint;
 
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.NumberUtil;
-import com.mwos.ebochs.core.model.handler.BP;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 
-public class BPModel {
+public class BPModel implements IInfoListener{
 	private OSConfig config;
 	private DomMap domMap;
 
@@ -29,7 +28,7 @@ public class BPModel {
 	private Map<String, String> _mapBootLoader = new HashMap<>();
 
 	private List<String> hasParsed = new ArrayList<>();
-
+	
 	public BPModel(OSConfig config) {
 		this.config = config;
 		domMap = new DomMap(config.getProject().getLocationURI().getPath() + "/obj/core.map");
@@ -51,7 +50,7 @@ public class BPModel {
 		}
 		return bps;
 	}
-
+	
 	public String getLocal(String addr) {
 		long a = NumberUtil.parseHex(addr);
 		if (a >= 0x7c00 && a < 0x7c00 + 512) {
@@ -121,7 +120,18 @@ public class BPModel {
 		for (String addr : addrs.keySet()) {
 			_mapCore.put(addr, src + ":" + addrs.get(addr));
 		}
+	}
 
+	@Override
+	public void notify(Object info) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notify(String cmd, Object info) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

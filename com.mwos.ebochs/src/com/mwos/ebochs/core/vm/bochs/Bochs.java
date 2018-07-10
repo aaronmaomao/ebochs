@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mwos.ebochs.core.model.handler.BP;
+import com.mwos.ebochs.core.model.BP;
 import com.mwos.ebochs.core.vm.AbstractVM;
 import com.mwos.ebochs.core.vm.IVMProfile;
 

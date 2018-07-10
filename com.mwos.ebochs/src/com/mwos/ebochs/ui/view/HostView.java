@@ -249,6 +249,7 @@ public class HostView extends ViewPart implements IInfoListener {
 	}
 
 	private void initTree(Node node) {
+		
 	}
 
 	// private String getHostInfo() {
@@ -257,7 +258,8 @@ public class HostView extends ViewPart implements IInfoListener {
 
 	@Override
 	public void dispose() {
-		super.dispose();
+		infoCenter.send("SelectHost -1");
 		infoCenter.removeListener(this);
+		super.dispose();
 	}
 }

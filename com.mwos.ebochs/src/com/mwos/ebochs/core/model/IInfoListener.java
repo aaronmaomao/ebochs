@@ -2,7 +2,7 @@ package com.mwos.ebochs.core.model;
 
 import java.util.Set;
 
-public interface IInfoListener {
+public abstract interface IInfoListener {
 
 	public void notify(Object info);
 
