@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import org.eclipse.cdt.debug.internal.core.breakpoints.CLineBreakpoint;
 import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointListener;
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -17,7 +19,7 @@ import com.mwos.ebochs.core.model.InfoCenter;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 import com.mwos.ebochs.ui.view.ConsoleFactory;
 
-public class DebugModel implements  IBreakpointListener {
+public class DebugModel implements IBreakpointListener {
 	private Process process;
 	private OSConfig config;
 	private BPModel bp;
@@ -30,15 +32,15 @@ public class DebugModel implements  IBreakpointListener {
 			rec();
 			bp = new BPModel(config);
 			List<BP> bps = bp.getAllBp();
-			for(BP b:bps) {
-				this.send("b "+b.getAddress());
+			for (BP b : bps) {
+				this.send("b " + b.getAddress());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
-		InfoCenter.getInfoCenter().addDebug(this);
+		InfoCenter.getInfoCenter().setDebug(this);
 
 	}
 
@@ -91,23 +93,70 @@ public class DebugModel implements  IBreakpointListener {
 	@Override
 	public void breakpointAdded(IBreakpoint breakpoint) {
 		// TODO Auto-generated method stub
-		
+		if (breakpoint instanceof CLineBreakpoint && breakpoint.getMarker().getResource().getProject() == config.getProject()) {
+			CLineBreakpoint temp = (CLineBreakpoint) breakpoint;
+			String addr;
+			try {
+				addr = bp.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
+				if (addr != null) {
+					this.send("b " + addr);
+					InfoCenter.getInfoCenter().send("AddBP", null);
+				}
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
 	}
 
 	@Override
 	public void breakpointRemoved(IBreakpoint breakpoint, IMarkerDelta delta) {
 		// TODO Auto-generated method stub
-		
+		if (breakpoint instanceof CLineBreakpoint && breakpoint.getMarker().getResource().getProject() == config.getProject()) {
+			CLineBreakpoint temp = (CLineBreakpoint) breakpoint;
+			String addr;
+			try {
+				addr = bp.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
+				if (addr != null) {
+					this.send("del " + addr);
+					InfoCenter.getInfoCenter().send("DelBP", null);
+				}
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 	}
 
 	@Override
 	public void breakpointChanged(IBreakpoint breakpoint, IMarkerDelta delta) {
 		// TODO Auto-generated method stub
-		
+		if (breakpoint instanceof CLineBreakpoint && breakpoint.getMarker().getResource().getProject() == config.getProject()) {
+			CLineBreakpoint temp = (CLineBreakpoint) breakpoint;
+			String addr;
+			try {
+				addr = bp.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
+				if (addr != null) {
+					if (temp.isEnabled())
+						this.send("bpe " + addr);
+					else
+						this.send("bpd " + addr);
+				}
+			} catch (CoreException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			InfoCenter.getInfoCenter().send("ChaBP", null);
+		}
+
 	}
-	
+
 	private void destory() {
 		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
-		InfoCenter.getInfoCenter().removeDebug(this);
+		InfoCenter.getInfoCenter().asynSend("DestoryDM", null);
 	}
 }

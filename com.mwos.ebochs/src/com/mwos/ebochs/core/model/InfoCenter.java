@@ -10,12 +10,10 @@ public class InfoCenter {
 	private static InfoCenter infoCenter = new InfoCenter();
 
 	private List<IInfoListener> listeners;
-	private List<DebugModel> debugs;
-	private int current=-1;
+	private DebugModel debug = null;
 
 	private InfoCenter() {
 		listeners = new ArrayList<>();
-		debugs = new ArrayList<>();
 	}
 
 	public void addListener(IInfoListener listener) {
@@ -25,16 +23,29 @@ public class InfoCenter {
 	public void removeListener(IInfoListener listener) {
 		listeners.remove(listener);
 	}
-	
-	public void addDebug(DebugModel debug) {
-		debugs.add(debug);
+
+	public void setDebug(DebugModel debug) {
+		this.debug = debug;
 	}
 
-	public void removeDebug(DebugModel debug) {
-		debugs.remove(debug);
+	public synchronized Object synSend(String cmd, Object object) {
+		return cmd;
 	}
 
-	public synchronized Object synSend(String cmd, String[] others) {
+	public Object send(String cmd, Object object) {
+		return cmd;
+	}
+
+	public void asynSend(String cmd, Object object) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+
+			}
+		}).start();
+	}
+
+	public String send(String cmd) {
 		return cmd;
 	}
 
@@ -42,7 +53,26 @@ public class InfoCenter {
 		return infoCenter;
 	}
 
-	public String send(String cmd) {
-		return cmd;
+	public DebugModel getDebug() {
+		return debug;
+	}
+
+	public boolean isVaild() {
+		return debug == null ? false : true;
+	}
+
+	public void notity(Class<IInfoListener> lisClass, String cmd, Object cont) {
+		for (IInfoListener listener : this.listeners) {
+			if (listener.getClass().equals(lisClass)) {
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						listener.notify(cmd, cont);
+
+					}
+				}).start();
+			}
+		}
 	}
 }
