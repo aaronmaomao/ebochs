@@ -103,6 +103,8 @@ public class HostView extends ViewPart implements IInfoListener {
 					// TODO Auto-generated method stub
 				}
 			};
+			actionStepOver.setId("actionStepOver");
+			actionStepOver.setEnabled(false);
 			actionStepOver.setAccelerator(SWT.F6);
 			actionStepOver.setToolTipText("stepover");
 			actionStepOver.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/stepover_co.png"));
@@ -121,6 +123,8 @@ public class HostView extends ViewPart implements IInfoListener {
 					// TODO Auto-generated method stub
 				}
 			};
+			actionStepInto.setId("actionStepInto");
+			actionStepInto.setEnabled(false);
 			actionStepInto.setAccelerator(SWT.F7);
 			actionStepInto.setToolTipText("StepInto");
 			actionStepInto.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/stepinto_co.png"));
@@ -138,6 +142,8 @@ public class HostView extends ViewPart implements IInfoListener {
 					// TODO Auto-generated method stub
 				}
 			};
+			actionStepReturn.setId("actionStepReturn");
+			actionStepReturn.setEnabled(false);
 			actionStepReturn.setAccelerator(SWT.F8);
 			actionStepReturn.setToolTipText("StepReturn");
 			actionStepReturn.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/stepreturn_co.png"));
@@ -155,6 +161,8 @@ public class HostView extends ViewPart implements IInfoListener {
 					// TODO Auto-generated method stub
 				}
 			};
+			actionContinue.setId("actionContinue");
+			actionContinue.setEnabled(false);
 			actionContinue.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.egit.ui", "/icons/elcl16/continue.png"));
 			actionContinue.setToolTipText("continue");
 		}
@@ -171,6 +179,8 @@ public class HostView extends ViewPart implements IInfoListener {
 					// TODO Auto-generated method stub
 				}
 			};
+			actionTerminate.setId("actionTerminate");
+			actionTerminate.setEnabled(false);
 			actionTerminate.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/terminate_co.png"));
 			actionTerminate.setToolTipText("terminate");
 		}
@@ -186,6 +196,8 @@ public class HostView extends ViewPart implements IInfoListener {
 					this.setChecked(!this.isChecked());
 				}
 			};
+			actionBp.setToolTipText("breakpoint");
+			actionBp.setEnabled(false);
 			actionBp.setId("actionBp");
 			actionBp.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/skip_brkp.png"));
 		}

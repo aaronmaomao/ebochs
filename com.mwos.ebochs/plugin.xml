@@ -33,13 +33,6 @@
       </view>
       <view
             category="com.mwos.ebochs.view.category"
-            class="com.mwos.ebochs.view.GIdtVPart"
-            icon="resource/icons/table_multiple.png"
-            id="com.mwos.ebochs.view.GIdtVPart"
-            name="全局描述符表">
-      </view>
-      <view
-            category="com.mwos.ebochs.view.category"
             class="com.mwos.ebochs.ui.view.CPUView"
             icon="resource/icons/car.png"
             id="com.mwos.ebochs.ui.view.CPUView"
@@ -58,6 +51,13 @@
             icon="resource/icons/clock_go.png"
             id="com.mwos.ebochs.ui.view.HostView"
             name="目标主机">
+      </view>
+      <view
+            category="com.mwos.ebochs.view.category"
+            class="com.mwos.ebochs.ui.view.GILDTView"
+            icon="resource/icons/table_multiple.png"
+            id="com.mwos.ebochs.ui.view.GILDTView"
+            name="GILDTView">
       </view>
    </extension>
    <extension

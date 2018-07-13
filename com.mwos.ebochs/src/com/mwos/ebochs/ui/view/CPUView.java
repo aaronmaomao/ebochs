@@ -7,6 +7,7 @@ import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
@@ -19,6 +20,17 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.mwos.ebochs.core.model.IInfoListener;
 import com.mwos.ebochs.core.model.InfoCenter;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.jface.text.TextViewer;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.ui.forms.widgets.Section;
 
 public class CPUView extends ViewPart implements IInfoListener {
 
@@ -26,7 +38,10 @@ public class CPUView extends ViewPart implements IInfoListener {
 	private Table table;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Table table_1;
-	private InfoCenter infoCenter = InfoCenter.getInfoCenter();;
+	private InfoCenter infoCenter = InfoCenter.getInfoCenter();
+	private Action realAction;
+	private Action refreshAction;
+	private Action upAction;;
 
 	public CPUView() {
 		infoCenter.addListener(this);
@@ -110,6 +125,11 @@ public class CPUView extends ViewPart implements IInfoListener {
 
 		Composite composite_1 = new Composite(expandBar, SWT.NONE);
 		segRegExp.setControl(composite_1);
+		
+		Section sctnNewSection = formToolkit.createSection(expandBar, Section.TWISTIE | Section.TITLE_BAR);
+		segRegExp.setControl(sctnNewSection);
+		formToolkit.paintBordersFor(sctnNewSection);
+		sctnNewSection.setText("New Section");
 		formToolkit.adapt(composite_1);
 		formToolkit.paintBordersFor(composite_1);
 		TableColumnLayout tcl_composite_1 = new TableColumnLayout();
@@ -151,6 +171,27 @@ public class CPUView extends ViewPart implements IInfoListener {
 	 */
 	private void createActions() {
 		// Create the actions
+		{
+			realAction = new Action("realAction") {
+
+			};
+			realAction.setId("realAction");
+			realAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.buildship.ui", "/icons/full/elcl16/link_to_selection.png"));
+		}
+		{
+			refreshAction = new Action("refreshAction") {
+
+			};
+			refreshAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("com.mwos.ebochs", "resource/icons/arrow_refresh.png"));
+			refreshAction.setId("refreshAction");
+		}
+		{
+			upAction = new Action("upAction") {
+
+			};
+			upAction.setId("upAction");
+			upAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("com.mwos.ebochs", "resource/icons/arrow_up.png"));
+		}
 	}
 
 	/**
@@ -158,6 +199,9 @@ public class CPUView extends ViewPart implements IInfoListener {
 	 */
 	private void initializeToolBar() {
 		IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
+		toolbarManager.add(realAction);
+		toolbarManager.add(refreshAction);
+		toolbarManager.add(upAction);
 	}
 
 	/**
@@ -165,6 +209,9 @@ public class CPUView extends ViewPart implements IInfoListener {
 	 */
 	private void initializeMenu() {
 		IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
+		menuManager.add(upAction);
+		menuManager.add(realAction);
+		menuManager.add(refreshAction);
 	}
 
 	@Override
@@ -182,11 +229,10 @@ public class CPUView extends ViewPart implements IInfoListener {
 	public void notify(String cmd, Object info) {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
 		super.dispose();
 	}
-	
 }
