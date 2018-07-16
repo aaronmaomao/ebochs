@@ -27,6 +27,9 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.Button;
+
+import java.util.Set;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IContributionManager;
@@ -38,13 +41,12 @@ public class CPUView extends ViewPart implements IInfoListener {
 	private Table table;
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
 	private Table table_1;
-	private InfoCenter infoCenter = InfoCenter.getInfoCenter();
 	private Action realAction;
 	private Action refreshAction;
 	private Action upAction;;
 
 	public CPUView() {
-		infoCenter.addListener(this);
+		center.addListener(this);
 	}
 
 	/**

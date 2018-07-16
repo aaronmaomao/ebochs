@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.cdt.debug.internal.core.breakpoints.CLineBreakpoint;
 import org.eclipse.core.runtime.CoreException;
@@ -132,6 +133,12 @@ public class BPModel implements IInfoListener{
 	public void notify(String cmd, Object info) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Set<String> getCare() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

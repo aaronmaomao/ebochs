@@ -1,5 +1,7 @@
 package com.mwos.ebochs.ui.view;
 
+import java.util.Set;
+
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -23,10 +25,9 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 
 	public static final String ID = "com.mwos.ebochs.ui.view.BreakPointView"; //$NON-NLS-1$
 	private Table table;
-	private InfoCenter infoCenter = InfoCenter.getInfoCenter();;
 
 	public BreakPointView() {
-		infoCenter.addListener(this);
+		this.center.addListener(this);
 	}
 
 	/**
@@ -129,6 +130,6 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 	@Override
 	public void dispose() {
 		super.dispose();
-		infoCenter.removeListener(this);
+		center.removeListener(this);
 	}
 }

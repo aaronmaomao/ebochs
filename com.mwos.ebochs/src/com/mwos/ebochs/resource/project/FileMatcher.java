@@ -20,7 +20,6 @@ public class FileMatcher extends AbstractFileInfoMatcher {
 		this.project = project;
 		this.arguments = arguments;
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

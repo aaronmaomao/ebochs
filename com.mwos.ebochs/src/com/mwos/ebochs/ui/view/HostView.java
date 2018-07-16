@@ -21,6 +21,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.mwos.ebochs.core.model.IInfoListener;
 import com.mwos.ebochs.core.model.InfoCenter;
 import com.mwos.ebochs.core.model.InfoCmd;
+import com.mwos.ebochs.core.model.cmd.CmdFactory;
 import com.mwos.ebochs.ui.view.model.host.HostNode;
 import com.mwos.ebochs.ui.view.model.host.Node;
 
@@ -29,6 +30,9 @@ import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.swt.widgets.Display;
+
+import java.util.Set;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.jface.action.Separator;
@@ -37,7 +41,6 @@ public class HostView extends ViewPart implements IInfoListener {
 
 	public static final String ID = "com.mwos.ebochs.ui.view.HostView"; //$NON-NLS-1$
 
-	private InfoCenter infoCenter = InfoCenter.getInfoCenter();
 	private boolean enable = false;
 	private HostNode root = null;
 	private Tree hostTree;
@@ -49,7 +52,7 @@ public class HostView extends ViewPart implements IInfoListener {
 	private Action actionBp;
 
 	public HostView() {
-		infoCenter.addListener(this);
+		center.addListener(this);
 	}
 
 	/**
@@ -107,7 +110,8 @@ public class HostView extends ViewPart implements IInfoListener {
 			actionStepOver.setEnabled(false);
 			actionStepOver.setAccelerator(SWT.F6);
 			actionStepOver.setToolTipText("stepover");
-			actionStepOver.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/stepover_co.png"));
+			actionStepOver.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui",
+					"/icons/full/elcl16/stepover_co.png"));
 
 		}
 		{
@@ -127,7 +131,8 @@ public class HostView extends ViewPart implements IInfoListener {
 			actionStepInto.setEnabled(false);
 			actionStepInto.setAccelerator(SWT.F7);
 			actionStepInto.setToolTipText("StepInto");
-			actionStepInto.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/stepinto_co.png"));
+			actionStepInto.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui",
+					"/icons/full/elcl16/stepinto_co.png"));
 		}
 		{
 			actionStepReturn = new Action("StepReturn") {
@@ -146,7 +151,8 @@ public class HostView extends ViewPart implements IInfoListener {
 			actionStepReturn.setEnabled(false);
 			actionStepReturn.setAccelerator(SWT.F8);
 			actionStepReturn.setToolTipText("StepReturn");
-			actionStepReturn.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/stepreturn_co.png"));
+			actionStepReturn.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui",
+					"/icons/full/elcl16/stepreturn_co.png"));
 		}
 		{
 			actionContinue = new Action("continue") {
@@ -163,7 +169,8 @@ public class HostView extends ViewPart implements IInfoListener {
 			};
 			actionContinue.setId("actionContinue");
 			actionContinue.setEnabled(false);
-			actionContinue.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.egit.ui", "/icons/elcl16/continue.png"));
+			actionContinue.setImageDescriptor(
+					ResourceManager.getPluginImageDescriptor("org.eclipse.egit.ui", "/icons/elcl16/continue.png"));
 			actionContinue.setToolTipText("continue");
 		}
 		{
@@ -181,11 +188,13 @@ public class HostView extends ViewPart implements IInfoListener {
 			};
 			actionTerminate.setId("actionTerminate");
 			actionTerminate.setEnabled(false);
-			actionTerminate.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/terminate_co.png"));
+			actionTerminate.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui",
+					"/icons/full/elcl16/terminate_co.png"));
 			actionTerminate.setToolTipText("terminate");
 		}
 		{
-			actionBp = new Action("breakpoint") {				public void runWithEvent(Event event) {
+			actionBp = new Action("breakpoint") {
+				public void runWithEvent(Event event) {
 					// TODO Auto-generated method stub
 					System.out.println(event);
 					run();
@@ -199,7 +208,8 @@ public class HostView extends ViewPart implements IInfoListener {
 			actionBp.setToolTipText("breakpoint");
 			actionBp.setEnabled(false);
 			actionBp.setId("actionBp");
-			actionBp.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/skip_brkp.png"));
+			actionBp.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui",
+					"/icons/full/elcl16/skip_brkp.png"));
 		}
 	}
 
@@ -224,7 +234,7 @@ public class HostView extends ViewPart implements IInfoListener {
 	 */
 	private void initializeMenu() {
 		IMenuManager menuManager = getViewSite().getActionBars().getMenuManager();
-		//menuManager.add(actionBp);
+		// menuManager.add(actionBp);
 		// menuManager.add(actionStepInto);
 		// menuManager.add(actionStepReturn);
 		// menuManager.add(new Separator());
@@ -261,7 +271,7 @@ public class HostView extends ViewPart implements IInfoListener {
 	}
 
 	private void initTree(Node node) {
-		
+
 	}
 
 	// private String getHostInfo() {
@@ -270,8 +280,7 @@ public class HostView extends ViewPart implements IInfoListener {
 
 	@Override
 	public void dispose() {
-		infoCenter.send("SelectHost -1");
-		infoCenter.removeListener(this);
+		this.send(CmdFactory.removeListener, this);
 		super.dispose();
 	}
 }
