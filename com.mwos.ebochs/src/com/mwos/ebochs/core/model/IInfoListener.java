@@ -19,11 +19,11 @@ public abstract interface IInfoListener {
 		return cares;
 	}
 
-	public default String send(Cmd cmd) {
+	public default String sendToCenter(Cmd cmd) {
 		return center.send(cmd);
 	}
 
-	public default String send(Cmd cmd, Object object) {
+	public default String sendToCenter(Cmd cmd, Object object) {
 		return center.send(cmd, object);
 	}
 }

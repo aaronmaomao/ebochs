@@ -36,6 +36,15 @@ public class InfoCenter {
 
 	public void setDebug(DebugModel debug) {
 		this.debug = debug;
+		this.addListener(debug);
+	}
+
+	public void removeDebug(DebugModel debug) {
+		if (this.debug == debug) {
+			this.debug = null;
+		}
+		removeListener(debug);
+
 	}
 
 	public synchronized Object synSend(String cmd, Object object) {
@@ -46,30 +55,24 @@ public class InfoCenter {
 		return cmd;
 	}
 
-	public void asynSend(String cmd, Object object) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-
-			}
-		}).start();
-	}
-
 	public String send(Cmd cmd) {
-		return cmd.getCmd();
+		return this.send(cmd, null);
 	}
 
 	public String send(Cmd cmd, Object object) {
-		if (cmd.getCmd().equals(CmdFactory.removeListener.getCmd())) {
+		if (cmd.getCmd().equals(CmdFactory.RemoveListener.getCmd())) {
 			this.removeListener((IInfoListener) object);
 			return "";
 		}
 
-		if (cmd.getCmd().equals(CmdFactory.updateCare.getCmd())) {
+		if (cmd.getCmd().equals(CmdFactory.UpdateCare.getCmd())) {
 			updateCare((IInfoListener) object);
 			return "";
 		}
-		return cmd.getCmd();
+
+		String rec = debug.sendToVM(cmd);
+		notifyLis(cmd.getCmd(), rec);
+		return rec;
 	}
 
 	public static InfoCenter getInfoCenter() {
@@ -97,6 +100,20 @@ public class InfoCenter {
 				}).start();
 			}
 		}
+	}
+
+	private void notifyLis(String cmd, String cont) {
+		if (this.cares.get(cmd) == null)
+			return;
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				for (IInfoListener listener : cares.get(cmd)) {
+					listener.notify(cmd, cont);
+				}
+			}
+		}).start();
 	}
 
 	private void updateCare(IInfoListener listener) {

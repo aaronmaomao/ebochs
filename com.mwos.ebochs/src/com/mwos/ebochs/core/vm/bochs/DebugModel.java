@@ -15,11 +15,14 @@ import org.eclipse.debug.core.model.IBreakpoint;
 
 import com.mwos.ebochs.core.model.BP;
 import com.mwos.ebochs.core.model.BPModel;
+import com.mwos.ebochs.core.model.IInfoListener;
 import com.mwos.ebochs.core.model.InfoCenter;
+import com.mwos.ebochs.core.model.cmd.Cmd;
+import com.mwos.ebochs.core.model.cmd.CmdFactory;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 import com.mwos.ebochs.ui.view.ConsoleFactory;
 
-public class DebugModel implements IBreakpointListener {
+public class DebugModel implements IBreakpointListener, IInfoListener {
 	private Process process;
 	private OSConfig config;
 	private BPModel bp;
@@ -29,26 +32,24 @@ public class DebugModel implements IBreakpointListener {
 		this.config = config;
 		new Thread(new HandlerErr()).start();
 		try {
-			rec();
+			recFromVM();
 			bp = new BPModel(config);
 			List<BP> bps = bp.getAllBp();
 			for (BP b : bps) {
-				this.send("b " + b.getAddress());
+				this.sendToVM(new Cmd("b", b.getAddress()));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
-		InfoCenter.getInfoCenter().setDebug(this);
-
 	}
 
-	private synchronized String send(String cmd) {
+	public synchronized String sendToVM(Cmd cmd) {
 		try {
 			process.getOutputStream().write((cmd + "\r\n").getBytes());
 			process.getOutputStream().flush();
-			return rec();
+			return recFromVM();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,7 +58,7 @@ public class DebugModel implements IBreakpointListener {
 		return null;
 	}
 
-	private synchronized String rec() {
+	private synchronized String recFromVM() {
 		BochsReader br = new BochsReader(process.getInputStream());
 		String res;
 		try {
@@ -99,11 +100,10 @@ public class DebugModel implements IBreakpointListener {
 			try {
 				addr = bp.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
 				if (addr != null) {
-					this.send("b " + addr);
-					InfoCenter.getInfoCenter().send("AddBP", null);
+					this.sendToVM(new Cmd("b", addr));
+					this.sendToCenter(new Cmd("AddBP"));
 				}
 			} catch (CoreException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -120,8 +120,8 @@ public class DebugModel implements IBreakpointListener {
 			try {
 				addr = bp.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
 				if (addr != null) {
-					this.send("del " + addr);
-					InfoCenter.getInfoCenter().send("DelBP", null);
+					this.sendToVM(new Cmd("del", addr));
+					this.sendToCenter(new Cmd("DelBP"));
 				}
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
@@ -141,22 +141,33 @@ public class DebugModel implements IBreakpointListener {
 				addr = bp.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
 				if (addr != null) {
 					if (temp.isEnabled())
-						this.send("bpe " + addr);
+						this.sendToVM(new Cmd("bpe", addr));
 					else
-						this.send("bpd " + addr);
+						this.sendToVM(new Cmd("bpd", addr));
 				}
 			} catch (CoreException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
-			InfoCenter.getInfoCenter().send("ChaBP", null);
+			this.sendToCenter(new Cmd("ChangedBp"));
 		}
 
 	}
 
 	private void destory() {
 		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
-		InfoCenter.getInfoCenter().asynSend("DestoryDM", null);
+	}
+
+	@Override
+	public void notify(Object info) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void notify(String cmd, Object info) {
+		// TODO Auto-generated method stub
+
 	}
 }

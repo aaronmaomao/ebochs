@@ -20,6 +20,7 @@ import org.eclipse.ui.PlatformUI;
 import com.mwos.ebochs.Activator;
 import com.mwos.ebochs.core.build.AbstractBuilder;
 import com.mwos.ebochs.core.build.DefaultBuilder;
+import com.mwos.ebochs.core.model.InfoCenter;
 import com.mwos.ebochs.core.vm.bochs.Bochs;
 import com.mwos.ebochs.core.vm.bochs.Bxrc;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
@@ -61,11 +62,10 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 				Bxrc bxrc = new Bxrc(config, bochsDir);
 				Bochs bochs = new Bochs(bochsDir, bxrc);
 				Process process = bochs.debug();
-
+				InfoCenter.getInfoCenter().setDebug(new DebugModel(process, config));
 				// InfoCenter.getInfoCenter().addVm(bochs);
-				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective", PlatformUI.getWorkbench().getActiveWorkbenchWindow());
-
-				new DebugModel(process, config);
+				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective",
+						PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 
 				ICProject cproject = CoreModel.getDefault().getCModel().getCProject(project.getName());
 				ICElement element = cproject.findElement(project.getFile("src/mbr.asm").getProjectRelativePath());

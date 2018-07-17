@@ -176,18 +176,16 @@ public class HostView extends ViewPart implements IInfoListener {
 		{
 			actionTerminate = new Action("terminate") {
 				public void runWithEvent(Event event) {
-					// TODO Auto-generated method stub
-					System.out.println(event);
 					run();
 				}
 
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
+					sendToCenter(CmdFactory.Terminate);
 				}
 			};
 			actionTerminate.setId("actionTerminate");
-			actionTerminate.setEnabled(false);
+			actionTerminate.setEnabled(center.isVaild());
 			actionTerminate.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui",
 					"/icons/full/elcl16/terminate_co.png"));
 			actionTerminate.setToolTipText("terminate");
@@ -280,7 +278,7 @@ public class HostView extends ViewPart implements IInfoListener {
 
 	@Override
 	public void dispose() {
-		this.send(CmdFactory.removeListener, this);
+		this.sendToCenter(CmdFactory.RemoveListener, this);
 		super.dispose();
 	}
 }
