@@ -22,6 +22,8 @@ import com.mwos.ebochs.core.model.IInfoListener;
 import com.mwos.ebochs.core.model.InfoCenter;
 import com.mwos.ebochs.core.model.InfoCmd;
 import com.mwos.ebochs.core.model.cmd.CmdFactory;
+import com.mwos.ebochs.core.model.cmd.CmdStr;
+import com.mwos.ebochs.core.vm.bochs.DebugModel;
 import com.mwos.ebochs.ui.view.model.host.HostNode;
 import com.mwos.ebochs.ui.view.model.host.Node;
 
@@ -52,6 +54,8 @@ public class HostView extends ViewPart implements IInfoListener {
 	private Action actionBp;
 
 	public HostView() {
+		this.cares.add(CmdStr.AddDebug);
+		this.cares.add(CmdStr.DMDestory);
 		center.addListener(this);
 	}
 
@@ -254,7 +258,12 @@ public class HostView extends ViewPart implements IInfoListener {
 
 	@Override
 	public void notify(String cmd, Object info) {
-		// TODO Auto-generated method stub
+		if(cmd.equals(CmdStr.AddDebug)) {
+			DebugModel dm = (DebugModel) info;
+			this.actionTerminate.setEnabled(true);
+		}else if(cmd.equals(CmdStr.DMDestory)) {
+			this.actionTerminate.setEnabled(false);
+		}
 
 	}
 

@@ -41,11 +41,8 @@ public class BPModel implements IInfoListener{
 		for (IBreakpoint bp : bs) {
 			if (bp instanceof CLineBreakpoint && bp.getMarker().getResource().getProject() == config.getProject()) {
 				CLineBreakpoint temp = (CLineBreakpoint) bp;
-				BP b = new BP();
-				b.setEnable(temp.isEnabled());
+				BP b = new BP(temp);
 				b.setAddress(getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber()));
-				b.setLocaltion(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
-				b.setFunction(temp.getFunction());
 				bps.add(b);
 			}
 		}

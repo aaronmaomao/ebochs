@@ -16,16 +16,17 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import com.mwos.ebochs.core.model.BP;
 import com.mwos.ebochs.core.model.BPModel;
 import com.mwos.ebochs.core.model.IInfoListener;
-import com.mwos.ebochs.core.model.InfoCenter;
 import com.mwos.ebochs.core.model.cmd.Cmd;
-import com.mwos.ebochs.core.model.cmd.CmdFactory;
+import com.mwos.ebochs.core.model.cmd.CmdStr;
+import com.mwos.ebochs.core.model.cmd.DCmd;
+import com.mwos.ebochs.core.model.cmd.NCmd;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 import com.mwos.ebochs.ui.view.ConsoleFactory;
 
 public class DebugModel implements IBreakpointListener, IInfoListener {
 	private Process process;
 	private OSConfig config;
-	private BPModel bp;
+	private BPModel bm;
 
 	public DebugModel(Process process, OSConfig config) {
 		this.process = process;
@@ -33,10 +34,10 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 		new Thread(new HandlerErr()).start();
 		try {
 			recFromVM();
-			bp = new BPModel(config);
-			List<BP> bps = bp.getAllBp();
+			bm = new BPModel(config);
+			List<BP> bps = bm.getAllBp();
 			for (BP b : bps) {
-				this.sendToVM(new Cmd("b", b.getAddress()));
+				this.sendToVM(new DCmd(CmdStr.b, b.getAddress()));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,6 +86,7 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 					ConsoleFactory.outErrMsg(line + "\r\n", config.getProject());
 				}
 				err.close();
+				destory();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -96,12 +98,12 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 		// TODO Auto-generated method stub
 		if (breakpoint instanceof CLineBreakpoint && breakpoint.getMarker().getResource().getProject() == config.getProject()) {
 			CLineBreakpoint temp = (CLineBreakpoint) breakpoint;
-			String addr;
 			try {
-				addr = bp.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
-				if (addr != null) {
-					this.sendToVM(new Cmd("b", addr));
-					this.sendToCenter(new Cmd("AddBP"));
+				BP bp = new BP(temp);
+				bp.setAddress(bm.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber()));
+				if (!bp.getAddress().isEmpty()) {
+					this.sendToVM(new DCmd(CmdStr.b, bp.getAddress()));
+					this.sendToCenter(new NCmd(CmdStr.AddBP), bp);
 				}
 			} catch (CoreException e) {
 				e.printStackTrace();
@@ -116,12 +118,12 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 		// TODO Auto-generated method stub
 		if (breakpoint instanceof CLineBreakpoint && breakpoint.getMarker().getResource().getProject() == config.getProject()) {
 			CLineBreakpoint temp = (CLineBreakpoint) breakpoint;
-			String addr;
 			try {
-				addr = bp.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
-				if (addr != null) {
-					this.sendToVM(new Cmd("del", addr));
-					this.sendToCenter(new Cmd("DelBP"));
+				BP bp = new BP(temp);
+				bp.setAddress(bm.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber()));
+				if (!bp.getAddress().isEmpty()) {
+					this.sendToVM(new DCmd(CmdStr.del, bp.getAddress()));
+					this.sendToCenter(new NCmd(CmdStr.DelBP), bp);
 				}
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
@@ -136,27 +138,29 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 		// TODO Auto-generated method stub
 		if (breakpoint instanceof CLineBreakpoint && breakpoint.getMarker().getResource().getProject() == config.getProject()) {
 			CLineBreakpoint temp = (CLineBreakpoint) breakpoint;
-			String addr;
 			try {
-				addr = bp.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
-				if (addr != null) {
+				BP bp = new BP(temp);
+				bp.setAddress(bm.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber()));
+				if (!bp.getAddress().isEmpty()) {
 					if (temp.isEnabled())
-						this.sendToVM(new Cmd("bpe", addr));
+						this.sendToVM(new DCmd(CmdStr.bpe, bp.getAddress()));
 					else
-						this.sendToVM(new Cmd("bpd", addr));
+						this.sendToVM(new DCmd(CmdStr.bpd, bp.getAddress()));
+					this.sendToCenter(new NCmd(CmdStr.ChangedBp), bp);
 				}
 			} catch (CoreException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
-			this.sendToCenter(new Cmd("ChangedBp"));
+			this.sendToCenter(new NCmd(CmdStr.ChangedBp));
 		}
 
 	}
 
 	private void destory() {
 		DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
+		this.center.removeDebug(this);
 	}
 
 	@Override

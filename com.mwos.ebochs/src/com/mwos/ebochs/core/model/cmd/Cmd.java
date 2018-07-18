@@ -1,6 +1,6 @@
 package com.mwos.ebochs.core.model.cmd;
 
-public class Cmd {
+public abstract class Cmd {
 	private String cmd = "";
 	private String[] args;
 

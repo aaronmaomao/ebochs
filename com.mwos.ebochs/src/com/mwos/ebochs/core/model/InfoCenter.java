@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.mwos.ebochs.core.model.cmd.Cmd;
 import com.mwos.ebochs.core.model.cmd.CmdFactory;
+import com.mwos.ebochs.core.model.cmd.CmdStr;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
 
 public class InfoCenter {
@@ -37,6 +38,7 @@ public class InfoCenter {
 	public void setDebug(DebugModel debug) {
 		this.debug = debug;
 		this.addListener(debug);
+		notifyLis(CmdStr.AddDebug, debug);
 	}
 
 	public void removeDebug(DebugModel debug) {
@@ -44,11 +46,7 @@ public class InfoCenter {
 			this.debug = null;
 		}
 		removeListener(debug);
-
-	}
-
-	public synchronized Object synSend(String cmd, Object object) {
-		return cmd;
+		notifyLis(CmdStr.DMDestory, debug);
 	}
 
 	public Object send(String cmd, Object object) {
@@ -87,22 +85,7 @@ public class InfoCenter {
 		return debug == null ? false : true;
 	}
 
-	public void notity(Class<IInfoListener> lisClass, String cmd, Object cont) {
-		for (IInfoListener listener : this.listeners) {
-			if (listener.getClass().equals(lisClass)) {
-				new Thread(new Runnable() {
-
-					@Override
-					public void run() {
-						listener.notify(cmd, cont);
-
-					}
-				}).start();
-			}
-		}
-	}
-
-	private void notifyLis(String cmd, String cont) {
+	private void notifyLis(String cmd, Object cont) {
 		if (this.cares.get(cmd) == null)
 			return;
 		new Thread(new Runnable() {

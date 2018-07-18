@@ -1,5 +1,8 @@
 package com.mwos.ebochs.core.model;
 
+import org.eclipse.cdt.debug.internal.core.breakpoints.CLineBreakpoint;
+import org.eclipse.core.runtime.CoreException;
+
 public class BP {
 	private boolean enable = true;
 	private String address = "";
@@ -8,6 +11,16 @@ public class BP {
 
 	public boolean getEnable() {
 		return enable;
+	}
+
+	public BP(CLineBreakpoint cbp) {
+		try {
+			enable = cbp.isEnabled();
+			localtion = cbp.getMarker().getResource().getProjectRelativePath() + ":" + cbp.getLineNumber();
+			function = cbp.getFunction();
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setEnable(boolean b) {

@@ -12,6 +12,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.mwos.ebochs.core.model.IInfoListener;
 import com.mwos.ebochs.core.model.InfoCenter;
 import com.mwos.ebochs.core.model.InfoCmd;
+import com.mwos.ebochs.core.model.cmd.CmdStr;
 
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Table;
@@ -27,6 +28,9 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 	private Table table;
 
 	public BreakPointView() {
+		this.cares.add(CmdStr.AddBP);
+		this.cares.add(CmdStr.DelBP);
+		this.cares.add(CmdStr.ChangedBp);
 		this.center.addListener(this);
 	}
 
@@ -115,7 +119,9 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 
 	@Override
 	public void notify(String cmd, Object info) {
-		// TODO Auto-generated method stub
+		if(cmd.equals(CmdStr.AddBP)) {
+			
+		}
 		
 	}
 	
