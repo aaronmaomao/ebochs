@@ -26,13 +26,6 @@
       </category>
       <view
             category="com.mwos.ebochs.view.category"
-            class="com.mwos.ebochs.ui.view.CPUView"
-            icon="resource/icons/car.png"
-            id="com.mwos.ebochs.ui.view.CPUView"
-            name="寄存器">
-      </view>
-      <view
-            category="com.mwos.ebochs.view.category"
             class="com.mwos.ebochs.ui.view.BreakPointView"
             icon="resource/icons/photo.png"
             id="com.mwos.ebochs.ui.view.BreakPointView"
@@ -51,6 +44,13 @@
             icon="resource/icons/table_multiple.png"
             id="com.mwos.ebochs.ui.view.GILDTView"
             name="GILDTView">
+      </view>
+      <view
+            category="com.mwos.ebochs.view.category"
+            class="com.mwos.ebochs.ui.view.RegisterView"
+            icon="resource/image/register.png"
+            id="com.mwos.ebochs.ui.view.RegisterView"
+            name="寄存器">
       </view>
    </extension>
    <extension

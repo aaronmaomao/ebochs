@@ -127,11 +127,6 @@ public class CPUView extends ViewPart implements IInfoListener {
 
 		Composite composite_1 = new Composite(expandBar, SWT.NONE);
 		segRegExp.setControl(composite_1);
-		
-		Section sctnNewSection = formToolkit.createSection(expandBar, Section.TWISTIE | Section.TITLE_BAR);
-		segRegExp.setControl(sctnNewSection);
-		formToolkit.paintBordersFor(sctnNewSection);
-		sctnNewSection.setText("New Section");
 		formToolkit.adapt(composite_1);
 		formToolkit.paintBordersFor(composite_1);
 		TableColumnLayout tcl_composite_1 = new TableColumnLayout();
