@@ -25,10 +25,13 @@ import org.eclipse.swt.layout.FillLayout;
 import swing2swt.layout.FlowLayout;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import com.mwos.ebochs.core.model.IInfoListener;
+
 import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
-public class RegisterView extends ViewPart {
+public class RegisterView extends ViewPart implements IInfoListener{
 
 	public static final String ID = "com.mwos.ebochs.ui.view.RegisterView"; //$NON-NLS-1$
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
@@ -36,6 +39,7 @@ public class RegisterView extends ViewPart {
 	private Action actionRefresh;
 
 	public RegisterView() {
+		this.center.addListener(this);
 	}
 
 	/**
@@ -51,12 +55,12 @@ public class RegisterView extends ViewPart {
 		gl_container.marginHeight = 0;
 		container.setLayout(gl_container);
 		{
-			Section sctnNewSection = formToolkit.createSection(container, Section.TWISTIE | Section.TITLE_BAR);
-			sctnNewSection.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-			formToolkit.paintBordersFor(sctnNewSection);
-			sctnNewSection.setText("通用寄存器");
-			Composite cs = formToolkit.createComposite(sctnNewSection);
-			sctnNewSection.setClient(cs);
+			Section regSec1 = formToolkit.createSection(container, Section.TWISTIE | Section.TITLE_BAR);
+			regSec1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+			formToolkit.paintBordersFor(regSec1);
+			regSec1.setText("通用寄存器");
+			Composite cs = formToolkit.createComposite(regSec1);
+			regSec1.setClient(cs);
 			cs.setLayout(new GridLayout(1, false));
 			{
 				
@@ -132,9 +136,9 @@ public class RegisterView extends ViewPart {
 				tiFs.setText(new String[] {"fs", "0x0000", "gs", "0x0000"});
 			}
 			
-			Composite composite = new Composite(sctnNewSection, SWT.NONE);
+			Composite composite = new Composite(regSec1, SWT.NONE);
 			composite.setSize(10, 10);
-			sctnNewSection.setTextClient(composite);
+			regSec1.setTextClient(composite);
 			composite.setLayout(new FillLayout(SWT.HORIZONTAL));
 			
 			Label lblNewLabel_1 = new Label(composite, SWT.HORIZONTAL | SWT.CENTER);
@@ -147,10 +151,10 @@ public class RegisterView extends ViewPart {
 			
 		}
 		{
-			Section sctnNewSection_1 = formToolkit.createSection(container, Section.TWISTIE | Section.TITLE_BAR);
-			sctnNewSection_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-			formToolkit.paintBordersFor(sctnNewSection_1);
-			sctnNewSection_1.setText("控制寄存器");
+			Section regSec2 = formToolkit.createSection(container, Section.TWISTIE | Section.TITLE_BAR);
+			regSec2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+			formToolkit.paintBordersFor(regSec2);
+			regSec2.setText("控制寄存器");
 		}
 
 		createActions();
@@ -189,5 +193,23 @@ public class RegisterView extends ViewPart {
 	@Override
 	public void setFocus() {
 		// Set the focus
+	}
+
+	@Override
+	public void notify(Object info) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notify(String cmd, Object info) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void dispose() {
+		this.center.removeListener(this);
+		super.dispose();
 	}
 }

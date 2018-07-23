@@ -10,6 +10,7 @@ import java.util.Set;
 import com.mwos.ebochs.core.model.cmd.Cmd;
 import com.mwos.ebochs.core.model.cmd.CmdFactory;
 import com.mwos.ebochs.core.model.cmd.CmdStr;
+import com.mwos.ebochs.core.model.cmd.DCmd;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
 
 public class InfoCenter {
@@ -58,6 +59,12 @@ public class InfoCenter {
 	}
 
 	public String send(Cmd cmd, Object object) {
+		if (cmd instanceof DCmd) {
+			String rec = debug.sendToVM(cmd);
+			notifyLis(cmd.getCmd(), rec);
+			return rec;
+		}
+
 		if (cmd.getCmd().equals(CmdFactory.RemoveListener.getCmd())) {
 			this.removeListener((IInfoListener) object);
 			return "";
@@ -67,10 +74,7 @@ public class InfoCenter {
 			updateCare((IInfoListener) object);
 			return "";
 		}
-
-		String rec = debug.sendToVM(cmd);
-		notifyLis(cmd.getCmd(), rec);
-		return rec;
+		return null;
 	}
 
 	public static InfoCenter getInfoCenter() {

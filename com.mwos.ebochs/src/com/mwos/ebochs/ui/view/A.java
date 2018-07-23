@@ -135,11 +135,6 @@ public class A {
 		
 		TableItem tiFs = new TableItem(table, 0);
 		tiFs.setText(new String[] {"fs", "0x0000", "gs", "0x0000"});
-		
-		Button btnNewButton = new Button(shell, SWT.TOGGLE);
-		btnNewButton.setFont(SWTResourceManager.getFont("微软雅黑", 5, SWT.NORMAL));
-		btnNewButton.setAlignment(SWT.LEFT);
-		btnNewButton.setBackgroundImage(ResourceManager.getPluginImage("com.mwos.ebochs", "resource/icons/arrow_refresh_small.png"));
 
 	}
 }

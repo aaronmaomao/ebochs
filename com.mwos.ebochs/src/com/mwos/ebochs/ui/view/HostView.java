@@ -23,6 +23,7 @@ import com.mwos.ebochs.core.model.InfoCenter;
 import com.mwos.ebochs.core.model.InfoCmd;
 import com.mwos.ebochs.core.model.cmd.CmdFactory;
 import com.mwos.ebochs.core.model.cmd.CmdStr;
+import com.mwos.ebochs.core.model.cmd.DCmd;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
 import com.mwos.ebochs.ui.view.model.host.HostNode;
 import com.mwos.ebochs.ui.view.model.host.Node;
@@ -100,14 +101,12 @@ public class HostView extends ViewPart implements IInfoListener {
 			actionStepOver = new Action("stepover") {
 				@Override
 				public void runWithEvent(Event event) {
-					// TODO Auto-generated method stub
-					System.out.println(event);
 					run();
 				}
 
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
+					sendToCenter(new DCmd(CmdStr.n));
 				}
 			};
 			actionStepOver.setId("actionStepOver");
@@ -121,14 +120,12 @@ public class HostView extends ViewPart implements IInfoListener {
 		{
 			actionStepInto = new Action("StepInto") {
 				public void runWithEvent(Event event) {
-					// TODO Auto-generated method stub
-					System.out.println(event);
 					run();
 				}
 
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
+					sendToCenter(new DCmd(CmdStr.s));
 				}
 			};
 			actionStepInto.setId("actionStepInto");
@@ -168,7 +165,7 @@ public class HostView extends ViewPart implements IInfoListener {
 
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
+					sendToCenter(new DCmd(CmdStr.c));
 				}
 			};
 			actionContinue.setId("actionContinue");
@@ -185,7 +182,7 @@ public class HostView extends ViewPart implements IInfoListener {
 
 				@Override
 				public void run() {
-					sendToCenter(CmdFactory.Terminate);
+					sendToCenter(new DCmd(CmdStr.Terminate));
 				}
 			};
 			actionTerminate.setId("actionTerminate");
@@ -261,6 +258,8 @@ public class HostView extends ViewPart implements IInfoListener {
 		if(cmd.equals(CmdStr.AddDebug)) {
 			DebugModel dm = (DebugModel) info;
 			this.actionTerminate.setEnabled(true);
+			this.actionStepOver.setEnabled(true);
+			this.actionContinue.setEnabled(true);
 		}else if(cmd.equals(CmdStr.DMDestory)) {
 			this.actionTerminate.setEnabled(false);
 		}
