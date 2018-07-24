@@ -125,7 +125,7 @@ public class HostView extends ViewPart implements IInfoListener {
 
 				@Override
 				public void run() {
-					sendToCenter(new DCmd(CmdStr.s));
+					String rec = sendToCenter(new DCmd(CmdStr.s));
 				}
 			};
 			actionStepInto.setId("actionStepInto");
