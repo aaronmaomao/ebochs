@@ -25,7 +25,7 @@ public abstract class Cmd {
 		String str = cmd;
 		if (args != null) {
 			for (String arg : args) {
-				cmd += (" " + arg);
+				str += (" " + arg);
 			}
 		}
 		return str;

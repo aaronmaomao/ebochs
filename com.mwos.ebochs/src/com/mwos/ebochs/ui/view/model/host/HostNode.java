@@ -5,16 +5,25 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Tree;
 
+import com.mwos.ebochs.core.vm.bochs.DebugModel;
+
 public class HostNode extends Node {
 
 	private String machineName;
 	private String location;
 	private String cpu;
 	private String memory;
-	private String status;
 
 	public HostNode(Tree parent, int style) {
 		super(parent, style);
+	}
+
+	public void setDM(DebugModel dm) {
+		this.dm = dm;
+	}
+	
+	public DebugModel getDM() {
+		return dm;
 	}
 
 	@Override
@@ -33,5 +42,11 @@ public class HostNode extends Node {
 		deleteItem.setText("删除");
 		this.getParent().setMenu(menu);
 
+	}
+
+	@Override
+	public void dispose() {
+		dm = null;
+		super.dispose();
 	}
 }

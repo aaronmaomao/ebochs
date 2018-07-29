@@ -19,7 +19,7 @@ public class InfoCenter {
 
 	private List<IInfoListener> listeners;
 	public Map<String, Set<IInfoListener>> cares;
-	private DebugModel debug = null;
+	private DebugModel dm ;
 
 	private InfoCenter() {
 		listeners = new ArrayList<>();
@@ -37,15 +37,13 @@ public class InfoCenter {
 	}
 
 	public void setDebug(DebugModel debug) {
-		this.debug = debug;
+		dm=debug;
 		this.addListener(debug);
 		notifyLis(CmdStr.AddDebug, debug);
 	}
 
 	public void removeDebug(DebugModel debug) {
-		if (this.debug == debug) {
-			this.debug = null;
-		}
+		dm=null;
 		removeListener(debug);
 		notifyLis(CmdStr.DMDestory, debug);
 	}
@@ -60,7 +58,7 @@ public class InfoCenter {
 
 	public String send(Cmd cmd, Object object) {
 		if (cmd instanceof DCmd) {
-			String rec = debug.sendToVM(cmd);
+			String rec = dm.sendToVM(cmd);
 			notifyLis(cmd.getCmd(), rec);
 			return rec;
 		}
@@ -82,25 +80,25 @@ public class InfoCenter {
 	}
 
 	public DebugModel getDebug() {
-		return debug;
+		return dm;
 	}
 
 	public boolean isVaild() {
-		return debug == null ? false : true;
+		return dm == null ? false : true;
 	}
 
 	private void notifyLis(String cmd, Object cont) {
 		if (this.cares.get(cmd) == null)
 			return;
-		new Thread(new Runnable() {
+	//	new Thread(new Runnable() {
 
-			@Override
-			public void run() {
+		//	@Override
+		//	public void run() {
 				for (IInfoListener listener : cares.get(cmd)) {
 					listener.notify(cmd, cont);
 				}
-			}
-		}).start();
+		//	}
+		//}).start();
 	}
 
 	private void updateCare(IInfoListener listener) {
@@ -120,4 +118,5 @@ public class InfoCenter {
 			}
 		}
 	}
+	
 }

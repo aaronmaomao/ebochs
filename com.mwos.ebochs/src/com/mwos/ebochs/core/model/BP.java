@@ -5,7 +5,7 @@ import org.eclipse.core.runtime.CoreException;
 
 public class BP {
 	private boolean enable = true;
-	private String address = "";
+	private Long address = 0L;
 	private String localtion = "";
 	private String function = "";
 
@@ -27,11 +27,11 @@ public class BP {
 		this.enable = b;
 	}
 
-	public String getAddress() {
+	public Long getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(Long address) {
 		this.address = address;
 	}
 

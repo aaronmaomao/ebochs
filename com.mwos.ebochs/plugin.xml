@@ -226,6 +226,7 @@
    <extension
          point="org.eclipse.ui.editors.annotationTypes">
       <type
+            markerSeverity="0"
             markerType="com.ebochs.DebugMarker"
             name="com.mwos.ebochs.type2"
             super="org.eclipse.debug.ui.currentIP">

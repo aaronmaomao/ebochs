@@ -20,19 +20,21 @@ import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.NumberUtil;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 
-public class BPModel implements IInfoListener{
+public class BPModel implements IInfoListener {
 	private OSConfig config;
 	private DomMap domMap;
 
-	private Map<String, String> _mapMbr = new HashMap<>();
-	private Map<String, String> _mapCore = new HashMap<>();
-	private Map<String, String> _mapBootLoader = new HashMap<>();
+	private Map<Long, String> _mapMbr = new LinkedHashMap<>();
+	private Map<Long, String> _mapCore = new LinkedHashMap<>();
+	private Map<Long, String> _mapBootLoader = new LinkedHashMap<>();
 
 	private List<String> hasParsed = new ArrayList<>();
-	
+
 	public BPModel(OSConfig config) {
 		this.config = config;
 		domMap = new DomMap(config.getProject().getLocationURI().getPath() + "/obj/core.map");
+		parseMbrAsm();
+		parseBootAsm();
 	}
 
 	public List<BP> getAllBp() throws CoreException {
@@ -41,33 +43,38 @@ public class BPModel implements IInfoListener{
 		for (IBreakpoint bp : bs) {
 			if (bp instanceof CLineBreakpoint && bp.getMarker().getResource().getProject() == config.getProject()) {
 				CLineBreakpoint temp = (CLineBreakpoint) bp;
+
+				Long addr = getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
+				if (addr == null) {
+					temp.delete();
+					continue;
+				}
 				BP b = new BP(temp);
-				b.setAddress(getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber()));
+				b.setAddress(addr);
 				bps.add(b);
 			}
 		}
 		return bps;
 	}
-	
-	public String getLocal(String addr) {
-		long a = NumberUtil.parseHex(addr);
-		if (a >= 0x7c00 && a < 0x7c00 + 512) {
+
+	public String getLocal(long addr) {
+		if (addr >= 0x7c00 && addr < 0x7c00 + 512) {
 			return _mapMbr.get(addr);
 		}
 
-		if (a >= 0x280000) {
+		if (addr >= 0x280000) {
 			return _mapCore.get(addr);
 		}
 
-		if (a > 0xc200) {
+		if (addr > 0xc200) {
 			return _mapBootLoader.get(addr);
 		}
 		return null;
 	}
 
-	public String getAddr(String local) {
+	public Long getAddr(String local) {
 		String temp[] = local.split(":");
-		Map<String, String> _source;
+		Map<Long, String> _source;
 		if (temp[0].equals("src/mbr.asm")) {
 			if (!hasParsed.contains(temp[0])) {
 				parseMbrAsm();
@@ -85,7 +92,7 @@ public class BPModel implements IInfoListener{
 			_source = _mapCore;
 		}
 
-		for (String addr : _source.keySet()) {
+		for (Long addr : _source.keySet()) {
 			String loc = _source.get(addr);
 			if (loc.equals(local))
 				return addr;
@@ -98,7 +105,7 @@ public class BPModel implements IInfoListener{
 		hasParsed.add("src/mbr.asm");
 		_mapMbr.clear();
 		for (String addr : mbr.getAddr_line().keySet()) {
-			_mapMbr.put(addr, "src/mbr.asm:"+mbr.getAddr_line().get(addr));
+			_mapMbr.put(NumberUtil.parseHex(addr), "src/mbr.asm:" + mbr.getAddr_line().get(addr));
 		}
 	}
 
@@ -107,7 +114,7 @@ public class BPModel implements IInfoListener{
 		hasParsed.add("src/bootloader.asm");
 		_mapBootLoader.clear();
 		for (String addr : boot.getAddr_line().keySet()) {
-			_mapBootLoader.put(addr, "src/bootloader.asm:"+boot.getAddr_line().get(addr));
+			_mapBootLoader.put(NumberUtil.parseHex(addr), "src/bootloader.asm:" + boot.getAddr_line().get(addr));
 		}
 	}
 
@@ -116,20 +123,20 @@ public class BPModel implements IInfoListener{
 		hasParsed.add(src);
 		Map<String, String> addrs = adapt.getMap();
 		for (String addr : addrs.keySet()) {
-			_mapCore.put(addr, src + ":" + addrs.get(addr));
+			_mapCore.put(NumberUtil.parseHex(addr) + 0x280000, src + ":" + addrs.get(addr));
 		}
 	}
 
 	@Override
 	public void notify(Object info) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void notify(String cmd, Object info) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

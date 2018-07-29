@@ -56,8 +56,15 @@ public class AsmAdapt {
 
 			while ((line2 = br2.readLine()) != null) {
 				if (line2.startsWith(".globl _")) {
-					_AsmFun _asmFun = new _AsmFun(br2);
-					_asmFuns.add(_asmFun);
+					_AsmFun _asmFun;
+					try {
+						_asmFun = new _AsmFun(br2);
+						_asmFuns.add(_asmFun);
+					} catch (Exception e) {
+						e.printStackTrace();
+						System.out.println(src+"  "+line2);
+					}
+					
 				}
 			}
 		}
@@ -143,18 +150,18 @@ class _AsmFun {
 	List<Integer> lineNum;
 	private int funLine;
 
-	public _AsmFun(BufferedReader br2) {
+	public _AsmFun(BufferedReader br2) throws Exception {
 		// TODO Auto-generated constructor stub
 		lineNum = new ArrayList<>();
 		init(br2);
 	}
 
-	private void init(BufferedReader br2) {
-		int lineN;
-		try {
-			String temp = "";
+	private void init(BufferedReader br2) throws Exception {
+		int lineN = 0;
+		String temp = "";
 			temp = br2.readLine();
 			funName = temp.substring(0, temp.indexOf(":"));
+			
 			temp = br2.readLine();
 			funLine = Integer.parseInt(temp.substring(35, temp.lastIndexOf(";"))) - 1;
 			lineN = funLine;
@@ -167,9 +174,6 @@ class _AsmFun {
 					continue;
 				lineNum.add(lineN);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public List<Integer> getLineNum() {

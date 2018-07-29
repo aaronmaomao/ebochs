@@ -1,9 +1,5 @@
 package com.mwos.ebochs.ui.launch;
 
-import org.eclipse.cdt.core.model.CoreModel;
-import org.eclipse.cdt.core.model.ICElement;
-import org.eclipse.cdt.core.model.ICProject;
-import org.eclipse.cdt.ui.CDTUITools;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -14,7 +10,6 @@ import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 import com.mwos.ebochs.Activator;
@@ -62,20 +57,11 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 				Bxrc bxrc = new Bxrc(config, bochsDir);
 				Bochs bochs = new Bochs(bochsDir, bxrc);
 				Process process = bochs.debug();
-				InfoCenter.getInfoCenter().setDebug(new DebugModel(process, config));
-				// InfoCenter.getInfoCenter().addVm(bochs);
+				DebugModel dm = new DebugModel(process, config);
+
 				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective",
 						PlatformUI.getWorkbench().getActiveWorkbenchWindow());
-
-				ICProject cproject = CoreModel.getDefault().getCModel().getCProject(project.getName());
-				ICElement element = cproject.findElement(project.getFile("src/mbr.asm").getProjectRelativePath());
-				IEditorPart ed = CDTUITools.openInEditor(element);
-				ed.getEditorInput();
-				// IMarker mark =
-				// project.getFile("src/mbr.asm").createMarker("com.ebochs.DebugMarker");
-				// mark.setAttribute(IMarker.LINE_NUMBER, 15);
-				// mark.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
-				// mark.setAttribute(IMarker, value);
+				InfoCenter.getInfoCenter().setDebug(dm);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -48,6 +48,22 @@ public class NumberUtil {
 
 	}
 
+	public static String hex8(String addr) {
+		if (addr.length() < 10) {
+			int len = 10 - addr.length();
+			String t = "0x";
+			for (int i = 0; i < len; i++) {
+				t += "0";
+			}
+			addr = addr.replace("0x", t);
+		}
+		return addr;
+	}
+
+	public static String toHexStr(long l) {
+		return "0x" + Long.toHexString(l);
+	}
+
 	public static void main(String[] args) {
 		parseHex("00000000");
 	}
