@@ -5,33 +5,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.debug.internal.core.breakpoints.CLineBreakpoint;
 import org.eclipse.cdt.ui.CDTUITools;
-import org.eclipse.cdt.utils.Platform;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointListener;
 import org.eclipse.debug.core.model.IBreakpoint;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.UIPlugin;
 
 import com.mwos.ebochs.core.NumberUtil;
 import com.mwos.ebochs.core.model.BP;
 import com.mwos.ebochs.core.model.BPModel;
 import com.mwos.ebochs.core.model.IInfoListener;
-import com.mwos.ebochs.core.model.InfoCenter;
 import com.mwos.ebochs.core.model.cmd.Cmd;
 import com.mwos.ebochs.core.model.cmd.CmdStr;
 import com.mwos.ebochs.core.model.cmd.DCmd;
-import com.mwos.ebochs.core.model.cmd.NCmd;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 import com.mwos.ebochs.ui.view.ConsoleFactory;
 
@@ -67,23 +61,19 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 
 		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(this);
 
-		Status = 1;
-
 	}
 
 	public synchronized String sendToVM(Cmd cmd) {
 		try {
-			Status = 2;
 			process.getOutputStream().write((cmd.toString() + "\r\n").getBytes());
 			process.getOutputStream().flush();
 			String rec = recFromVM();
-			Status = 1;
+			this.sendToCenter(cmd.getCmd(), rec);
 			return rec;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			this.destory();
-			Status = 0;
 		}
 		return null;
 	}
@@ -136,7 +126,7 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 				}
 				bp.setAddress(addr);
 				this.sendToVM(new DCmd(CmdStr.b, NumberUtil.toHexStr(bp.getAddress())));
-				this.sendToCenter(new NCmd(CmdStr.AddBP), bp);
+				this.sendToCenter(CmdStr.AddBP, bp);
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
@@ -158,7 +148,7 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 					return;
 				}
 				this.sendToVM(new DCmd(CmdStr.del, NumberUtil.toHexStr(bp.getAddress())));
-				this.sendToCenter(new NCmd(CmdStr.DelBP), bp);
+				this.sendToCenter(CmdStr.DelBP, bp);
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -183,13 +173,11 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 					this.sendToVM(new DCmd(CmdStr.bpe, NumberUtil.toHexStr(bp.getAddress())));
 				else
 					this.sendToVM(new DCmd(CmdStr.bpd, NumberUtil.toHexStr(bp.getAddress())));
-				this.sendToCenter(new NCmd(CmdStr.ChangedBp), bp);
+				this.sendToCenter(CmdStr.ChangedBp, bp);
 			} catch (CoreException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-
-			this.sendToCenter(new NCmd(CmdStr.ChangedBp));
 		}
 
 	}
@@ -304,5 +292,11 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public Set<String> getCare() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

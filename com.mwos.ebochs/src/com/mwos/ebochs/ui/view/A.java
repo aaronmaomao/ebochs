@@ -35,14 +35,14 @@ public class A {
 	private Text text_1;
 	private Text text_2;
 	private Text text_3;
-	private Text text_4;
-	private Text text_5;
-	private Text text_6;
-	private Text text_7;
+	private Text txtx_7;
+	private Text txtx_6;
+	private Text txtx_5;
+	private Text txtx_4;
 	private Text text_8;
 	private Text text_9;
-	private Text text_10;
-	private Text text_11;
+	private Text txtx_8;
+	private Text txtx_9;
 	private Text text_12;
 
 	/**
@@ -83,43 +83,43 @@ public class A {
 		shell.setText("SWT Application");
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		Composite composite = new Composite(shell, SWT.NONE);
-		GridLayout gl_composite = new GridLayout(4, false);
-		gl_composite.verticalSpacing = 0;
-		gl_composite.marginWidth = 0;
-		gl_composite.marginHeight = 0;
-		gl_composite.horizontalSpacing = 0;
-		composite.setLayout(gl_composite);
+		Composite cs = new Composite(shell, SWT.NONE);
+		GridLayout gl_cs = new GridLayout(4, false);
+		gl_cs.verticalSpacing = 0;
+		gl_cs.marginWidth = 0;
+		gl_cs.marginHeight = 0;
+		gl_cs.horizontalSpacing = 0;
+		cs.setLayout(gl_cs);
 		
-		Label label = new Label(composite, SWT.NONE);
+		Label label = new Label(cs, SWT.NONE);
 		GridData gd_label = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_label.widthHint = 50;
 		label.setLayoutData(gd_label);
 		label.setText("寄存器");
 		
 		
-		Label label_1 = new Label(composite, SWT.NONE);
+		Label label_1 = new Label(cs, SWT.NONE);
 		GridData gd_label_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_label_1.widthHint = 120;
 		label_1.setLayoutData(gd_label_1);
 		label_1.setText("值");
 		
-		Label label_2 = new Label(composite, SWT.NONE);
+		Label label_2 = new Label(cs, SWT.NONE);
 		GridData gd_label_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_label_2.widthHint = 50;
 		label_2.setLayoutData(gd_label_2);
 		label_2.setText("寄存器");
 		
-		Label label_3 = new Label(composite, SWT.NONE);
+		Label label_3 = new Label(cs, SWT.NONE);
 		GridData gd_label_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_label_3.widthHint = 120;
 		label_3.setLayoutData(gd_label_3);
 		label_3.setText("值");
 		
-		Label lblNewLabel = new Label(composite, SWT.NONE);
+		Label lblNewLabel = new Label(cs, SWT.NONE);
 		lblNewLabel.setText("EAX");
 		
-		txtx = new Text(composite, SWT.BORDER);
+		txtx = new Text(cs, SWT.BORDER);
 		GridData gd_txtx = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_txtx.widthHint = 120;
 		txtx.setLayoutData(gd_txtx);
@@ -127,66 +127,66 @@ public class A {
 		txtx.setEditable(false);
 		
 		
-		Label lblEbp = new Label(composite, SWT.NONE);
+		Label lblEbp = new Label(cs, SWT.NONE);
 		GridData gd_lblEbp = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_lblEbp.widthHint = 50;
 		lblEbp.setLayoutData(gd_lblEbp);
 		lblEbp.setText("EBP");
 		
-		txtx_2 = new Text(composite, SWT.BORDER);
+		txtx_2 = new Text(cs, SWT.BORDER);
 		txtx_2.setText("0x00000000");
 		GridData gd_txtx_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_txtx_2.widthHint = 120;
 		txtx_2.setLayoutData(gd_txtx_2);
 		txtx_2.setEditable(false);
 		
-		Label lblEcx = new Label(composite, SWT.NONE);
+		Label lblEcx = new Label(cs, SWT.NONE);
 		lblEcx.setText("ECX");
 		
-		txtx_1 = new Text(composite, SWT.BORDER);
+		txtx_1 = new Text(cs, SWT.BORDER);
 		txtx_1.setText("0x00000000");
 		GridData gd_txtx_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_txtx_1.widthHint = 120;
 		txtx_1.setLayoutData(gd_txtx_1);
 		txtx_1.setEditable(false);
 		
-		Label lblEsp = new Label(composite, SWT.NONE);
+		Label lblEsp = new Label(cs, SWT.NONE);
 		GridData gd_lblEsp = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_lblEsp.widthHint = 50;
 		lblEsp.setLayoutData(gd_lblEsp);
 		lblEsp.setText("ESP");
 		
-		txtx_3 = new Text(composite, SWT.BORDER);
+		txtx_3 = new Text(cs, SWT.BORDER);
 		txtx_3.setText("0x00000000");
 		GridData gd_txtx_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_txtx_3.widthHint = 120;
 		txtx_3.setLayoutData(gd_txtx_3);
 		txtx_3.setEditable(false);
 		
-		Label label_4 = new Label(composite, SWT.NONE);
-		label_4.setText("ECX");
+		Label lblEdx = new Label(cs, SWT.NONE);
+		lblEdx.setText("EDX");
 		
-		text = new Text(composite, SWT.BORDER);
+		text = new Text(cs, SWT.BORDER);
 		text.setText("0x00000000");
 		text.setEditable(false);
 		GridData gd_text = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_text.widthHint = 120;
 		text.setLayoutData(gd_text);
 		
-		Label label_6 = new Label(composite, SWT.NONE);
-		label_6.setText("ESP");
+		Label lblEsi = new Label(cs, SWT.NONE);
+		lblEsi.setText("ESI");
 		
-		text_1 = new Text(composite, SWT.BORDER);
+		text_1 = new Text(cs, SWT.BORDER);
 		GridData gd_text_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_text_1.widthHint = 120;
 		text_1.setLayoutData(gd_text_1);
 		text_1.setText("0x00000000");
 		text_1.setEditable(false);
 		
-		Label label_5 = new Label(composite, SWT.NONE);
-		label_5.setText("ECX");
+		Label lblEbx = new Label(cs, SWT.NONE);
+		lblEbx.setText("EBX");
 		
-		text_3 = new Text(composite, SWT.BORDER);
+		text_3 = new Text(cs, SWT.BORDER);
 		text_3.setTouchEnabled(true);
 		GridData gd_text_3 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_text_3.widthHint = 120;
@@ -194,104 +194,104 @@ public class A {
 		text_3.setText("0x00000000");
 		text_3.setEditable(false);
 		
-		Label label_7 = new Label(composite, SWT.NONE);
-		label_7.setText("ESP");
+		Label lblEdi = new Label(cs, SWT.NONE);
+		lblEdi.setText("EDI");
 		
-		text_2 = new Text(composite, SWT.BORDER);
+		text_2 = new Text(cs, SWT.BORDER);
 		GridData gd_text_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_text_2.widthHint = 120;
 		text_2.setLayoutData(gd_text_2);
 		text_2.setText("0x00000000");
 		text_2.setEditable(false);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
-		new Label(composite, SWT.NONE);
+		new Label(cs, SWT.NONE);
+		new Label(cs, SWT.NONE);
+		new Label(cs, SWT.NONE);
+		new Label(cs, SWT.NONE);
 		
-		Label label_8 = new Label(composite, SWT.NONE);
-		label_8.setText("EAX");
+		Label lblCs = new Label(cs, SWT.NONE);
+		lblCs.setText("CS");
 		
-		text_4 = new Text(composite, SWT.BORDER);
-		GridData gd_text_4 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_4.widthHint = 120;
-		text_4.setLayoutData(gd_text_4);
-		text_4.setText("0x00000000");
-		text_4.setEditable(false);
+		txtx_7 = new Text(cs, SWT.BORDER);
+		GridData gd_txtx_7 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_txtx_7.widthHint = 120;
+		txtx_7.setLayoutData(gd_txtx_7);
+		txtx_7.setText("0x0000");
+		txtx_7.setEditable(false);
 		
-		Label label_12 = new Label(composite, SWT.NONE);
-		label_12.setText("ESP");
+		Label lblEip = new Label(cs, SWT.NONE);
+		lblEip.setText("EIP");
 		
-		text_8 = new Text(composite, SWT.BORDER);
+		text_8 = new Text(cs, SWT.BORDER);
 		GridData gd_text_8 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_text_8.widthHint = 120;
 		text_8.setLayoutData(gd_text_8);
 		text_8.setText("0x00000000");
 		text_8.setEditable(false);
 		
-		Label label_9 = new Label(composite, SWT.NONE);
-		label_9.setText("EAX");
+		Label lblSs = new Label(cs, SWT.NONE);
+		lblSs.setText("SS");
 		
-		text_5 = new Text(composite, SWT.BORDER);
-		text_5.setText("0x00000000");
-		text_5.setEditable(false);
-		GridData gd_text_5 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_5.widthHint = 120;
-		text_5.setLayoutData(gd_text_5);
+		txtx_6 = new Text(cs, SWT.BORDER);
+		txtx_6.setText("0x0000");
+		txtx_6.setEditable(false);
+		GridData gd_txtx_6 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_txtx_6.widthHint = 120;
+		txtx_6.setLayoutData(gd_txtx_6);
 		
-		Label label_13 = new Label(composite, SWT.NONE);
+		Label label_13 = new Label(cs, SWT.NONE);
 		label_13.setText("ESP");
 		
-		text_9 = new Text(composite, SWT.BORDER);
+		text_9 = new Text(cs, SWT.BORDER);
 		GridData gd_text_9 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_text_9.widthHint = 120;
 		text_9.setLayoutData(gd_text_9);
 		text_9.setText("0x00000000");
 		text_9.setEditable(false);
 		
-		Label label_10 = new Label(composite, SWT.NONE);
-		label_10.setText("EAX");
+		Label lblDs = new Label(cs, SWT.NONE);
+		lblDs.setText("DS");
 		
-		text_6 = new Text(composite, SWT.BORDER);
-		text_6.setText("0x00000000");
-		text_6.setEditable(false);
-		GridData gd_text_6 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_6.widthHint = 120;
-		text_6.setLayoutData(gd_text_6);
+		txtx_5 = new Text(cs, SWT.BORDER);
+		txtx_5.setText("0x0000");
+		txtx_5.setEditable(false);
+		GridData gd_txtx_5 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_txtx_5.widthHint = 120;
+		txtx_5.setLayoutData(gd_txtx_5);
 		
-		Label label_14 = new Label(composite, SWT.NONE);
-		label_14.setText("ESP");
+		Label lblEs = new Label(cs, SWT.NONE);
+		lblEs.setText("ES");
 		
-		text_10 = new Text(composite, SWT.BORDER);
-		GridData gd_text_10 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_10.widthHint = 120;
-		text_10.setLayoutData(gd_text_10);
-		text_10.setText("0x00000000");
-		text_10.setEditable(false);
+		txtx_8 = new Text(cs, SWT.BORDER);
+		GridData gd_txtx_8 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_txtx_8.widthHint = 120;
+		txtx_8.setLayoutData(gd_txtx_8);
+		txtx_8.setText("0x0000");
+		txtx_8.setEditable(false);
 		
-		Label label_11 = new Label(composite, SWT.NONE);
-		label_11.setText("EAX");
+		Label lblFs = new Label(cs, SWT.NONE);
+		lblFs.setText("FS");
 		
-		text_7 = new Text(composite, SWT.BORDER);
-		text_7.setText("0x00000000");
-		text_7.setEditable(false);
-		GridData gd_text_7 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_7.widthHint = 120;
-		text_7.setLayoutData(gd_text_7);
+		txtx_4 = new Text(cs, SWT.BORDER);
+		txtx_4.setText("0x0000");
+		txtx_4.setEditable(false);
+		GridData gd_txtx_4 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_txtx_4.widthHint = 120;
+		txtx_4.setLayoutData(gd_txtx_4);
 		
-		Label label_15 = new Label(composite, SWT.NONE);
-		label_15.setText("ESP");
+		Label lblGs = new Label(cs, SWT.NONE);
+		lblGs.setText("GS");
 		
-		text_11 = new Text(composite, SWT.BORDER);
-		GridData gd_text_11 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_text_11.widthHint = 120;
-		text_11.setLayoutData(gd_text_11);
-		text_11.setText("0x00000000");
-		text_11.setEditable(false);
+		txtx_9 = new Text(cs, SWT.BORDER);
+		GridData gd_txtx_9 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_txtx_9.widthHint = 120;
+		txtx_9.setLayoutData(gd_txtx_9);
+		txtx_9.setText("0x0000");
+		txtx_9.setEditable(false);
 		
-		Label lblEflage = new Label(composite, SWT.NONE);
+		Label lblEflage = new Label(cs, SWT.NONE);
 		lblEflage.setText("EFLAGE");
 		
-		text_12 = new Text(composite, SWT.BORDER);
+		text_12 = new Text(cs, SWT.BORDER);
 		text_12.setText("0x00000000");
 		text_12.setEditable(false);
 		GridData gd_text_12 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1);

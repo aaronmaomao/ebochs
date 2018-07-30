@@ -1,5 +1,6 @@
 package com.mwos.ebochs.ui.view;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -7,6 +8,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mwos.ebochs.core.model.IInfoListener;
@@ -27,6 +29,8 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 	public static final String ID = "com.mwos.ebochs.ui.view.BreakPointView"; //$NON-NLS-1$
 	private Table table;
 
+	private Set<String> cares = new HashSet<>();
+	
 	public BreakPointView() {
 		this.cares.add(CmdStr.AddBP);
 		this.cares.add(CmdStr.DelBP);
@@ -138,4 +142,11 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 		super.dispose();
 		center.removeListener(this);
 	}
+
+	@Override
+	public Set<String> getCare() {
+		// TODO Auto-generated method stub
+		return this.cares;
+	}
+	
 }

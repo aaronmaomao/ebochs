@@ -232,4 +232,10 @@ public class CPUView extends ViewPart implements IInfoListener {
 		// TODO Auto-generated method stub
 		super.dispose();
 	}
+
+	@Override
+	public Set<String> getCare() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

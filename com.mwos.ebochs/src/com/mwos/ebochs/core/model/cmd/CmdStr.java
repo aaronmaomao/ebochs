@@ -5,6 +5,8 @@ public class CmdStr {
 	public static final String RemoveListener = "RemoveListener";
 	public static final String UpdateCare = "UpdateCare";
 	public static final String DMDestory = "DMDestory";
+	public static final String SelectDM = "SelectDM";
+	public static final String DisSelectDM = "DisSelectDM";
 
 	public static final String AddBP = "AddBP";
 	public static final String DelBP = "DelBP";
@@ -15,9 +17,10 @@ public class CmdStr {
 	public static final String del = "del";
 	public static final String bpe = "bpe";
 	public static final String bpd = "bpd";
-
 	public static final String s = "s";
 	public static final String n = "n";
 	public static final String c = "c";
+	
+	public static final String reg = "reg";
 
 }

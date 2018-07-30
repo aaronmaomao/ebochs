@@ -15,6 +15,7 @@ import org.eclipse.cdt.debug.internal.core.breakpoints.CLineBreakpoint;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.swt.widgets.Display;
 
 import com.mwos.ebochs.core.FileUtil;
 import com.mwos.ebochs.core.NumberUtil;

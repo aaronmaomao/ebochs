@@ -1,44 +1,30 @@
 package com.mwos.ebochs.ui.view;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.mwos.ebochs.core.model.IInfoListener;
-import com.mwos.ebochs.core.model.InfoCenter;
-import com.mwos.ebochs.core.model.InfoCmd;
-import com.mwos.ebochs.core.model.cmd.CmdFactory;
 import com.mwos.ebochs.core.model.cmd.CmdStr;
-import com.mwos.ebochs.core.model.cmd.DCmd;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
 import com.mwos.ebochs.ui.view.model.host.HostNode;
 import com.mwos.ebochs.ui.view.model.host.Node;
-
-import org.eclipse.swt.events.HelpEvent;
-import org.eclipse.swt.events.HelpListener;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.swt.widgets.Display;
-
-import java.util.Set;
-
-import org.eclipse.jface.action.Action;
-import org.eclipse.wb.swt.ResourceManager;
-import org.eclipse.jface.action.Separator;
 
 public class HostView extends ViewPart implements IInfoListener {
 
@@ -51,6 +37,8 @@ public class HostView extends ViewPart implements IInfoListener {
 	private Action actionContinue;
 	private Action actionTerminate;
 	private Action actionBp;
+
+	private Set<String> cares = new HashSet<>();
 
 	public HostView() {
 		this.cares.add(CmdStr.AddDebug);
@@ -70,16 +58,18 @@ public class HostView extends ViewPart implements IInfoListener {
 
 		hostTree = new Tree(container, SWT.BORDER);
 		hostTree.addSelectionListener(new SelectionListener() {
-			
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
+				if (e.getSource() instanceof Node) {
+					sendToCenter(CmdStr.SelectDM, ((Node) e.getSource()).getDm());
+				}
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		hostTree.addMouseListener(new MouseAdapter() {
@@ -278,54 +268,59 @@ public class HostView extends ViewPart implements IInfoListener {
 		hostNode.setDM(dm);
 		hostNode.setText(dm.getName() + " " + dm.toString());
 		hostTree.select(hostNode);
-		
+
 		this.actionStepOver.setEnabled(true);
 		this.actionTerminate.setEnabled(true);
 		this.actionContinue.setEnabled(true);
+
+		sendToCenter(CmdStr.SelectDM, dm);
 	}
 
 	private void delHost(DebugModel dm) {
-		hostTree.getDisplay().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				for (TreeItem item : hostTree.getItems()) {
-					if (item.getText().equals(dm.getName() + " " + dm.toString())) {
-						item.dispose();
-						actionStepOver.setEnabled(false);
-						actionTerminate.setEnabled(false);
-						actionContinue.setEnabled(false);
-						return;
-					}
-				}
+
+		for (TreeItem item : hostTree.getItems()) {
+			if (item.getText().equals(dm.getName() + " " + dm.toString())) {
+				item.dispose();
+				actionStepOver.setEnabled(false);
+				actionTerminate.setEnabled(false);
+				actionContinue.setEnabled(false);
+				return;
 			}
-		});
+		}
 
 	}
 
 	private void stepOver() {
-		TreeItem ti=hostTree.getSelection()[0];
-		if(ti instanceof Node) {
-			String rec=((Node) ti).getDm().stepOver();
+		TreeItem ti = hostTree.getSelection()[0];
+		if (ti instanceof Node) {
+			String rec = ((Node) ti).getDm().stepOver();
 		}
 	}
-	
+
 	private void terminal() {
-		TreeItem ti=hostTree.getSelection()[0];
-		if(ti instanceof Node) {
-			String rec=((Node) ti).getDm().terminal();
+		TreeItem ti = hostTree.getSelection()[0];
+		if (ti instanceof Node) {
+			String rec = ((Node) ti).getDm().terminal();
 		}
 	}
-	
+
 	private void contin() {
-		TreeItem ti=hostTree.getSelection()[0];
-		if(ti instanceof Node) {
-			String rec=((Node) ti).getDm().contin();
+		TreeItem ti = hostTree.getSelection()[0];
+		if (ti instanceof Node) {
+			String rec = ((Node) ti).getDm().contin();
 		}
 	}
 
 	@Override
 	public void dispose() {
-		this.sendToCenter(CmdFactory.RemoveListener, this);
+		this.sendToCenter(CmdStr.RemoveListener, this);
 		super.dispose();
 	}
+
+	@Override
+	public Set<String> getCare() {
+		// TODO Auto-generated method stub
+		return this.cares;
+	}
+
 }

@@ -19,7 +19,7 @@ public class InfoCenter {
 
 	private List<IInfoListener> listeners;
 	public Map<String, Set<IInfoListener>> cares;
-	private DebugModel dm ;
+	private DebugModel dm;
 
 	private InfoCenter() {
 		listeners = new ArrayList<>();
@@ -37,41 +37,30 @@ public class InfoCenter {
 	}
 
 	public void setDebug(DebugModel debug) {
-		dm=debug;
+		dm = debug;
 		this.addListener(debug);
 		notifyLis(CmdStr.AddDebug, debug);
 	}
 
 	public void removeDebug(DebugModel debug) {
-		dm=null;
+		dm = null;
 		removeListener(debug);
 		notifyLis(CmdStr.DMDestory, debug);
 	}
 
-	public Object send(String cmd, Object object) {
-		return cmd;
-	}
+	public String send(String cmd, Object object) {
 
-	public String send(Cmd cmd) {
-		return this.send(cmd, null);
-	}
-
-	public String send(Cmd cmd, Object object) {
-		if (cmd instanceof DCmd) {
-			String rec = dm.sendToVM(cmd);
-			notifyLis(cmd.getCmd(), rec);
-			return rec;
-		}
-
-		if (cmd.getCmd().equals(CmdFactory.RemoveListener.getCmd())) {
+		if (cmd.equals(CmdStr.RemoveListener)) {
 			this.removeListener((IInfoListener) object);
 			return "";
 		}
 
-		if (cmd.getCmd().equals(CmdFactory.UpdateCare.getCmd())) {
+		if (cmd.equals(CmdStr.UpdateCare)) {
 			updateCare((IInfoListener) object);
 			return "";
 		}
+
+		notifyLis(cmd, object);
 		return null;
 	}
 
@@ -90,19 +79,17 @@ public class InfoCenter {
 	private void notifyLis(String cmd, Object cont) {
 		if (this.cares.get(cmd) == null)
 			return;
-	//	new Thread(new Runnable() {
 
-		//	@Override
-		//	public void run() {
-				for (IInfoListener listener : cares.get(cmd)) {
-					listener.notify(cmd, cont);
-				}
-		//	}
-		//}).start();
+		for (IInfoListener listener : cares.get(cmd)) {
+			listener.notify(cmd, cont);
+		}
+
 	}
 
 	private void updateCare(IInfoListener listener) {
 		removeCare(listener);
+		if (listener.getCare() == null)
+			return;
 		for (String care : listener.getCare()) {
 			if (cares.get(care) == null) {
 				cares.put(care, new HashSet<>());
@@ -112,11 +99,8 @@ public class InfoCenter {
 	}
 
 	private void removeCare(IInfoListener listener) {
-		for (String care : listener.getCare()) {
-			if (cares.get(care) != null) {
-				cares.get(care).remove(listener);
-			}
+		for (String care : cares.keySet()) {
+			cares.get(care).remove(listener);
 		}
 	}
-	
 }
