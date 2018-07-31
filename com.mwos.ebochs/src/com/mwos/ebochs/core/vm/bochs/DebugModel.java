@@ -11,6 +11,7 @@ import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.debug.internal.core.breakpoints.CLineBreakpoint;
+import org.eclipse.cdt.internal.ui.util.EditorUtility;
 import org.eclipse.cdt.ui.CDTUITools;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
@@ -18,6 +19,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointListener;
 import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.ui.IPropertyListener;
 
 import com.mwos.ebochs.core.NumberUtil;
 import com.mwos.ebochs.core.model.BP;
@@ -216,6 +218,14 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 	}
 
 	public String stepOver() {
+		if (mark != null) {
+			try {
+				mark.delete();
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+			mark = null;
+		}
 		String rec = this.sendToVM(new DCmd(CmdStr.n));
 		if (rec != null) {
 			if (rec.contains("Next at t=")) {
@@ -245,6 +255,14 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 	}
 
 	public String contin() {
+		if (mark != null) {
+			try {
+				mark.delete();
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+			mark = null;
+		}
 		String rec = this.sendToVM(new DCmd(CmdStr.c));
 		if (rec != null) {
 			if (rec.contains("Next at t=")) {
@@ -260,6 +278,14 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 	}
 
 	public String stepInto() {
+		if (mark != null) {
+			try {
+				mark.delete();
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
+			mark = null;
+		}
 		String rec = this.sendToVM(new DCmd(CmdStr.s));
 		if (rec != null) {
 			if (rec.contains("Next at t=")) {
@@ -285,7 +311,6 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 			ICProject cproject = CoreModel.getDefault().getCModel().getCProject(config.getProject().getName());
 			ICElement element = cproject.findElement(config.getProject().getFile(file).getProjectRelativePath());
 			CDTUITools.openInEditor(element);
-
 			mark.setAttribute(IMarker.LINE_NUMBER, Integer.valueOf(line));
 			// mark.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 

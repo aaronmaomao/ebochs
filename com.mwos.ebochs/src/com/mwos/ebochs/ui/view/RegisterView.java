@@ -410,8 +410,9 @@ public class RegisterView extends ViewPart implements IInfoListener {
 		this.txtESP.setText(_map.get("esp"));
 		this.txtEIP.setText(_map.get("eip"));
 		this.txtEFLAGS.setText(_map.get("eflags"));
-		//rec = dm.sendToVM(new DCmd(CmdStr.sreg));
-		//_map = RegisterParse.parseSReg(rec);
+//		rec = dm.sendToVM(new DCmd(CmdStr.sreg));
+//		_map = RegisterParse.parseSReg(rec);
+//		this.txtCS.setText(_map.get("cs"));
 	}
 
 	@Override

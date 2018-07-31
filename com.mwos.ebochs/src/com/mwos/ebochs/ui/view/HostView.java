@@ -62,8 +62,9 @@ public class HostView extends ViewPart implements IInfoListener {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (e.getSource() instanceof Tree) {
-					if(hostTree.getSelection()[0]
-					sendToCenter(CmdStr.SelectDM, ((Node) e.getSource()).getDm());
+					if (hostTree.getSelection().length > 0) {
+						sendToCenter(CmdStr.SelectDM, ((Node) hostTree.getSelection()[0]).getDm());
+					}
 				}
 			}
 
@@ -184,7 +185,7 @@ public class HostView extends ViewPart implements IInfoListener {
 				}
 			};
 			actionTerminate.setId("actionTerminate");
-			actionTerminate.setEnabled(center.isVaild());
+			actionTerminate.setEnabled(false);
 			actionTerminate.setImageDescriptor(
 					ResourceManager.getPluginImageDescriptor("org.eclipse.debug.ui", "/icons/full/elcl16/terminate_co.png"));
 			actionTerminate.setToolTipText("terminate");

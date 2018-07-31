@@ -58,14 +58,6 @@ public class InfoCenter {
 		return infoCenter;
 	}
 
-	public DebugModel getDebug() {
-		return dm;
-	}
-
-	public boolean isVaild() {
-		return dm == null ? false : true;
-	}
-
 	private void notifyLis(String cmd, Object cont) {
 		if (this.cares.get(cmd) == null)
 			return;

@@ -62,7 +62,16 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 
 				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective",
 						PlatformUI.getWorkbench().getActiveWorkbenchWindow());
-				InfoCenter.getInfoCenter().send(CmdStr.AddDM, dm);
+
+				PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						InfoCenter.getInfoCenter().send(CmdStr.AddDM, dm);
+
+					}
+				});
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
