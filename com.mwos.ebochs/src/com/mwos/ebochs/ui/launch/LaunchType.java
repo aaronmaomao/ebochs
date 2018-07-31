@@ -16,6 +16,7 @@ import com.mwos.ebochs.Activator;
 import com.mwos.ebochs.core.build.AbstractBuilder;
 import com.mwos.ebochs.core.build.DefaultBuilder;
 import com.mwos.ebochs.core.model.InfoCenter;
+import com.mwos.ebochs.core.model.cmd.CmdStr;
 import com.mwos.ebochs.core.vm.bochs.Bochs;
 import com.mwos.ebochs.core.vm.bochs.Bxrc;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
@@ -61,7 +62,7 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 
 				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective",
 						PlatformUI.getWorkbench().getActiveWorkbenchWindow());
-				InfoCenter.getInfoCenter().setDebug(dm);
+				InfoCenter.getInfoCenter().send(CmdStr.AddDM, dm);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

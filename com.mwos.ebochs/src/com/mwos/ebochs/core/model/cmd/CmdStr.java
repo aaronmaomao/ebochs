@@ -1,10 +1,10 @@
 package com.mwos.ebochs.core.model.cmd;
 
 public class CmdStr {
-	public static final String AddDebug = "AddDebug";
+	public static final String AddDM = "AddDebug";
 	public static final String RemoveListener = "RemoveListener";
 	public static final String UpdateCare = "UpdateCare";
-	public static final String DMDestory = "DMDestory";
+	public static final String DestoryDM = "DMDestory";
 	public static final String SelectDM = "SelectDM";
 	public static final String DisSelectDM = "DisSelectDM";
 
@@ -22,5 +22,7 @@ public class CmdStr {
 	public static final String c = "c";
 	
 	public static final String reg = "reg";
+	public static final String creg = "creg";
+	public static final String sreg = "sreg";
 
 }

@@ -41,8 +41,8 @@ public class HostView extends ViewPart implements IInfoListener {
 	private Set<String> cares = new HashSet<>();
 
 	public HostView() {
-		this.cares.add(CmdStr.AddDebug);
-		this.cares.add(CmdStr.DMDestory);
+		this.cares.add(CmdStr.AddDM);
+		this.cares.add(CmdStr.DestoryDM);
 		center.addListener(this);
 	}
 
@@ -61,7 +61,8 @@ public class HostView extends ViewPart implements IInfoListener {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (e.getSource() instanceof Node) {
+				if (e.getSource() instanceof Tree) {
+					if(hostTree.getSelection()[0]
 					sendToCenter(CmdStr.SelectDM, ((Node) e.getSource()).getDm());
 				}
 			}
@@ -241,10 +242,10 @@ public class HostView extends ViewPart implements IInfoListener {
 
 	@Override
 	public void notify(String cmd, Object info) {
-		if (cmd.equals(CmdStr.AddDebug)) {
+		if (cmd.equals(CmdStr.AddDM)) {
 			DebugModel dm = (DebugModel) info;
 			addHost(dm);
-		} else if (cmd.equals(CmdStr.DMDestory)) {
+		} else if (cmd.equals(CmdStr.DestoryDM)) {
 			DebugModel dm = (DebugModel) info;
 			this.actionStepOver.setEnabled(false);
 			this.actionTerminate.setEnabled(false);

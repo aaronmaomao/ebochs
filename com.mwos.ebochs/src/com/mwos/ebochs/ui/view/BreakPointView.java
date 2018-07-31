@@ -54,7 +54,6 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(checkboxTableViewer, SWT.NONE);
 				TableColumn tblclmnNewColumn = tableViewerColumn.getColumn();
 				tblclmnNewColumn.setWidth(50);
-				tblclmnNewColumn.setText("状态");
 			}
 			{
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(checkboxTableViewer, SWT.NONE);
@@ -140,7 +139,7 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 	@Override
 	public void dispose() {
 		super.dispose();
-		center.removeListener(this);
+		sendToCenter(CmdStr.RemoveListener, this);
 	}
 
 	@Override

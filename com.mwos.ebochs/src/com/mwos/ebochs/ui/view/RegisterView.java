@@ -1,6 +1,7 @@
 package com.mwos.ebochs.ui.view;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jface.action.Action;
@@ -15,7 +16,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -23,16 +23,15 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.mwos.ebochs.core.model.IInfoListener;
-import com.mwos.ebochs.core.model.cmd.Cmd;
 import com.mwos.ebochs.core.model.cmd.CmdStr;
 import com.mwos.ebochs.core.model.cmd.DCmd;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
+import com.mwos.ebochs.ui.view.model.register.RegisterParse;
 
 public class RegisterView extends ViewPart implements IInfoListener {
 
 	public static final String ID = "com.mwos.ebochs.ui.view.RegisterView"; //$NON-NLS-1$
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
-	private Table table;
 	private Action linkAction;
 
 	private Text txtEBP;
@@ -63,8 +62,8 @@ public class RegisterView extends ViewPart implements IInfoListener {
 		this.cares.add(CmdStr.DisSelectDM);
 		this.cares.add(CmdStr.s);
 		this.cares.add(CmdStr.n);
-		this.center.addListener(this);
-
+		this.cares.add(CmdStr.c);
+		IInfoListener.center.addListener(this);
 	}
 
 	/**
@@ -346,7 +345,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 			refAction = new Action("ref") {
 				@Override
 				public void run() {
-
+					refresh();
 				}
 			};
 			refAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("com.mwos.ebochs", "resource/icons/table_refresh.png"));
@@ -390,7 +389,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 		} else if (cmd.equals(CmdStr.DisSelectDM)) {
 			this.refAction.setEnabled(false);
 			this.linkAction.setEnabled(false);
-		} else if (cmd.equals("s")||cmd.equals("n")) {
+		} else if (cmd.equals("s") || cmd.equals("n")) {
 			if (this.linkAction.isChecked()) {
 				refresh();
 			}
@@ -400,17 +399,29 @@ public class RegisterView extends ViewPart implements IInfoListener {
 
 	private void refresh() {
 		String rec = dm.sendToVM(new DCmd(CmdStr.reg));
+		Map<String, String> _map = RegisterParse.parseReg(rec);
+		this.txtEAX.setText(_map.get("eax"));
+		this.txtECX.setText(_map.get("ecx"));
+		this.txtEDX.setText(_map.get("edx"));
+		this.txtEBX.setText(_map.get("ebx"));
+		this.txtESI.setText(_map.get("esi"));
+		this.txtEDI.setText(_map.get("edi"));
+		this.txtEBP.setText(_map.get("ebp"));
+		this.txtESP.setText(_map.get("esp"));
+		this.txtEIP.setText(_map.get("eip"));
+		this.txtEFLAGS.setText(_map.get("eflags"));
+		//rec = dm.sendToVM(new DCmd(CmdStr.sreg));
+		//_map = RegisterParse.parseSReg(rec);
 	}
 
 	@Override
 	public void dispose() {
-		this.center.removeListener(this);
+		sendToCenter(CmdStr.RemoveListener, this);
 		super.dispose();
 	}
 
 	@Override
 	public Set<String> getCare() {
-		// TODO Auto-generated method stub
 		return this.cares;
 	}
 

@@ -192,7 +192,7 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 				e.printStackTrace();
 			}
 		}
-		this.center.removeDebug(this);
+		sendToCenter(CmdStr.DestoryDM, this);
 	}
 
 	@Override

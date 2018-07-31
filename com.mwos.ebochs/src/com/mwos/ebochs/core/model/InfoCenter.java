@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.mwos.ebochs.core.model.cmd.Cmd;
-import com.mwos.ebochs.core.model.cmd.CmdFactory;
 import com.mwos.ebochs.core.model.cmd.CmdStr;
-import com.mwos.ebochs.core.model.cmd.DCmd;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
 
 public class InfoCenter {
@@ -31,33 +28,26 @@ public class InfoCenter {
 		updateCare(listener);
 	}
 
-	public void removeListener(IInfoListener listener) {
-		listeners.remove(listener);
-		removeCare(listener);
-	}
-
-	public void setDebug(DebugModel debug) {
-		dm = debug;
-		this.addListener(debug);
-		notifyLis(CmdStr.AddDebug, debug);
-	}
-
-	public void removeDebug(DebugModel debug) {
-		dm = null;
-		removeListener(debug);
-		notifyLis(CmdStr.DMDestory, debug);
-	}
-
 	public String send(String cmd, Object object) {
 
 		if (cmd.equals(CmdStr.RemoveListener)) {
-			this.removeListener((IInfoListener) object);
-			return "";
+			listeners.remove(object);
+			removeCare((IInfoListener) object);
 		}
 
 		if (cmd.equals(CmdStr.UpdateCare)) {
 			updateCare((IInfoListener) object);
-			return "";
+		}
+		
+		if(cmd.equals(CmdStr.DestoryDM)) {
+			dm = null;
+			listeners.remove(object);
+			removeCare((IInfoListener) object);
+		}
+		
+		if(cmd.equals(CmdStr.AddDM)) {
+			dm = (DebugModel) object;
+			this.addListener((IInfoListener) object);
 		}
 
 		notifyLis(cmd, object);
