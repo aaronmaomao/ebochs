@@ -286,8 +286,15 @@ public class HostView extends ViewPart implements IInfoListener {
 				actionStepOver.setEnabled(false);
 				actionTerminate.setEnabled(false);
 				actionContinue.setEnabled(false);
-				return;
 			}
+		}
+		
+		if(hostTree.getItems().length==0) {
+			sendToCenter(CmdStr.DisSelectDM, null);
+		}else {
+			Node node = (Node) hostTree.getItems()[0];
+			hostTree.select(node);
+			sendToCenter(CmdStr.SelectDM, node.getDm());
 		}
 
 	}

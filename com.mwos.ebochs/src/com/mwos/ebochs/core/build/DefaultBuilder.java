@@ -85,7 +85,7 @@ public class DefaultBuilder extends AbstractBuilder {
 
 	@Override
 	public BuildResult buildImg(Image img) throws Exception {
-		String prjPath = img.getConfig().getProject().getLocationURI().getPath();
+		String prjPath = img.getConfig().getProject().getLocation().toString();
 
 		// 构建镜像
 		String cmd_img = cmd_img(img);
