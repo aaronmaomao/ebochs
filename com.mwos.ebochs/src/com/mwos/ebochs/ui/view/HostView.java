@@ -126,6 +126,7 @@ public class HostView extends ViewPart implements IInfoListener {
 
 				@Override
 				public void run() {
+					stepInto();
 				}
 			};
 			actionStepInto.setId("actionStepInto");
@@ -273,6 +274,7 @@ public class HostView extends ViewPart implements IInfoListener {
 		hostTree.select(hostNode);
 
 		this.actionStepOver.setEnabled(true);
+		this.actionStepInto.setEnabled(true);
 		this.actionTerminate.setEnabled(true);
 		this.actionContinue.setEnabled(true);
 
@@ -304,6 +306,13 @@ public class HostView extends ViewPart implements IInfoListener {
 		TreeItem ti = hostTree.getSelection()[0];
 		if (ti instanceof Node) {
 			String rec = ((Node) ti).getDm().stepOver();
+		}
+	}
+	
+	private void stepInto() {
+		TreeItem ti = hostTree.getSelection()[0];
+		if (ti instanceof Node) {
+			String rec = ((Node) ti).getDm().stepInto();
 		}
 	}
 

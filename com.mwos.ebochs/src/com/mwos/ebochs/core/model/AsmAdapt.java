@@ -118,6 +118,9 @@ class AsmFun {
 		try {
 			String temp = "";
 			temp = br1.readLine();
+			while(temp.charAt(48)!='_') {
+				temp =br1.readLine();
+			}
 			funName = temp.substring(48, temp.lastIndexOf(":"));
 			relAddr = NumberUtil.parseHex(temp.substring(7, 15));
 			if (domMap.getAddr(funName) == null)

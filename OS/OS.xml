@@ -19,6 +19,7 @@
 
 	<codepart type="os" out="core.mwe">
 		<code src="src/osmain.c" />
+		<code src="src/asmfun.asm" />
 	</codepart>
 	<!-- 
 	<codepart type="app" out="HelloWorld.mwe">
