@@ -19,6 +19,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointListener;
 import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.texteditor.GotoLineAction;
+import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 import com.mwos.ebochs.core.NumberUtil;
 import com.mwos.ebochs.core.model.BP;
@@ -335,12 +343,35 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 
 			ICProject cproject = CoreModel.getDefault().getCModel().getCProject(config.getProject().getName());
 			ICElement element = cproject.findElement(config.getProject().getFile(file).getProjectRelativePath());
-			CDTUITools.openInEditor(element);
+			IEditorPart part = CDTUITools.openInEditor(element);
 			mark.setAttribute(IMarker.LINE_NUMBER, Integer.valueOf(line));
+			// GotoLineAction gotoLineAction = new GotoLineAction((ITextEditor) part);
+			// GotoLineAction a = new GotoLineAction(element.getResource(), prefix,
+			// (ITextEditor) part)
+
+			gotoLine((TextEditor) part, Integer.valueOf(line));
+
 			// mark.setAttribute(IMarker.PRIORITY, IMarker.PRIORITY_HIGH);
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void gotoLine(TextEditor editor, int line) {
+
+		IDocumentProvider provider = editor.getDocumentProvider();
+		IDocument document = provider.getDocument(editor.getEditorInput());
+		try {
+
+			int start = document.getLineOffset(Integer.valueOf(line)-1);
+			editor.selectAndReveal(start, 0);
+
+			IWorkbenchPage page = editor.getSite().getPage();
+			page.activate(editor);
+
+		} catch (BadLocationException x) {
+			x.printStackTrace();
 		}
 	}
 

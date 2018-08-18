@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.texteditor.GotoLineAction;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.mwos.ebochs.core.model.IInfoListener;
