@@ -59,19 +59,19 @@ public class BreakPointView extends ViewPart implements IInfoListener{
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(checkboxTableViewer, SWT.NONE);
 				TableColumn tblclmnNewColumn_1 = tableViewerColumn.getColumn();
 				tblclmnNewColumn_1.setWidth(100);
-				tblclmnNewColumn_1.setText("鐗╃悊鍦板潃");
+				tblclmnNewColumn_1.setText("物理地址");
 			}
 			{
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(checkboxTableViewer, SWT.NONE);
 				TableColumn tblclmnNewColumn_2 = tableViewerColumn.getColumn();
 				tblclmnNewColumn_2.setWidth(100);
-				tblclmnNewColumn_2.setText("浣嶇疆");
+				tblclmnNewColumn_2.setText("位置");
 			}
 			{
 				TableViewerColumn tableViewerColumn = new TableViewerColumn(checkboxTableViewer, SWT.NONE);
 				TableColumn tblclmnNewColumn_3 = tableViewerColumn.getColumn();
 				tblclmnNewColumn_3.setWidth(100);
-				tblclmnNewColumn_3.setText("鏂规硶");
+				tblclmnNewColumn_3.setText("方法");
 			}
 			{
 				TableItem tableItem = new TableItem(table, SWT.NONE);

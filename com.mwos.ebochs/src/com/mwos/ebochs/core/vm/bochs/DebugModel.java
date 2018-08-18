@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,7 +12,6 @@ import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
 import org.eclipse.cdt.debug.internal.core.breakpoints.CLineBreakpoint;
-import org.eclipse.cdt.internal.ui.util.EditorUtility;
 import org.eclipse.cdt.ui.CDTUITools;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointListener;
 import org.eclipse.debug.core.model.IBreakpoint;
-import org.eclipse.ui.IPropertyListener;
 
 import com.mwos.ebochs.core.NumberUtil;
 import com.mwos.ebochs.core.model.BP;
@@ -28,6 +27,7 @@ import com.mwos.ebochs.core.model.IInfoListener;
 import com.mwos.ebochs.core.model.cmd.Cmd;
 import com.mwos.ebochs.core.model.cmd.CmdStr;
 import com.mwos.ebochs.core.model.cmd.DCmd;
+import com.mwos.ebochs.propertyTester.EbochsTester;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 import com.mwos.ebochs.ui.view.ConsoleFactory;
 
@@ -149,7 +149,8 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 					breakpoint.delete();
 					return;
 				}
-				this.sendToVM(new DCmd(CmdStr.del, NumberUtil.toHexStr(bp.getAddress())));
+				bp.setAddress(addr);
+				this.sendToVM(new DCmd(CmdStr.del, getBPNum(addr)));
 				this.sendToCenter(CmdStr.DelBP, bp);
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
@@ -171,10 +172,12 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 					breakpoint.delete();
 					return;
 				}
-				if (temp.isEnabled())
-					this.sendToVM(new DCmd(CmdStr.bpe, NumberUtil.toHexStr(bp.getAddress())));
-				else
-					this.sendToVM(new DCmd(CmdStr.bpd, NumberUtil.toHexStr(bp.getAddress())));
+				bp.setAddress(addr);
+				if (temp.isEnabled()) {
+					this.sendToVM(new DCmd(CmdStr.bpe, getBPNum(addr)));
+				} else {
+					this.sendToVM(new DCmd(CmdStr.bpd, getBPNum(addr)));
+				}
 				this.sendToCenter(CmdStr.ChangedBp, bp);
 			} catch (CoreException e1) {
 				// TODO Auto-generated catch block
@@ -298,6 +301,28 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 			}
 		}
 		return rec;
+	}
+
+	public List<BochsBP> listBP() {
+		String rec = this.sendToVM(new DCmd(CmdStr.blist));
+		String temp[] = rec.split("\r\n");
+		List<BochsBP> bps = new ArrayList<BochsBP>();
+		for (int i = 1; i < temp.length - 1; i++) {
+			String t[] = temp[i].trim().split("\\s+");
+			BochsBP bp = new BochsBP(t[0].trim(), t[4].trim());
+			bps.add(bp);
+		}
+		return bps;
+	}
+
+	public String getBPNum(long addr) {
+		for (BochsBP bp : listBP()) {
+			if (NumberUtil.parseHex(bp.getAddr()) == addr) {
+				return bp.getNum();
+			}
+		}
+
+		return "";
 	}
 
 	private void adjustMark(String file, String line) {

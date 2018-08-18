@@ -20,6 +20,7 @@ public class CmdStr {
 	public static final String s = "s";
 	public static final String n = "n";
 	public static final String c = "c";
+	public static final String blist = "blist";
 	
 	public static final String reg = "reg";
 	public static final String creg = "creg";

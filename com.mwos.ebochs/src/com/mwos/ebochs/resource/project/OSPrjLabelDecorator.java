@@ -34,7 +34,7 @@ public class OSPrjLabelDecorator implements ILabelDecorator {
 
 	}
 
-	// æ›´æ”¹æ–‡ä»¶å¤¹å›¾æ ‡
+	// ¸ü¸ÄÎÄ¼þ¼ÐÍ¼±ê
 	@Override
 	public Image decorateImage(Image image, Object element) {
 		if (element instanceof Folder && ((Folder) element).getName().equals("Library")) {

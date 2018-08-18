@@ -24,12 +24,12 @@ public class NewOSWizardPage extends WizardPage {
 	 */
 	public NewOSWizardPage() {
 		super("wizardPage");
-		setMessage("åˆ›å»ºx86æ“ä½œç³»ç»Ÿå·¥ç¨‹");
+		setMessage("´´½¨x86²Ù×÷ÏµÍ³¹¤³Ì");
 		// setErrorMessage(" A project with this name already exists.");
 		setImageDescriptor(ResourceManager.getPluginImageDescriptor("com.mwos.ebochs", "resource/image/window.png"));
 		setPageComplete(false);
-		setTitle("OS å·¥ç¨‹");
-		setDescription("åˆ›å»ºx86æ“ä½œç³»ç»Ÿå·¥ç¨‹");
+		setTitle("OS ¹¤³Ì");
+		setDescription("´´½¨x86²Ù×÷ÏµÍ³¹¤³Ì");
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class NewOSWizardPage extends WizardPage {
 		GridData gd_lblPrjName = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		gd_lblPrjName.widthHint = 77;
 		lblPrjName.setLayoutData(gd_lblPrjName);
-		lblPrjName.setText("å·¥ç¨‹å");
+		lblPrjName.setText("¹¤³ÌÃû");
 
 		textPrjName = new Text(container, SWT.BORDER);
 		textPrjName.addModifyListener(new ModifyListener() {
@@ -59,12 +59,12 @@ public class NewOSWizardPage extends WizardPage {
 				String text = textPrjName.getText().trim();
 				if (!text.isEmpty()) {
 					if (!ResourcesPlugin.getWorkspace().getRoot().getProject(text).exists()) {
-						setMessage("åˆ›å»ºx86æ“ä½œç³»ç»Ÿå·¥ç¨‹");
+						setMessage("´´½¨x86²Ù×÷ÏµÍ³¹¤³Ì");
 						setErrorMessage(null);
 						projName = text;
 						vaild(prjNameVaild, true);
 					} else {
-						setErrorMessage("è¯¥åå­—çš„å·¥ç¨‹å­˜åœ¨ï¼");
+						setErrorMessage("¸ÃÃû×ÖµÄ¹¤³Ì´æÔÚ£¡");
 						vaild(prjNameVaild, false);
 					}
 				} else {

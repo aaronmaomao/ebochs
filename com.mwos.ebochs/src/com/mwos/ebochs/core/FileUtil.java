@@ -22,12 +22,12 @@ public class FileUtil {
 	}
 
 	/**
-	 * æŸ¥æ‰¾æ–‡ä»¶
+	 * ²éÕÒÎÄ¼ş
 	 * 
 	 * @param path
-	 *            ç›®å½•
+	 *            Ä¿Â¼
 	 * @param reg
-	 *            æ–‡ä»¶å
+	 *            ÎÄ¼şÃû
 	 * @return
 	 */
 	public static File searchFile(String path, String reg) {
@@ -44,15 +44,15 @@ public class FileUtil {
 	}
 
 	/**
-	 * åˆ—å‡ºæŒ‡å®šç›®å½•ä¸‹çš„æ‰€æœ‰æ–‡ä»¶
+	 * ÁĞ³öÖ¸¶¨Ä¿Â¼ÏÂµÄËùÓĞÎÄ¼ş
 	 * 
 	 * @param dirctory
-	 *            ç›®å½•
+	 *            Ä¿Â¼
 	 * @param filter
-	 *            è¦ç­›é€‰çš„æ­£åˆ™å­—ç¬¦ä¸²
+	 *            ÒªÉ¸Ñ¡µÄÕıÔò×Ö·û´®
 	 * @param filterInner
-	 *            è¿”å›é€‰æ‹©å™¨ä¹‹ä¸­çš„è¿˜æ˜¯ä¹‹å¤–çš„
-	 * @return è¿”å›<æ–‡ä»¶å:æ–‡ä»¶>é›†åˆ
+	 *            ·µ»ØÑ¡ÔñÆ÷Ö®ÖĞµÄ»¹ÊÇÖ®ÍâµÄ
+	 * @return ·µ»Ø<ÎÄ¼şÃû:ÎÄ¼ş>¼¯ºÏ
 	 */
 	public static Map<String, File> mapFiles(String dirctory, String[] filter, boolean filterInner) {
 		List<File> files = new ArrayList<>();
@@ -82,26 +82,26 @@ public class FileUtil {
 	}
 
 	/**
-	 * åˆ—å‡ºæŒ‡å®šç›®å½•ä¸‹çš„æ‰€æœ‰æ–‡ä»¶
+	 * ÁĞ³öÖ¸¶¨Ä¿Â¼ÏÂµÄËùÓĞÎÄ¼ş
 	 * 
 	 * @param dirctory
-	 *            ç›®å½•
+	 *            Ä¿Â¼
 	 * @param filter
-	 *            è¦ç­›é€‰çš„æ­£åˆ™å­—ç¬¦ä¸²
-	 * @return è¿”å›<æ–‡ä»¶å:æ–‡ä»¶>é›†åˆ
+	 *            ÒªÉ¸Ñ¡µÄÕıÔò×Ö·û´®
+	 * @return ·µ»Ø<ÎÄ¼şÃû:ÎÄ¼ş>¼¯ºÏ
 	 */
 	public static Map<String, File> mapFiles(String dirctory, String[] filter) {
 		return mapFiles(dirctory, filter, false);
 	}
 
 	/**
-	 * åˆ—å‡ºæŒ‡å®šç›®å½•ä¸‹çš„æ‰€æœ‰æ–‡ä»¶
+	 * ÁĞ³öÖ¸¶¨Ä¿Â¼ÏÂµÄËùÓĞÎÄ¼ş
 	 * 
 	 * @param dirctory
-	 *            ç›®å½•
+	 *            Ä¿Â¼
 	 * @param filter
-	 *            è¦è¿‡æ»¤çš„æ–‡ä»¶å
-	 * @return è¿”å›æ–‡ä»¶é›†åˆ
+	 *            Òª¹ıÂËµÄÎÄ¼şÃû
+	 * @return ·µ»ØÎÄ¼ş¼¯ºÏ
 	 */
 	public static List<File> listFiles(String dirctory, String[] filter, boolean filterInner) {
 		List<File> files = new ArrayList<>();
@@ -128,13 +128,13 @@ public class FileUtil {
 	}
 
 	/**
-	 * åˆ—å‡ºæŒ‡å®šç›®å½•ä¸‹çš„æ‰€æœ‰æ–‡ä»¶
+	 * ÁĞ³öÖ¸¶¨Ä¿Â¼ÏÂµÄËùÓĞÎÄ¼ş
 	 * 
 	 * @param dirctory
-	 *            ç›®å½•
+	 *            Ä¿Â¼
 	 * @param filter
-	 *            è¦è¿‡æ»¤çš„æ–‡ä»¶å
-	 * @return è¿”å›æ–‡ä»¶é›†åˆ
+	 *            Òª¹ıÂËµÄÎÄ¼şÃû
+	 * @return ·µ»ØÎÄ¼ş¼¯ºÏ
 	 */
 	public static List<File> listFiles(String dirctory, String[] filter) {
 		return listFiles(dirctory, filter, false);
@@ -170,7 +170,7 @@ public class FileUtil {
 	}
 
 	/**
-	 * é€’å½’æŸ¥æ‰¾æ–‡ä»¶
+	 * µİ¹é²éÕÒÎÄ¼ş
 	 * 
 	 * @param file
 	 * @param list

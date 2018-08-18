@@ -102,7 +102,7 @@ public class Activator extends AbstractUIPlugin {
 	public static IProject getCurrentProject() {
 		IProject project = null;  
 //        
-//        //1.æ ¹æ®å½“å‰ç¼–è¾‘å™¨è·å–å·¥ç¨‹  
+//        //1.¸ù¾İµ±Ç°±à¼­Æ÷»ñÈ¡¹¤³Ì  
 //        IEditorPart part = getActiveEditor();  
 //        if(part != null){  
 //            Object object = part.getEditorInput().getAdapter(IFile.class);  

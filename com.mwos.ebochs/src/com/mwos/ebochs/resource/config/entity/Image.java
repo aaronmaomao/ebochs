@@ -120,25 +120,25 @@ public class Image {
 				return null;
 			}
 		}
-		FileUtil.fillFile(this.getConfig().getProject().getLocationURI().getPath() + this.getMbr(), size);
+		FileUtil.fillFile(this.getConfig().getProject().getRawLocation().toString() + this.getMbr(), size);
 		try {
 			BuildResult res = builder.buildImg(this);
 			if (!res.isSuccess()) {
-				ConsoleFactory.outErrMsg("----- 闀滃儚鏋勫缓澶辫触:\t" + this.getName() + "\r\n" + res.getAllMsg() + "\r\n", this.getConfig().getProject());
+				ConsoleFactory.outErrMsg("----- 镜像构建失败:\t" + this.getName() + "\r\n" + res.getAllMsg() + "\r\n", this.getConfig().getProject());
 				return null;
 			} else {
-				ConsoleFactory.outMsg("----- 闀滃儚鏋勫缓鎴愬姛:\t" + this.getName() + "\r\n" + res.getAllMsg() + "\r\n", this.getConfig().getProject());
+				ConsoleFactory.outMsg("----- 镜像构建成功:\t" + this.getName() + "\r\n" + res.getAllMsg() + "\r\n", this.getConfig().getProject());
 				return new File(this.getConfig().getProject().getLocationURI().getPath() + "/images/" + this.getName());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			ConsoleFactory.outErrMsg("----- 绯荤粺閿欒:\t" + "\r\n", this.getConfig().getProject());
+			ConsoleFactory.outErrMsg("----- 系统错误:\t" + "\r\n", this.getConfig().getProject());
 			return null;
 		}
 	}
 	
 	public void clean() {
-		new File(this.getConfig().getProject().getLocationURI().getPath()+"/obj/images/"+this.getName()).delete();
+		new File(this.getConfig().getProject().getRawLocation().toString()+"/obj/images/"+this.getName()).delete();
 		for(ImgFile imgF:imgFiles) {
 			imgF.clean();
 		}

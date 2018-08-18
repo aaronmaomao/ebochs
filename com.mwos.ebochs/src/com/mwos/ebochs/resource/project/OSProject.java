@@ -103,7 +103,7 @@ public class OSProject {
 		try {
 			IFile config = project.getFile("OS.xml");
 			Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
-			URL url = bundle.getResource("src/com/mwos/ebochs/resource/project/OSTemp.xml");
+			URL url = bundle.getResource("resource/OSTemp.xml");
 			config.create(url.openStream(), true, null);
 		} catch (Exception e) {
 			e.printStackTrace();

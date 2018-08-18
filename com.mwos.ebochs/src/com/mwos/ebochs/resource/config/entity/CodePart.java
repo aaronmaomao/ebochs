@@ -61,15 +61,15 @@ public class CodePart {
 				try {
 					BuildResult res = builder.compile(src, out, config.getProject());
 					if (!res.isSuccess()) {
-						ConsoleFactory.outErrMsg("----- 缂栬瘧閿欒:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+						ConsoleFactory.outErrMsg("----- 编译错误:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
 						return null;
 					} else {
-						ConsoleFactory.outMsg("----- 缂栬瘧鎴愬姛:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+						ConsoleFactory.outMsg("----- 编译成功:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
 						return out;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					ConsoleFactory.outErrMsg("----- 绯荤粺寮傚父:\t" + src + "\r\n", config.getProject());
+					ConsoleFactory.outErrMsg("----- 系统异常:\t" + src + "\r\n", config.getProject());
 					return null;
 				}
 			}
@@ -77,15 +77,15 @@ public class CodePart {
 			try {
 				BuildResult res = builder.buildMWE(this);
 				if (!res.isSuccess()) {
-					ConsoleFactory.outErrMsg("----- 鏋勫缓澶辫触:\t" + getOut() + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+					ConsoleFactory.outErrMsg("----- 构建失败:\t" + getOut() + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
 					return null;
 				} else {
-					ConsoleFactory.outMsg("----- 鏋勫缓鎴愬姛:\t" + getOut() + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
+					ConsoleFactory.outMsg("----- 构建成功:\t" + getOut() + "\r\n" + res.getAllMsg() + "\r\n", config.getProject());
 					return out;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				ConsoleFactory.outErrMsg("----- 绯荤粺寮傚父:\t" + getOut() + "\r\n", config.getProject());
+				ConsoleFactory.outErrMsg("----- 系统异常:\t" + getOut() + "\r\n", config.getProject());
 				return null;
 			}
 		}
@@ -204,15 +204,15 @@ public class CodePart {
 					try {
 						BuildResult res = builder.compile(src, out, cp.getConfig().getProject());
 						if (!res.isSuccess()) {
-							ConsoleFactory.outErrMsg("----- 缂栬瘧閿欒:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", cp.getConfig().getProject());
+							ConsoleFactory.outErrMsg("----- 编译错误:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", cp.getConfig().getProject());
 							return null;
 						} else {
-							ConsoleFactory.outMsg("----- 缂栬瘧鎴愬姛:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", cp.getConfig().getProject());
+							ConsoleFactory.outMsg("----- 编译成功:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", cp.getConfig().getProject());
 							return out;
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						ConsoleFactory.outErrMsg("----- 绯荤粺鍑洪敊锛歕r\n" + e.getMessage() + "\r\n", cp.getConfig().getProject());
+						ConsoleFactory.outErrMsg("----- 系统出错：\r\n" + e.getMessage() + "\r\n", cp.getConfig().getProject());
 						return null;
 					}
 				} else {

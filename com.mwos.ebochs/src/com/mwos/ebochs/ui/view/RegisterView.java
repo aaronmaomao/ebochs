@@ -83,7 +83,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 			Section regSec1 = formToolkit.createSection(container, Section.TWISTIE | Section.TITLE_BAR);
 			regSec1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 			formToolkit.paintBordersFor(regSec1);
-			regSec1.setText("é€šç”¨å¯„å­˜å™¨");
+			regSec1.setText("Í¨ÓÃ¼Ä´æÆ÷");
 			Composite cmpGReg = formToolkit.createComposite(regSec1);
 			regSec1.setClient(cmpGReg);
 			{
@@ -99,25 +99,25 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				GridData gd_lblReg1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_lblReg1.widthHint = 50;
 				lblReg1.setLayoutData(gd_lblReg1);
-				lblReg1.setText("å¯„å­˜å™¨");
+				lblReg1.setText("¼Ä´æÆ÷");
 
 				Label lblVal1 = new Label(cmpGReg, SWT.NONE);
 				GridData gd_lblVal1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_lblVal1.widthHint = 120;
 				lblVal1.setLayoutData(gd_lblVal1);
-				lblVal1.setText("å€¼");
+				lblVal1.setText("Öµ");
 
 				Label lblReg2 = new Label(cmpGReg, SWT.NONE);
 				GridData gd_lblReg2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_lblReg2.widthHint = 50;
 				lblReg2.setLayoutData(gd_lblReg2);
-				lblReg2.setText("å¯„å­˜å™¨");
+				lblReg2.setText("¼Ä´æÆ÷");
 
 				Label lblVal2 = new Label(cmpGReg, SWT.NONE);
 				GridData gd_lblVal2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_lblVal2.widthHint = 120;
 				lblVal2.setLayoutData(gd_lblVal2);
-				lblVal2.setText("å€¼");
+				lblVal2.setText("Öµ");
 
 				Label lblEAX = new Label(cmpGReg, SWT.NONE);
 				lblEAX.setText("EAX");
@@ -320,7 +320,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 			Section regSec2 = formToolkit.createSection(container, Section.TWISTIE | Section.TITLE_BAR);
 			regSec2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 			formToolkit.paintBordersFor(regSec2);
-			regSec2.setText("æŽ§åˆ¶å¯„å­˜å™¨");
+			regSec2.setText("¿ØÖÆ¼Ä´æÆ÷");
 		}
 
 		createActions();
@@ -358,7 +358,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 	 */
 	private void initializeToolBar() {
 		IToolBarManager toolbarManager = getViewSite().getActionBars().getToolBarManager();
-		toolbarManager.add(linkAction);
+			toolbarManager.add(linkAction);
 		toolbarManager.add(refAction);
 	}
 

@@ -80,14 +80,14 @@ public class ProjectBuilder extends IncrementalProjectBuilder {
 			}
 
 			if (!res.isSuccess()) {
-				ConsoleFactory.outErrMsg("----- ç¼–è¯‘é”™è¯¯:\t" + name + "\r\n" + res.getAllMsg() + "\r\n", getProject());
+				ConsoleFactory.outErrMsg("----- ±àÒë´íÎó:\t" + name + "\r\n" + res.getAllMsg() + "\r\n", getProject());
 			} else {
-				ConsoleFactory.outMsg("----- ç¼–è¯‘æˆåŠŸ:\t" + name + "\r\n" + res.getAllMsg() + "\r\n", getProject());
+				ConsoleFactory.outMsg("----- ±àÒë³É¹¦:\t" + name + "\r\n" + res.getAllMsg() + "\r\n", getProject());
 			}
 			return res.isSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			ConsoleFactory.outErrMsg("----- ç³»ç»Ÿå‡ºé”™ï¼š\r\n" + e.getMessage() + "\r\n", getProject());
+			ConsoleFactory.outErrMsg("----- ÏµÍ³³ö´í£º\r\n" + e.getMessage() + "\r\n", getProject());
 		}
 		return false;
 	}

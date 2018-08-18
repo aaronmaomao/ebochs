@@ -49,7 +49,7 @@ public class OSConfigFactory {
 					return config;
 				}
 			} catch (Exception e) {
-				ConsoleFactory.outErrMsg("----- OS.xml å‡ºé”™ï¼š\r\n", project);
+				ConsoleFactory.outErrMsg("----- OS.xml ³ö´í£º\r\n", project);
 				e.printStackTrace();
 			}
 		}

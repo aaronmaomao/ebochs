@@ -45,7 +45,7 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 	 */
 	public OSDevPreference() {
 		setErrorMessage(" ");
-		setTitle("æ“ä½œç³»ç»Ÿå¼€å‘");
+		setTitle("²Ù×÷ÏµÍ³¿ª·¢");
 		// TODO Auto-generated constructor stub
 	}
 
@@ -72,12 +72,12 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 
 		Group groupToolchain = new Group(container, SWT.NONE);
 		groupToolchain.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		groupToolchain.setText("å·¥å…·é“¾è®¾ç½®");
+		groupToolchain.setText("¹¤¾ßÁ´ÉèÖÃ");
 		groupToolchain.setLayout(new GridLayout(3, false));
 
 		Label labelToolchain = new Label(groupToolchain, SWT.NONE);
 		labelToolchain.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		labelToolchain.setText("å·¥å…·é“¾");
+		labelToolchain.setText("¹¤¾ßÁ´");
 
 		textToolchain = new Text(groupToolchain, SWT.BORDER);
 		textToolchain.addModifyListener(new ModifyListener() {
@@ -88,7 +88,7 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 				if (f.exists() && f.isDirectory()) {
 					vaild(OSDevPreference.toolChainVaild, true);
 				} else {
-					setErrorMessage("è¯·é€‰æ‹©å·¥å…·é“¾");
+					setErrorMessage("ÇëÑ¡Ôñ¹¤¾ßÁ´");
 					vaild(OSDevPreference.toolChainVaild, false);
 				}
 			}
@@ -100,17 +100,17 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 		btnToolchain.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String toochain = UiUtil.chooseFolder("å·¥å…·é“¾", container);
+				String toochain = UiUtil.chooseFolder("¹¤¾ßÁ´", container);
 				if (StringUtils.isNotEmpty(toochain)) {
 					textToolchain.setText(toochain);
 				}
 			}
 		});
-		btnToolchain.setText("æµè§ˆ...");
+		btnToolchain.setText("ä¯ÀÀ...");
 
 		Group groupDbg = new Group(container, SWT.NONE);
 		groupDbg.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		groupDbg.setText("è°ƒè¯•å™¨è®¾ç½®");
+		groupDbg.setText("µ÷ÊÔÆ÷ÉèÖÃ");
 		groupDbg.setLayout(new GridLayout(3, false));
 
 		Label lblBochs = new Label(groupDbg, SWT.NONE);
@@ -126,7 +126,7 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 				if (f.exists() && f.isDirectory()) {
 					vaild(OSDevPreference.bochsVaild, true);
 				} else {
-					setErrorMessage("è¯·é€‰æ‹©bochs");
+					setErrorMessage("ÇëÑ¡Ôñbochs");
 					vaild(OSDevPreference.bochsVaild, false);
 				}
 			}
@@ -144,11 +144,11 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 				}
 			}
 		});
-		btnBochs.setText("æµè§ˆ...");
+		btnBochs.setText("ä¯ÀÀ...");
 		
 		Group grpVirtualbox = new Group(container, SWT.NONE);
 		grpVirtualbox.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		grpVirtualbox.setText("VirtualBoxè™šæ‹Ÿæœºè®¾ç½®");
+		grpVirtualbox.setText("VirtualBoxĞéÄâ»úÉèÖÃ");
 		grpVirtualbox.setLayout(new GridLayout(3, false));
 		
 		Label lblVbox = new Label(grpVirtualbox, SWT.NONE);
@@ -171,7 +171,7 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 				}
 			}
 		});
-		btnVbox.setText("æµè§ˆ...");
+		btnVbox.setText("ä¯ÀÀ...");
 
 		return container;
 	}
@@ -220,7 +220,7 @@ public class OSDevPreference extends PreferencePage implements IWorkbenchPrefere
 
 	private String chooseFile(String name, Composite container) {
 		FileDialog filedlg = new FileDialog(container.getShell(), SWT.OPEN);
-		filedlg.setText("é€‰æ‹©" + name);
+		filedlg.setText("Ñ¡Ôñ" + name);
 		filedlg.setFilterPath("SystemRoot");
 		filedlg.setFileName(name);
 		filedlg.setFilterExtensions(new String[] { name });

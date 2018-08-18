@@ -12,7 +12,7 @@ import com.mwos.ebochs.core.FileUtil;
 public class UiUtil {
 	public static String chooseFolder(String name, Composite container) {
 		DirectoryDialog filedlg = new DirectoryDialog(container.getShell(), SWT.OPEN);
-		filedlg.setText("é€‰æ‹©" + name);
+		filedlg.setText("Ñ¡Ôñ" + name);
 		filedlg.setFilterPath("SystemDrive");
 		filedlg.setMessage("");
 		String selected = filedlg.open();

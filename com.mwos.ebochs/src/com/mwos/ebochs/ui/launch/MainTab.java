@@ -87,13 +87,13 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 		container.setLayout(new GridLayout(1, false));
 		{
 			Group groupPrj = new Group(container, SWT.NONE);
-			groupPrj.setText("閫夋嫨宸ョ▼");
+			groupPrj.setText("选择工程");
 			groupPrj.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 			groupPrj.setLayout(new GridLayout(2, false));
 			{
 				Label labelPrj = new Label(groupPrj, SWT.NONE);
 				labelPrj.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-				labelPrj.setText("宸ョ▼");
+				labelPrj.setText("工程");
 			}
 
 			comboProject = new Combo(groupPrj, SWT.READ_ONLY);
@@ -108,7 +108,7 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 
 		Group group = new Group(container, SWT.NONE);
 		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		group.setText("杩愯骞冲彴");
+		group.setText("运行平台");
 		group.setLayout(new GridLayout(3, false));
 
 		chkBochs = new Button(group, SWT.CHECK);
@@ -136,7 +136,7 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 				}
 			}
 		});
-		btnBochs.setText("娴忚...");
+		btnBochs.setText("浏览...");
 		chkBochs.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -170,7 +170,7 @@ public class MainTab extends AbstractLaunchConfigurationTab {
 				}
 			}
 		});
-		btnVBox.setText("娴忚...");
+		btnVBox.setText("浏览...");
 		chkVBox.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {

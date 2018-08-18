@@ -37,7 +37,7 @@ public class ImgFile {
 		if (src.contains(":"))
 			return src;
 		else
-			return config.getProject().getLocationURI().getPath() + src;
+			return config.getProject().getRawLocation().toString() + src;
 	}
 
 	public OSConfig getConfig() {
@@ -60,7 +60,7 @@ public class ImgFile {
 		for (ImgFile sub : subs) {
 			file = FileUtil.concat(file, new File[] { new File(sub.getLocation()) });
 			if (file == null) {
-				ConsoleFactory.outMsg("----- 鏂囦欢鏋勫缓閿欒:\t" + this.getSrc() + "\r\n", this.getConfig().getProject());
+				ConsoleFactory.outMsg("----- 文件构建错误:\t" + this.getSrc() + "\r\n", this.getConfig().getProject());
 				return null;
 			}
 		}

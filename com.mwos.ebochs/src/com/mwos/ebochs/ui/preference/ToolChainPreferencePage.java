@@ -204,7 +204,7 @@ public class ToolChainPreferencePage extends PreferencePage implements IWorkbenc
 
 	private String chooseFile(String name, Composite container) {
 		FileDialog filedlg = new FileDialog(container.getShell(), SWT.OPEN);
-		filedlg.setText("ѡ��" + name);
+		filedlg.setText("" + name);
 		filedlg.setFilterPath("SystemRoot");
 		filedlg.setFileName(name);
 		filedlg.setFilterExtensions(new String[] { name });

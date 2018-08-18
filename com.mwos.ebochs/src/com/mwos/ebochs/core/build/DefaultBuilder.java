@@ -1,6 +1,5 @@
 package com.mwos.ebochs.core.build;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,22 +39,22 @@ public class DefaultBuilder extends AbstractBuilder {
 		String name = FileUtil.getFileName(src, false);
 		List<String> incs = OSProject.getIncDirs(project);
 
-		// æ±‡ç¼–ä¸ºATæ±‡ç¼–
+		// »ã±àÎªAT»ã±à
 		String cmd_c2gas = cmd_c2gas(src, getIncStr(incs));
 		RunResult c2gasResult = EXERunner.run(cmd_c2gas, prjPath);
 		if (c2gasResult.exitValue() != 0) {
 			return new BuildResult(c2gasResult);
 		}
 
-		// æ±‡ç¼–ä¸ºintelæ±‡ç¼–
+		// »ã±àÎªintel»ã±à
 		String cmd_c2asm = cmd_c2asm(src, getIncStr(incs));
 		EXERunner.run(cmd_c2asm, prjPath);
 
-		// ATè½¬intelæ±‡ç¼–
+		// AT×ªintel»ã±à
 		String cmd_gas2asm = cmd_gas2asm(src);
 		EXERunner.run(cmd_gas2asm, prjPath);
 
-		// ç¼–è¯‘
+		// ±àÒë
 		String cmd_nask = cmd_nask("obj/" + name + ".asm", out);
 		RunResult naskResult = EXERunner.run(cmd_nask, prjPath);
 
@@ -66,7 +65,7 @@ public class DefaultBuilder extends AbstractBuilder {
 	public BuildResult compileAsm(String src, String out, IProject project) throws Exception {
 		String prjPath = project.getLocationURI().getPath();
 
-		// ç¼–è¯‘
+		// ±àÒë
 		String cmd_nask = cmd_nask(src, out);
 		RunResult naskResult = EXERunner.run(cmd_nask, prjPath);
 
@@ -77,7 +76,7 @@ public class DefaultBuilder extends AbstractBuilder {
 	public BuildResult link(String out, String stack, String objs[], IProject project) throws Exception {
 		String prjPath = project.getLocationURI().getPath();
 
-		// é“¾æ¥
+		// Á´½Ó
 		String cmd_link = cmd_link(out, stack, objs);
 		RunResult naskResult = EXERunner.run(cmd_link, prjPath);
 		return new BuildResult(naskResult);
@@ -85,9 +84,9 @@ public class DefaultBuilder extends AbstractBuilder {
 
 	@Override
 	public BuildResult buildImg(Image img) throws Exception {
-		String prjPath = img.getConfig().getProject().getLocation().toString();
+		String prjPath = img.getConfig().getProject().getRawLocation().toString();
 
-		// æ„å»ºé•œåƒ
+		// ¹¹½¨¾µÏñ
 		String cmd_img = cmd_img(img);
 		RunResult naskResult = EXERunner.run(cmd_img, prjPath);
 		return new BuildResult(naskResult);
@@ -95,9 +94,9 @@ public class DefaultBuilder extends AbstractBuilder {
 
 	@Override
 	public BuildResult bin2obj(String src, String out, String name, IProject project) throws Exception {
-		String prjPath = project.getProject().getLocationURI().getPath();
+		String prjPath = project.getProject().getRawLocation().toString();
 
-		// å°†äºŒè¿›åˆ¶æ–‡ä»¶è½¬ä¸ºå¯è¿æ¥ç›®æ ‡æ–‡ä»¶
+		// ½«¶ş½øÖÆÎÄ¼ş×ªÎª¿ÉÁ¬½ÓÄ¿±êÎÄ¼ş
 		String cmd_bin2obj = cmd_bin2obj(src, out, name);
 		RunResult naskResult = EXERunner.run(cmd_bin2obj, prjPath);
 		return new BuildResult(naskResult);
@@ -105,9 +104,9 @@ public class DefaultBuilder extends AbstractBuilder {
 
 	@Override
 	public BuildResult bim2mwe(String src, String out, String dsSize, IProject project) throws Exception {
-		String prjPath = project.getProject().getLocationURI().getPath();
+		String prjPath = project.getProject().getRawLocation().toString();
 
-		// æŠŠå¯æ‰§è¡ŒäºŒè¿›åˆ¶æ–‡ä»¶å°è£…ä¸ºOSå¯æ‰§è¡Œæ–‡ä»¶
+		// °Ñ¿ÉÖ´ĞĞ¶ş½øÖÆÎÄ¼ş·â×°ÎªOS¿ÉÖ´ĞĞÎÄ¼ş
 		String cmd_bim2hrb = cmd_bim2hrb(src, out, dsSize);
 		RunResult naskResult = EXERunner.run(cmd_bim2hrb, prjPath);
 		return new BuildResult(naskResult);

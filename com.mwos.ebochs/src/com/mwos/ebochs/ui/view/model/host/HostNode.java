@@ -30,16 +30,16 @@ public class HostNode extends Node {
 	public void showMenu() {
 		Menu menu = new Menu(this.getParent());
 		MenuItem newItem = new MenuItem(menu, SWT.PUSH);
-		newItem.setText("æ–°å¢ž");
+		newItem.setText("ÐÂÔö");
 
 		MenuItem newMemberItem = new MenuItem(menu, SWT.PUSH);
-		newMemberItem.setText("æ–°å¢ž2");
+		newMemberItem.setText("ÐÂÔö2");
 
 		MenuItem editItem = new MenuItem(menu, SWT.PUSH);
-		editItem.setText("ç¼–è¾‘");
+		editItem.setText("±à¼­");
 
 		MenuItem deleteItem = new MenuItem(menu, SWT.PUSH);
-		deleteItem.setText("åˆ é™¤");
+		deleteItem.setText("É¾³ý");
 		this.getParent().setMenu(menu);
 
 	}

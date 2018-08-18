@@ -23,7 +23,7 @@ public abstract class AbstractBuilder {
 	public AbstractBuilder() throws Exception {
 		String tcPath = OSDevPreference.getValue(getToolChain());
 		if (tcPath.isEmpty()) {
-			throw new Exception("æœªæ‰¾åˆ°å·¥å…·é“¾ï¼š" + getToolChain());
+			throw new Exception("Î´ÕÒµ½¹¤¾ßÁ´£º" + getToolChain());
 		}
 		toolchainPath = tcPath;
 	}
@@ -55,7 +55,7 @@ public abstract class AbstractBuilder {
 		} else if (src.toLowerCase().endsWith(".font")) {
 			return this.bin2obj(src, out, "_font", project);
 		} else {
-			BuildResult res = new BuildResult(false, "æœªçŸ¥çš„æ–‡ä»¶ç±»åž‹");
+			BuildResult res = new BuildResult(false, "Î´ÖªµÄÎÄ¼þÀàÐÍ");
 			return res;
 		}
 	}

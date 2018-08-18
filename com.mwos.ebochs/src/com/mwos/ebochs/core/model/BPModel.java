@@ -33,7 +33,8 @@ public class BPModel implements IInfoListener {
 
 	public BPModel(OSConfig config) {
 		this.config = config;
-		domMap = new DomMap(config.getProject().getLocationURI().getPath() + "/obj/core.map");
+		if (new File(config.getProject().getLocationURI().getPath() + "/obj/core.map").exists())
+			domMap = new DomMap(config.getProject().getLocationURI().getPath() + "/obj/core.map");
 		parseMbrAsm();
 		parseBootAsm();
 	}
@@ -67,7 +68,7 @@ public class BPModel implements IInfoListener {
 			return _mapCore.get(addr);
 		}
 
-		if (addr > 0xc200) {
+		if (addr >= 0xc200) {
 			return _mapBootLoader.get(addr);
 		}
 		return null;
