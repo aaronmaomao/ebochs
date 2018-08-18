@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<os name="mwos" bits="32" version="mwos1.1">
+	<!-- 运行平台配置 -->
+	<platform arch="x86">
+		<cpu>i386</cpu>
+	</platform>
+
+	<!-- 镜像/存储配置 -->
+	<image name="mwos.img" size="1440k" device="floppy" format="fat12" mbr="mbr.bin">
+		<file src="os.bin">
+			<sub src="bootloader.bin" />
+		<!-- 	<sub src="core.mwe" /> -->
+		</file> 
+	</image>
+
+	<!-- 源文件 -->
+	<codepart type="os" src="src/mbr.asm" out="mbr.bin" />
+	<codepart type="os" src="src/bootloader.asm" out="bootloader.bin" /> 
+
+	<!-- 
+	<codepart type="os" out="core.mwe">
+		<code src="src/osmain.c" />
+	</codepart>
+	 -->
+	<!-- 
+	<codepart type="app" out="HelloWorld.mwe">
+		<code src="app/main.c" />
+	</codepart> 
+	-->
+</os> 
