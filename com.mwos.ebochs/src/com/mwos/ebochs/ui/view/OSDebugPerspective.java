@@ -18,14 +18,18 @@ public class OSDebugPerspective implements IPerspectiveFactory {
 		addFastViews(layout);
 		addViewShortcuts(layout);
 		addPerspectiveShortcuts(layout);
-		layout.addView("com.mwos.ebochs.ui.view.HostView", IPageLayout.TOP, 0.5f, IPageLayout.ID_EDITOR_AREA);
-		layout.addView("com.mwos.ebochs.ui.view.RegisterView", IPageLayout.RIGHT, 0.5f, "com.mwos.ebochs.ui.view.HostView");
+		{
+			IFolderLayout folderLayout = layout.createFolder("folder_1", IPageLayout.TOP, 0.5f, IPageLayout.ID_EDITOR_AREA);
+			folderLayout.addView("com.mwos.ebochs.ui.view.HostView");
+		}
+		layout.addView("org.eclipse.ui.navigator.ProjectExplorer", IPageLayout.LEFT, 0.23f, "folder_1");
+		layout.addView("com.mwos.ebochs.ui.view.RegisterView", IPageLayout.RIGHT, 0.49f, "com.mwos.ebochs.ui.view.HostView");
 		{
 			IFolderLayout folderLayout = layout.createFolder("folder", IPageLayout.RIGHT, 0.5f, "com.mwos.ebochs.ui.view.RegisterView");
 			folderLayout.addView("com.mwos.ebochs.ui.view.GILDTView");
 			folderLayout.addView("com.mwos.ebochs.ui.view.BreakPointView");
 		}
-		layout.addView("org.eclipse.ui.console.ConsoleView", IPageLayout.RIGHT, 0.5f, IPageLayout.ID_EDITOR_AREA);
+		layout.addView("org.eclipse.ui.console.ConsoleView", IPageLayout.RIGHT, 0.61f, IPageLayout.ID_EDITOR_AREA);
 	}
 
 	/**

@@ -14,13 +14,13 @@ VRAM	equ	0x0ff8	;图像缓冲区的起始地址，即显存的起始地址
 org	0xc200
 
 ;设置显卡
-mov	bx,	0x4101	;VGA图形模式，320x200x8位彩色模式，调色板模式
-mov	ax,	0x4f02	;设置显卡模式
+mov	al, 0x13	;VGA图形模式，320x200x8位彩色模式，调色板模式
+mov	ah, 0x00	;设置显卡模式
 int	0x10
 mov	byte[VMODE],	8
-mov	word[SCRNX],	640
-mov	word[SCRNY],	480
-mov	dword[VRAM],	0xe0000000	;显存的起始地址
+mov	word[SCRNX],	320
+mov	word[SCRNY],	200
+mov	dword[VRAM],	0xa000	;显存的起始地址
 
 ;用bios取的键盘上各种led指示灯的状态
 mov	ah,	0x02
