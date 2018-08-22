@@ -4,7 +4,7 @@ DSKCAC	EQU		0x00100000		; ディスクキャッシュの場所 -> 磁盘缓存位置
 DSKCAC0	EQU		0x00008000		; ディスクキャッシュの場所（リアルモード）->磁盘缓存位置（实模式）
 
 ;有关bootinfo的设置
-CYLS	equ	0x0ff0
+CYLS	equ	0x0ff0	;此地址对应binfo变量
 LEDS	equ	0x0ff1
 VMODE	equ	0x0ff2	;保存颜色数目的信息。颜色的位数
 SCRNX	equ	0x0ff4	;分辨率的x
@@ -20,7 +20,7 @@ int	0x10
 mov	byte[VMODE],	8
 mov	word[SCRNX],	320
 mov	word[SCRNY],	200
-mov	dword[VRAM],	0xa000	;显存的起始地址
+mov	dword[VRAM],	0xa0000	;显存的起始地址
 
 ;用bios取的键盘上各种led指示灯的状态
 mov	ah,	0x02

@@ -4,7 +4,7 @@
 [BITS 32]		;制作32位模式的机器语言
 
 [FILE "asmfun.asm"]	;制作目标文件信息
-	GLOBAL	_io_hlt, _write_mem8, _io_load_eflags, _io_store_eflags, _io_cli, _io_sti, _io_in8, _io_out8
+	GLOBAL	_io_hlt, _io_load_eflags, _io_store_eflags, _io_cli, _io_sti, _io_in8, _io_out8, _load_gdtr, _load_idtr
 ;实际函数
 [section .text]
 _io_hlt:
@@ -35,9 +35,14 @@ _io_in8:	;int io_in8(int port)
 	mov	eax,	0
 	in	al,	dx
 	ret
+_load_gdtr:		; void load_gdtr(int limit, int addr);
+	MOV	AX,[ESP+4]		; limit
+	MOV	[ESP+6],AX
+	LGDT	[ESP+6]
+	RET
 
-_write_mem8: ;_write_mem8(int addr, int data)
-	mov ecx, [esp+4]
-	mov al, [esp+8]
-	mov [ecx], al
-	ret
+_load_idtr:		; void load_idtr(int limit, int addr);
+	MOV	AX,[ESP+4]		; LIMIT
+	MOV	[ESP+6],AX
+	LIDT	[ESP+6]
+	RET
