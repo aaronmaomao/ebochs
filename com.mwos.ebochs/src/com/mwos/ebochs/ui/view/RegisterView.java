@@ -27,6 +27,7 @@ import com.mwos.ebochs.core.model.cmd.CmdStr;
 import com.mwos.ebochs.core.model.cmd.DCmd;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
 import com.mwos.ebochs.ui.view.model.register.RegisterParse;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class RegisterView extends ViewPart implements IInfoListener {
 
@@ -122,7 +123,8 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				Label lblEAX = new Label(cmpGReg, SWT.NONE);
 				lblEAX.setText("EAX");
 
-				txtEAX = new Text(cmpGReg, SWT.BORDER);
+				txtEAX = new Text(cmpGReg, SWT.NONE);
+				txtEAX.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				GridData gd_txtEAX = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtEAX.widthHint = 120;
 				txtEAX.setLayoutData(gd_txtEAX);
@@ -135,7 +137,8 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblEBP.setLayoutData(gd_lblEBP);
 				lblEBP.setText("EBP");
 
-				txtEBP = new Text(cmpGReg, SWT.BORDER);
+				txtEBP = new Text(cmpGReg, SWT.NONE);
+				txtEBP.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				txtEBP.setText("0x00000000");
 				GridData gd_txtEBP = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtEBP.widthHint = 120;
@@ -146,6 +149,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblECX.setText("ECX");
 
 				txtECX = new Text(cmpGReg, SWT.BORDER);
+				txtECX.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				txtECX.setText("0x00000000");
 				GridData gd_txtECX = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtECX.widthHint = 120;
@@ -159,6 +163,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblESP.setText("ESP");
 
 				txtESP = new Text(cmpGReg, SWT.BORDER);
+				txtESP.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				txtESP.setText("0x00000000");
 				GridData gd_txtESP = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtESP.widthHint = 120;
@@ -169,6 +174,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblEDX.setText("EDX");
 
 				txtEDX = new Text(cmpGReg, SWT.BORDER);
+				txtEDX.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				txtEDX.setText("0x00000000");
 				txtEDX.setEditable(false);
 				GridData gd_txtEDX = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -179,6 +185,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblESI.setText("ESI");
 
 				txtESI = new Text(cmpGReg, SWT.BORDER);
+				txtESI.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				GridData gd_txtESI = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtESI.widthHint = 120;
 				txtESI.setLayoutData(gd_txtESI);
@@ -189,6 +196,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblEBX.setText("EBX");
 
 				txtEBX = new Text(cmpGReg, SWT.BORDER);
+				txtEBX.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				txtEBX.setTouchEnabled(true);
 				GridData gd_txtEBX = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtEBX.widthHint = 120;
@@ -200,6 +208,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblEDI.setText("EDI");
 
 				txtEDI = new Text(cmpGReg, SWT.BORDER);
+				txtEDI.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				GridData gd_txtEDI = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtEDI.widthHint = 120;
 				txtEDI.setLayoutData(gd_txtEDI);
@@ -214,6 +223,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblCS.setText("CS");
 
 				txtCS = new Text(cmpGReg, SWT.BORDER);
+				txtCS.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				GridData gd_txtCS = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtCS.widthHint = 120;
 				txtCS.setLayoutData(gd_txtCS);
@@ -224,6 +234,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblEIP.setText("EIP");
 
 				txtEIP = new Text(cmpGReg, SWT.BORDER);
+				txtEIP.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				GridData gd_txtEIP = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtEIP.widthHint = 120;
 				txtEIP.setLayoutData(gd_txtEIP);
@@ -234,6 +245,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblSS.setText("SS");
 
 				txtSS = new Text(cmpGReg, SWT.BORDER);
+				txtSS.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				txtSS.setText("0x0000");
 				txtSS.setEditable(false);
 				GridData gd_txtSS = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -244,6 +256,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblESP2.setText("ESP");
 
 				txtESP2 = new Text(cmpGReg, SWT.BORDER);
+				txtESP2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				GridData gd_txtESP2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtESP2.widthHint = 120;
 				txtESP2.setLayoutData(gd_txtESP2);
@@ -254,6 +267,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblDS.setText("DS");
 
 				txtDS = new Text(cmpGReg, SWT.BORDER);
+				txtDS.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				txtDS.setText("0x0000");
 				txtDS.setEditable(false);
 				GridData gd_txtDS = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -264,6 +278,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblES.setText("ES");
 
 				txtES = new Text(cmpGReg, SWT.BORDER);
+				txtES.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				GridData gd_txtES = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtES.widthHint = 120;
 				txtES.setLayoutData(gd_txtES);
@@ -274,6 +289,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblFS.setText("FS");
 
 				txtFS = new Text(cmpGReg, SWT.BORDER);
+				txtFS.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				txtFS.setText("0x0000");
 				txtFS.setEditable(false);
 				GridData gd_txtFS = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -284,6 +300,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblGS.setText("GS");
 
 				txtGS = new Text(cmpGReg, SWT.BORDER);
+				txtGS.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				GridData gd_txtGS = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 				gd_txtGS.widthHint = 120;
 				txtGS.setLayoutData(gd_txtGS);
@@ -294,6 +311,7 @@ public class RegisterView extends ViewPart implements IInfoListener {
 				lblEFLAGS.setText("EFLAGE");
 
 				txtEFLAGS = new Text(cmpGReg, SWT.BORDER);
+				txtEFLAGS.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 				txtEFLAGS.setText("0x00000000");
 				txtEFLAGS.setEditable(false);
 				GridData gd_txtEFLAGS = new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1);

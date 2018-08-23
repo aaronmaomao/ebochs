@@ -49,7 +49,7 @@ public class AsmAdapt {
 
 		}
 
-		if (!src.endsWith(".asm")) {
+		if (src.endsWith(".c")) {
 
 			BufferedReader br2 = new BufferedReader(new FileReader(new File(config.getProject().getLocationURI().getPath() + "/obj/" + name + "_.asm")));
 			String line2 = "";
@@ -62,9 +62,9 @@ public class AsmAdapt {
 						_asmFuns.add(_asmFun);
 					} catch (Exception e) {
 						e.printStackTrace();
-						System.out.println(src+"  "+line2);
+						System.out.println(src + "  " + line2);
 					}
-					
+
 				}
 			}
 		}
@@ -87,7 +87,7 @@ public class AsmAdapt {
 					if (asmFun.getAbsAddr() == 0)
 						break;
 
-					for (int j = 0; j < asmFun.getAddr().size()&&j<_asmFun.getLineNum().size(); j++) {
+					for (int j = 0; j < asmFun.getAddr().size() && j < _asmFun.getLineNum().size(); j++) {
 						String addr_line = asmFun.getAddr().get(j);
 						Integer cLine = _asmFun.getLineNum().get(j);
 						_map.put(addr_line.split(":")[0], "" + cLine);
@@ -118,8 +118,8 @@ class AsmFun {
 		try {
 			String temp = "";
 			temp = br1.readLine();
-			while(temp.charAt(48)!='_') {
-				temp =br1.readLine();
+			while (temp.length() < 49 || temp.charAt(48) != '_') {
+				temp = br1.readLine();
 			}
 			funName = temp.substring(48, temp.lastIndexOf(":"));
 			relAddr = NumberUtil.parseHex(temp.substring(7, 15));
@@ -162,21 +162,21 @@ class _AsmFun {
 	private void init(BufferedReader br2) throws Exception {
 		int lineN = 0;
 		String temp = "";
-			temp = br2.readLine();
-			funName = temp.substring(0, temp.indexOf(":"));
-			
-			temp = br2.readLine();
-			funLine = Integer.parseInt(temp.substring(35, temp.lastIndexOf(";"))) - 1;
-			lineN = funLine;
-			while (!(temp = br2.readLine()).startsWith("\t.def\t.ef;")) {
-				if (temp.startsWith("\t.ln")) {
-					lineN = Integer.parseInt(temp.substring(5, temp.length())) + funLine;
-					continue;
-				}
-				if (temp.startsWith("\t."))
-					continue;
-				lineNum.add(lineN);
+		temp = br2.readLine();
+		funName = temp.substring(0, temp.indexOf(":"));
+
+		temp = br2.readLine();
+		funLine = Integer.parseInt(temp.substring(35, temp.lastIndexOf(";"))) - 1;
+		lineN = funLine;
+		while (!(temp = br2.readLine()).startsWith("\t.def\t.ef;")) {
+			if (temp.startsWith("\t.ln")) {
+				lineN = Integer.parseInt(temp.substring(5, temp.length())) + funLine;
+				continue;
 			}
+			if (temp.startsWith("\t."))
+				continue;
+			lineNum.add(lineN);
+		}
 	}
 
 	public List<Integer> getLineNum() {

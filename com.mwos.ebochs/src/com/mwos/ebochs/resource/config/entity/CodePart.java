@@ -38,18 +38,18 @@ public class CodePart {
 	public String getOut() {
 		return out;
 	}
-	
+
 	public boolean isInclude(String code) {
-		if(code.equals(src)) {
+		if (code.equals(src)) {
 			return true;
-		}else {
-			for(Code c:codes) {
-				if(c.getSrc().equals(code)) {
+		} else {
+			for (Code c : codes) {
+				if (c.getSrc().equals(code)) {
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -158,7 +158,8 @@ public class CodePart {
 		private String src;
 		private String out = "";
 		private CodePart cp;
-		private boolean linkOnly = false;
+		private String type = "source"; // bin、obj
+		private String var = "";
 
 		public String getSrc() {
 			return src;
@@ -175,17 +176,22 @@ public class CodePart {
 			return out;
 		}
 
-		public void setLinkOnly(String linkOnly) {
-			if (linkOnly.equals("true"))
-				this.linkOnly = true;
-			else
-				this.linkOnly = false;
-		}
-
 		public void setOut(String out) {
 			if (!out.contains("/"))
 				out = "/obj/" + FileUtil.getFileName(out, true);
 			this.out = out;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setVar(String var) {
+			this.var = var;
 		}
 
 		public void setCp(CodePart cp) {
@@ -199,27 +205,35 @@ public class CodePart {
 		}
 
 		public String build(AbstractBuilder builder) {
-			if (!linkOnly) {
-				if (!new File(cp.getConfig().getProject().getLocationURI().getPath() + getOut()).exists()) {
-					try {
-						BuildResult res = builder.compile(src, out, cp.getConfig().getProject());
-						if (!res.isSuccess()) {
-							ConsoleFactory.outErrMsg("----- 编译错误:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", cp.getConfig().getProject());
-							return null;
-						} else {
-							ConsoleFactory.outMsg("----- 编译成功:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", cp.getConfig().getProject());
-							return out;
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						ConsoleFactory.outErrMsg("----- 系统出错：\r\n" + e.getMessage() + "\r\n", cp.getConfig().getProject());
-						return null;
-					}
-				} else {
-					return out;
-				}
+			if (type.equalsIgnoreCase("obj")) {
+				return src;
 			}
-			return src;
+			
+			if (!new File(cp.getConfig().getProject().getRawLocation().toString() + getOut()).exists()) {
+				try {
+
+					BuildResult res = null;
+					if (type.equalsIgnoreCase("source")) {
+						res = builder.compile(src, out, cp.getConfig().getProject());
+					} else if (type.equalsIgnoreCase("bin")) {
+						res = builder.bin2obj(src, out, var, cp.getConfig().getProject());
+					}
+
+					if (!res.isSuccess()) {
+						ConsoleFactory.outErrMsg("----- 编译错误:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", cp.getConfig().getProject());
+						return null;
+					} else {
+						ConsoleFactory.outMsg("----- 编译成功:\t" + src + "\r\n" + res.getAllMsg() + "\r\n", cp.getConfig().getProject());
+						return out;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					ConsoleFactory.outErrMsg("----- 系统出错：\r\n" + e.getMessage() + "\r\n", cp.getConfig().getProject());
+					return null;
+				}
+			} else {
+				return out;
+			}
 		}
 	}
 }

@@ -153,8 +153,10 @@ public class OSConfigFactory {
 							code.setSrc(attr.getNodeValue().trim());
 						} else if (attr.getNodeName().equalsIgnoreCase("out")) {
 							code.setOut(attr.getNodeValue().trim());
-						} else if (attr.getNodeName().equalsIgnoreCase("linkonly")) {
-							code.setLinkOnly(attr.getNodeValue().trim());
+						} else if (attr.getNodeName().equalsIgnoreCase("type")) {
+							code.setType(attr.getNodeValue().trim());
+						} else if (attr.getNodeName().equalsIgnoreCase("var")) {
+							code.setVar(attr.getNodeValue().trim());
 						}
 					}
 

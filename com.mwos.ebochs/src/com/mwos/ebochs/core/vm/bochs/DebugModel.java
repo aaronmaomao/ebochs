@@ -131,7 +131,7 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 				BP bp = new BP(temp);
 				Long addr = bm.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
 				if (addr == null) {
-					breakpoint.delete();
+					breakpoint.setEnabled(false);
 					return;
 				}
 				bp.setAddress(addr);
@@ -145,6 +145,7 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 
 	}
 
+	
 	@Override
 	public void breakpointRemoved(IBreakpoint breakpoint, IMarkerDelta delta) {
 		// TODO Auto-generated method stub
@@ -153,13 +154,11 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 			try {
 				BP bp = new BP(temp);
 				Long addr = bm.getAddr(temp.getMarker().getResource().getProjectRelativePath() + ":" + temp.getLineNumber());
-				if (addr == null) {
-					breakpoint.delete();
-					return;
+				if (addr != null) {
+					bp.setAddress(addr);
+					this.sendToVM(new DCmd(CmdStr.del, getBPNum(addr)));
+					this.sendToCenter(CmdStr.DelBP, bp);
 				}
-				bp.setAddress(addr);
-				this.sendToVM(new DCmd(CmdStr.del, getBPNum(addr)));
-				this.sendToCenter(CmdStr.DelBP, bp);
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -364,7 +363,7 @@ public class DebugModel implements IBreakpointListener, IInfoListener {
 		IDocument document = provider.getDocument(editor.getEditorInput());
 		try {
 
-			int start = document.getLineOffset(Integer.valueOf(line)-1);
+			int start = document.getLineOffset(Integer.valueOf(line) - 1);
 			editor.selectAndReveal(start, 0);
 
 			IWorkbenchPage page = editor.getSite().getPage();

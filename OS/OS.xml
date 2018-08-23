@@ -20,7 +20,7 @@
 	<codepart type="os" out="core.mwe">
 		<code src="src/osmain.c" />
 		<code src="src/asmfun.asm" />
-		<code src="src/st.font" />
+		<code src="src/st.font" type="bin" var="font" />
 		<code src="src/destbl.c" />
 		<code src="src/graphic.c" />
 		<code src="src/int.c" />

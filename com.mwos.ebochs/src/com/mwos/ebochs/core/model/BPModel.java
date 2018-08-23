@@ -36,9 +36,9 @@ public class BPModel implements IInfoListener {
 		this.config = config;
 		if (new File(config.getProject().getLocationURI().getPath() + "/obj/core.map").exists())
 			domMap = new DomMap(config.getProject().getLocationURI().getPath() + "/obj/core.map");
-		//parseMbrAsm();
-		//parseBootAsm();
-		
+		// parseMbrAsm();
+		// parseBootAsm();
+
 		parseAllAddr();
 	}
 
@@ -114,7 +114,8 @@ public class BPModel implements IInfoListener {
 					parseBootAsm();
 				} else {
 					for (Code code : cp.getCodes()) {
-						parseCore(code.getSrc());
+						if (code.getType().equalsIgnoreCase("source"))
+							parseCore(code.getSrc());
 					}
 				}
 			}
@@ -140,20 +141,21 @@ public class BPModel implements IInfoListener {
 	}
 
 	private void parseCore(String src) {
-		//if (src.endsWith(".c")) {
-			AsmAdapt adapt = new AsmAdapt(src, config, domMap);
-			hasParsed.add(src);
-			Map<String, String> addrs = adapt.getMap();
-			for (String addr : addrs.keySet()) {
-				_mapCore.put(NumberUtil.parseHex(addr) + 0x280000, src + ":" + addrs.get(addr));
-			}
-//		} else if (src.endsWith(".asm")) {
-//			DomAsmSrc asm = new DomAsmSrc(src, config);
-//			hasParsed.add(src);
-//			for (String addr : asm.getAddr_line().keySet()) {
-//				_mapCore.put(NumberUtil.parseHex(addr) + 0x280000, src + ":" + asm.getAddr_line().get(addr));
-//			}
-//		}
+		// if (src.endsWith(".c")) {
+		AsmAdapt adapt = new AsmAdapt(src, config, domMap);
+		hasParsed.add(src);
+		Map<String, String> addrs = adapt.getMap();
+		for (String addr : addrs.keySet()) {
+			_mapCore.put(NumberUtil.parseHex(addr) + 0x280000, src + ":" + addrs.get(addr));
+		}
+		// } else if (src.endsWith(".asm")) {
+		// DomAsmSrc asm = new DomAsmSrc(src, config);
+		// hasParsed.add(src);
+		// for (String addr : asm.getAddr_line().keySet()) {
+		// _mapCore.put(NumberUtil.parseHex(addr) + 0x280000, src + ":" +
+		// asm.getAddr_line().get(addr));
+		// }
+		// }
 	}
 
 	@Override
