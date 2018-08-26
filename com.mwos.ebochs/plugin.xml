@@ -52,6 +52,13 @@
             id="com.mwos.ebochs.ui.view.RegisterView"
             name="寄存器">
       </view>
+      <view
+            category="com.mwos.ebochs.view.category"
+            class="com.mwos.ebochs.ui.view.DebugView"
+            icon="resource/image/os.png"
+            id="com.mwos.ebochs.ui.view.DebugView"
+            name="调试">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">

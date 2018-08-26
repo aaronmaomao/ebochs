@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="../easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css">
+<style type="text/css">
+body {
+	margin: 0px;
+}
+
+.datagrid-header-row, .datagrid-row {
+	height: 22px;
+}
+</style>
+<script type="text/javascript" src="../easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../easyui/ext/datagrid-detailview.js"></script>
+<script type="text/javascript" src="../easyui/ext/datagrid-cellediting.js"></script>
+
+<script type="text/javascript" src="./view.js"></script>
+<script type="text/javascript">
+	$(function() {
+		hostTableInit();
+		regTableInit();
+	});
+</script>
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'south',split:true" style="height: 100px;"></div>
+	<div data-options="region:'east',split:true" style="width: 100px;"></div>
+	<div data-options="region:'west',split:true,title:'任务'" style="width: 280px;">
+		<table id="hostTable"></table>
+		<table id="regTable"></table>
+
+	</div>
+	<div data-options="region:'center',title:'center title'" style="padding: 5px; background: #eee;"></div>
+</body>
+</html>

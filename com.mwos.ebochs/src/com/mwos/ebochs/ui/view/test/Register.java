@@ -51,6 +51,7 @@ public class Register {
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
 		Browser browser = new Browser(shell, SWT.NONE);
+		browser.setUrl("file:///C:/Users/aaron/Desktop/jquery-easyui-datagridview/jquery-easyui-datagridview/jquery-easyui-datagridview/datagrid-scrollview2.html");
 
 	}
 

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="../easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css">
+<style type="text/css">
+body {
+	margin: 0px;
+}
+
+.datagrid-header-row, .datagrid-row {
+	height: 22px;
+}
+</style>
+<script type="text/javascript" src="../easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../easyui/ext/datagrid-detailview.js"></script>
+<script type="text/javascript" src="./view.js"></script>
+<script>
+	$(function() {
+		$('#gdtTable')
+				.datagrid(
+						{
+							title : 'GDT-全局描述表',
+							width : 400,
+							height : 250,
+							remoteSort : false,
+							singleSelect : true,
+							autoRowHeight : false,
+							fitColumns : true,
+							striped : true,
+							idField : 'NO',
+							//rownumbers: true,
+							data : [ {
+								NO : '131',
+								base : '0x00780000',
+								limit : '1024',
+								access : '0x00fa系统可读写'
+							}, {
+								NO : '1310',
+								base : '0x00780004',
+								limit : '1028',
+								access : '应用程序可执行'
+							} ],
+							columns : [ [ {
+								field : 'NO',
+								title : '序号',
+								width : 40
+							}, {
+								field : 'base',
+								title : '基地址',
+								width : 90,
+							}, {
+								field : 'limit',
+								title : '段限(KB)',
+								width : 70,
+								align : 'right',
+							}, {
+								field : 'access',
+								title : '访问属性',
+								width : 150,
+							} ] ],
+							view : detailview,
+							detailFormatter : function(rowIndex, rowData) {
+								return '<table><tr>'
+										+ '<td rowspan=2 style="border:0"><img src="images/' + rowData.itemid + '.png" style="height:50px;"></td>'
+										+ '<td style="border:0">'
+										+ '<p>Attribute: ' + rowData.attr1
+										+ '</p>' + '<p>Status: '
+										+ rowData.status + '</p>' + '</td>'
+										+ '</tr></table>';
+							}
+						});
+		$($('#gdtTable').datagrid('getPanel')).panel({
+			collapsible : true,
+			maximizable : true
+		});
+
+		//初始化idt表
+		$('#idtTable')
+				.datagrid(
+						{
+							title : 'IDT-中断描述表',
+							width : 400,
+							height : 250,
+							remoteSort : false,
+							singleSelect : true,
+							autoRowHeight : false,
+							fitColumns : true,
+							striped : true,
+							idField : 'NO',
+							//rownumbers: true,
+							data : [ {
+								NO : '131',
+								selector : '2',
+								offset : '0x3000',
+								access : '中断'
+							}, {
+								NO : '1310',
+								selector : '3',
+								offset : '0x3000',
+								access : '中断'
+							} ],
+							columns : [ [ {
+								field : 'NO',
+								title : '序号',
+								width : 40
+							}, {
+								field : 'selector',
+								title : '选择子',
+								width : 90,
+							}, {
+								field : 'offset',
+								title : '偏移量',
+								width : 70,
+								align : 'right',
+							}, {
+								field : 'access',
+								title : '访问属性',
+								width : 150,
+							} ] ],
+							view : detailview,
+							detailFormatter : function(rowIndex, rowData) {
+								return '<table><tr>'
+										+ '<td rowspan=2 style="border:0"><img src="images/' + rowData.itemid + '.png" style="height:50px;"></td>'
+										+ '<td style="border:0">'
+										+ '<p>Attribute: ' + rowData.attr1
+										+ '</p>' + '<p>Status: '
+										+ rowData.status + '</p>' + '</td>'
+										+ '</tr></table>';
+							}
+						});
+		$($('#idtTable').datagrid('getPanel')).panel({
+			collapsible : true,
+			maximizable : true
+		});
+		
+	});
+</script>
+
+</head>
+<body>
+	<table id="gdtTable" ></table><hr style="margin: 2px;visibility:  false;border: 0">
+	<table id="idtTable" ></table>
+</body>
+</html>
