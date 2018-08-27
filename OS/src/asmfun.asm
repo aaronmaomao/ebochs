@@ -5,6 +5,7 @@
 
 [FILE "asmfun.asm"]	;制作目标文件信息
 	GLOBAL	_io_hlt, _io_load_eflags, _io_store_eflags, _io_cli, _io_sti, _io_in8, _io_out8, _load_gdtr, _load_idtr
+	GLOBAL	_io_stihlt
 	GLOBAL _asm_inthandler21, _asm_inthandler2c
 
 	EXTERN _inthandler21, _inthandler2c
@@ -27,6 +28,10 @@ _io_cli:	;void io_cli(void)	清除中断标记位
 	ret
 _io_sti:	;	设置中断标记位
 	sti
+	ret
+_io_stihlt:
+	sti		;sti和hlt如果连续执行，CPU会忽略之间发生的中断
+	hlt
 	ret
 _io_out8:	;io_out8(int port, int data)
 	mov	edx,	[esp+4]

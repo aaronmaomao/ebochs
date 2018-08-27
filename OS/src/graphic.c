@@ -7,6 +7,9 @@
 
 #include "mwos.h"
 
+#define PORT_PALETTE_START 0x03c8
+#define PORT_PALETTE_COLOR 0x03c9
+
 void init_screen8(uchar* vram, int x, int y) {
 	boxfill8(vram, x, COL8_008484, 0, 0, x - 1, y - 1);	//桌面背景
 	boxfill8(vram, x, COL8_C6C6C6, 0, y - 30, x - 1, y - 1);
@@ -47,11 +50,11 @@ void set_palette(int start, int end, uchar *rgb) {
 	int i, eflags;
 	eflags = io_load_eflags();
 	io_cli();
-	io_out8(0x03c8, start);		//告诉显卡要设置颜色序号了
+	io_out8(PORT_PALETTE_START, start);		//告诉显卡要设置颜色序号了
 	for (i = start; i <= end; i++) {
-		io_out8(0x03c9, rgb[0] / 4);		//设置序号对应的颜色
-		io_out8(0x03c9, rgb[1] / 4);
-		io_out8(0x03c9, rgb[2] / 4);
+		io_out8(PORT_PALETTE_COLOR, rgb[0] / 4);		//设置序号对应的颜色
+		io_out8(PORT_PALETTE_COLOR, rgb[1] / 4);
+		io_out8(PORT_PALETTE_COLOR, rgb[2] / 4);
 		rgb += 3;
 	}
 	io_store_eflags(eflags);

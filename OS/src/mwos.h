@@ -11,6 +11,7 @@
 #define uchar unsigned char
 #define uint unsigned int
 #define ushort unsigned short
+#define BINFO_ADDR 0x0ff0
 typedef struct BOOTINFO {
 	uchar cyls, leds, vmode, reserve;
 	ushort scrnx, scrny;
@@ -36,6 +37,7 @@ int io_load_eflags(void);
 void io_store_eflags(int eflags);
 void io_cli(void);
 void io_sti(void);
+void io_stihlt(void);
 int io_in8(int port);
 void io_out8(int port, int data);
 void load_gdtr(int limit, int addr);
@@ -100,7 +102,39 @@ void setidt(IDT* idt, uint offset, int selector, int ar);
 #define PIC1_ICW3		0x00a1
 #define PIC1_ICW4		0x00a1
 void init_pic();
+
 void inthandler21(int* esp);
 void inthandler2c(int* esp);
+
+/**
+ * fifo
+ */
+typedef struct FIFO8 {
+	uchar* buf;
+	uint wp, rp, size, free, flags;
+} FIFO8;
+
+void init_fifo8(FIFO8* fifo, int size, uchar* buf);
+int fifo8_put(FIFO8* fifo, uchar data);
+int fifo8_get(FIFO8* fifo);
+int fifo8_status(FIFO8* fifo);
+
+/**
+ * keyboard
+ */
+#define PORT_KEYBOARD_STA 	0x0064	//键盘电路的状态读取端口
+#define PORT_KEYBOARD_CMD 	0x0064	//键盘电路的命令设置端口
+#define PORT_KEYBOARD_DAT 	0x0060	//键盘电路的数据存取端口
+#define KEYBOARD_WRITE_MODE 0x60	//给键盘电路写模式命令
+#define KEYBOARD_MODE 		0x47	//该模式下，keyboard电路会触发鼠标中断
+void wait_KBC_sendready();
+void init_keyboard();
+
+/**
+ * mouse
+ */
+#define PORT_KEYBOARD_TO_MOUSE  0xd4
+#define PORT_KEYBOARD_ENABLE_MOUSE  0xf4
+void enable_mouse();
 
 #endif /* MWOS_H_ */

@@ -10,9 +10,11 @@
 
 void HariMain(void) {
 	uchar mouse_buf[16 * 16];
-	BOOTINFO* binfo = (BOOTINFO*) 0x0ff0;
+	BOOTINFO* binfo = (BOOTINFO*) BINFO_ADDR;
 	init_gdtidt();
 	init_pic();
+	init_keyboard();
+	enable_mouse();
 	io_sti();
 
 	init_palette();
@@ -23,6 +25,6 @@ void HariMain(void) {
 	io_out8(PIC0_IMR, 0xf9);	//使能键盘中断
 	io_out8(PIC1_IMR, 0xef);	//使能鼠标中断
 	for (;;)
-		io_hlt();
+		io_stihlt();
 }
 

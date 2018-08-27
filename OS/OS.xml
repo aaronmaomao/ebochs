@@ -24,6 +24,8 @@
 		<code src="src/destbl.c" />
 		<code src="src/graphic.c" />
 		<code src="src/int.c" />
+		<code src="src/keyboard.c" />
+		<code src="src/mouse.c" />
 	</codepart>
 	<!-- 
 	<codepart type="app" out="HelloWorld.mwe">

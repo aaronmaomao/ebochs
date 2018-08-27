@@ -27,17 +27,3 @@ void init_pic(void) {
 	return;
 }
 
-/** 键盘中断处理函数 */
-void inthandler21(int* esp) {
-	BOOTINFO* binfo = (BOOTINFO*) 0x0ff0;
-	putfont8Str(binfo->vram, binfo->scrnx, 10, 10, COL8_00FF00, "inthandler21");
-	for(;;){
-		io_hlt();
-	}
-
-}
-
-/** 鼠标中断处理函数 */
-void inthandler2c(int* esp) {
-
-}
