@@ -1,8 +1,5 @@
 package com.mwos.ebochs.ui.view;
 
-import java.io.IOException;
-
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
@@ -31,11 +28,7 @@ public class DebugView extends ViewPart {
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
 		{
 			Browser browser = new Browser(container, SWT.NONE);
-			try {
-				browser.setUrl(FileLocator.toFileURL(Activator.getDefault().getBundle().getResource("resource/view/debug.html")).toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			browser.setUrl(Activator.getResourceURL("resource/view/debug.html"));
 		}
 
 		createActions();

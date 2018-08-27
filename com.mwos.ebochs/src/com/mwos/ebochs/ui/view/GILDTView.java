@@ -42,11 +42,7 @@ public class GILDTView extends ViewPart {
 		parent.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		Browser browser = new Browser(parent, SWT.NONE);
-		try {
-			browser.setUrl(FileLocator.toFileURL(Activator.getDefault().getBundle().getResource("resource/view/gidt.html")).toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		browser.setUrl(Activator.getResourceURL("resource/view/gidt.html"));
 
 		createActions();
 		initializeToolBar();

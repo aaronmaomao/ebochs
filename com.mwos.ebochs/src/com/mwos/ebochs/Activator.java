@@ -1,11 +1,13 @@
 package com.mwos.ebochs;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
@@ -80,11 +82,11 @@ public class Activator extends AbstractUIPlugin {
 
 		if (store.getDefaultString(OSDevPreference.BOCHS) == null)
 			store.setDefault(OSDevPreference.BOCHS, "");
-		
+
 		if (store.getDefaultString(OSDevPreference.VBOX) == null)
 			store.setDefault(OSDevPreference.VBOX, "");
 	}
-	
+
 	public static List<IProject> getOSProject() {
 		List<IProject> projects = new ArrayList<>();
 		for (IProject p : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
@@ -100,30 +102,40 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public static IProject getCurrentProject() {
-		IProject project = null;  
-//        
-//        //1.根据当前编辑器获取工程  
-//        IEditorPart part = getActiveEditor();  
-//        if(part != null){  
-//            Object object = part.getEditorInput().getAdapter(IFile.class);  
-//            if(object != null){  
-//                project = ((IFile)object).getProject();  
-//            }  
-//        }  
-//          
-//        if(project == null){  
-//            ISelectionService selectionService =     
-//                    Workbench.getInstance().getActiveWorkbenchWindow().getSelectionService();    
-//            ISelection selection = selectionService.getSelection();    
-//            if(selection instanceof IStructuredSelection) {    
-//                Object element = ((IStructuredSelection)selection).getFirstElement();    
-//            }     
-//        }  
-          
-        return project;  
+		IProject project = null;
+		//
+		// //1.根据当前编辑器获取工程
+		// IEditorPart part = getActiveEditor();
+		// if(part != null){
+		// Object object = part.getEditorInput().getAdapter(IFile.class);
+		// if(object != null){
+		// project = ((IFile)object).getProject();
+		// }
+		// }
+		//
+		// if(project == null){
+		// ISelectionService selectionService =
+		// Workbench.getInstance().getActiveWorkbenchWindow().getSelectionService();
+		// ISelection selection = selectionService.getSelection();
+		// if(selection instanceof IStructuredSelection) {
+		// Object element = ((IStructuredSelection)selection).getFirstElement();
+		// }
+		// }
+
+		return project;
 	}
-	
+
 	public static IProject getOSProject(String name) {
 		return ResourcesPlugin.getWorkspace().getRoot().getProject(name);
+	}
+
+	public static String getResourceURL(String url) {
+		try {
+			return FileLocator.toFileURL(Activator.getDefault().getBundle().getResource(url)).toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

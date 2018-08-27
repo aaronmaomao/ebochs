@@ -1,4 +1,8 @@
 /**
+ * 
+ */
+
+/**
  * hostTable
  */
 function hostTableInit() {
@@ -24,6 +28,9 @@ function hostTableInit() {
 			width : 80
 		} ] ]
 	});
+	$($('#hostTable').datagrid('getPanel')).panel({
+		headerCls:'panelHeader'
+	});
 }
 
 /**
@@ -32,11 +39,12 @@ function hostTableInit() {
 function regTableInit() {
 	$('#regTable').datagrid({
 		width : '100%',
-		height : 300,
+	//	height : 300,
 		// border : false,
 		striped : true,
 		title : '寄存器',
 		showHeader : false,
+		singleSelect : true,
 		data : [ {
 			name1 : 'EAX',
 			value1 : '0x00000000',
@@ -105,6 +113,10 @@ function regTableInit() {
 			field : 'value2',
 			width : 90,
 		} ] ]
+	});
+	
+	$($('#regTable').datagrid('getPanel')).panel({
+		headerCls:'panelHeader'
 	});
 
 }
