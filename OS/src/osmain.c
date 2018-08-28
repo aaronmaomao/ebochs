@@ -10,11 +10,14 @@
 
 void HariMain(void) {
 	uchar mouse_buf[16 * 16];
+	uchar fifo_buf[512];
+	FIFO8 fifo;
+	MOUSE_DEC mouse_dec;
 	BOOTINFO* binfo = (BOOTINFO*) BINFO_ADDR;
 	init_gdtidt();
 	init_pic();
 	init_keyboard();
-	enable_mouse();
+	enable_mouse(&mouse_dec);
 	io_sti();
 
 	init_palette();

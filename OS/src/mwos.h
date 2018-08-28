@@ -133,12 +133,18 @@ void init_keyboard();
 /**
  * mouse
  */
+#define MOUSE_CODE_ERR -1
+#define MOUSE_CODE_NO	0
+#define MOUSE_CODE_OK 	1
+
 typedef struct MOUSE_DEC {
 	uchar buf[3], phase;
 	int x, y, btn;
 } MOUSE_DEC;
+
 #define PORT_KEYBOARD_TO_MOUSE  0xd4
 #define PORT_KEYBOARD_ENABLE_MOUSE  0xf4
 void enable_mouse(MOUSE_DEC* mouse_dec);
+int mouse_decode(MOUSE_DEC* mdec, uchar dat);
 
 #endif /* MWOS_H_ */

@@ -19,6 +19,34 @@ void enable_mouse(MOUSE_DEC* mouse_dec) {
 	return;
 }
 
+#define MOUSE_CODE_ERR -1
+#define MOUSE_CODE_NO	0
+#define MOUSE_CODE_OK 	1
+int mouse_decode(MOUSE_DEC* mdec, uchar dat) {
+	if (mdec->phase == 0) {
+		if (dat == 0xfa) {
+			mdec->phase = 1;
+		}
+		return MOUSE_CODE_NO;
+	}
+	if (mdec->phase == 1) {
+		mdec->buf[0] = dat;
+		mdec->phase = 2;
+		return MOUSE_CODE_NO;
+	}
+	if (mdec->phase == 2) {
+		mdec->buf[1] = dat;
+		mdec->phase = 3;
+		return MOUSE_CODE_NO;
+	}
+	if (mdec->phase == 3) {
+		mdec->buf[2] = dat;
+		mdec->phase = 1;
+		return MOUSE_CODE_OK;
+	}
+	return MOUSE_CODE_ERR;
+}
+
 /** 鼠标中断处理函数 */
 void inthandler2c(int* esp) {
 	uchar dat, data[4];
