@@ -66,7 +66,7 @@ public class Bxrc implements IVMProfile {
 
 	@Override
 	public File localize() {
-		File f = new File(config.getProject().getLocationURI().getPath() + "/obj/bochs.bxrc");
+		File f = new File(config.getProject().getLocationURI().getPath() + "/obj/"+config.getName()+".bxrc");
 		try {
 			Writer w = new FileWriter(f);
 			for (String key : text.keySet()) {

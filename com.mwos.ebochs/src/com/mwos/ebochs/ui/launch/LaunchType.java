@@ -20,6 +20,8 @@ import com.mwos.ebochs.core.model.cmd.CmdStr;
 import com.mwos.ebochs.core.vm.bochs.Bochs;
 import com.mwos.ebochs.core.vm.bochs.Bxrc;
 import com.mwos.ebochs.core.vm.bochs.DebugModel;
+import com.mwos.ebochs.core.vm.vbox.PVbox;
+import com.mwos.ebochs.core.vm.vbox.Vbox;
 import com.mwos.ebochs.resource.config.OSConfigFactory;
 import com.mwos.ebochs.resource.config.entity.OSConfig;
 import com.mwos.ebochs.ui.preference.OSDevPreference;
@@ -52,6 +54,19 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 							System.out.println(text);
 						}
 					});
+				}
+				if(configuration.getAttribute(MainTab.vboxChk, false)) {
+					String vboxDir = OSDevPreference.getValue(OSDevPreference.VBOX);
+					PVbox pvbox = new PVbox(config, vboxDir);
+					Vbox box = new Vbox(vboxDir, pvbox);
+					Process process = box.run();
+//					IProcess iProcess = DebugPlugin.newProcess(launch, process, "Run " + project.getName() + " on " + bochs.getName());
+//					iProcess.getStreamsProxy().getOutputStreamMonitor().addListener(new IStreamListener() {
+//						@Override
+//						public void streamAppended(String text, IStreamMonitor monitor) {
+//							System.out.println(text);
+//						}
+//					});
 				}
 			} else if (mode.equals("debug")) {
 				String bochsDir = OSDevPreference.getValue(OSDevPreference.BOCHS);

@@ -6,6 +6,8 @@
  */
 #include "mwos.h"
 
+FIFO8* key_fifo;
+
 /**
  * 判断keyboard电路是否准备好
  */
@@ -21,7 +23,8 @@ void wait_KBC_sendready() {
 /**
  * 初始化keyboard电路为0x47模式
  */
-void init_keyboard() {
+void init_keyboard(FIFO8* fifo) {
+	key_fifo = fifo;
 	wait_KBC_sendready();
 	io_out8(PORT_KEYBOARD_CMD, KEYBOARD_WRITE_MODE);
 	wait_KBC_sendready();
@@ -31,11 +34,9 @@ void init_keyboard() {
 
 /** 键盘中断处理函数 */
 void inthandler21(int* esp) {
-	uchar data, str[4];
-	BOOTINFO* binfo = (BOOTINFO*) 0x0ff0;
+	uchar data;
 	io_out8(PIC0_OCW2, 0x60 + 0x1);	//中断受付完毕
 	data = io_in8(PORT_KEYBOARD_DAT);	//读取键盘端口的数据
-	sprintf(str, "%02x", data);
-	putfont8Str(binfo->vram, binfo->scrnx, 10, 30, COL8_00FF00, str);
+//	fifo8_put(key_fifo, data);
 	return;
 }

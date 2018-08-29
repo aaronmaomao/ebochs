@@ -18,8 +18,6 @@ void init_screen8(uchar* vram, int x, int y) {
 	boxfill8(vram, x, COL8_C6C6C6, (x - 32) / 2 + 1, y - 28, (x - 32) / 2 + 1 + 32, y - 2);
 	boxfill8(vram, x, COL8_848484, (x - 32) / 2 + 1, y - 2, (x - 32) / 2 + 1 + 32, y - 2);
 	boxfill8(vram, x, COL8_848484, (x - 32) / 2 + 1 + 32, y - 28, (x - 32) / 2 + 1 + 32, y - 2);
-
-	putfont8Str(vram, x, 10, 10, COL8_000000, "Mao Zhengjun!");
 }
 
 /** 初始化显卡的调色板  */

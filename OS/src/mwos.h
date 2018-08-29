@@ -12,6 +12,16 @@
 #define uint unsigned int
 #define ushort unsigned short
 #define BINFO_ADDR 0x0ff0
+#define B_00000001		1
+#define B_00000010		2
+#define B_00000011		3
+#define B_00000100		4
+#define B_00000111		7
+#define B_00001000		8
+#define B_00010000		16
+#define B_00100000		32
+#define B_01000000		64
+#define B_10000000		128
 typedef struct BOOTINFO {
 	uchar cyls, leds, vmode, reserve;
 	ushort scrnx, scrny;
@@ -128,7 +138,7 @@ int fifo8_status(FIFO8* fifo);
 #define KEYBOARD_WRITE_MODE 0x60	//给键盘电路写模式命令
 #define KEYBOARD_MODE 		0x47	//该模式下，keyboard电路会触发鼠标中断
 void wait_KBC_sendready();
-void init_keyboard();
+void init_keyboard(FIFO8* fifo);
 
 /**
  * mouse
@@ -144,7 +154,7 @@ typedef struct MOUSE_DEC {
 
 #define PORT_KEYBOARD_TO_MOUSE  0xd4
 #define PORT_KEYBOARD_ENABLE_MOUSE  0xf4
-void enable_mouse(MOUSE_DEC* mouse_dec);
+void enable_mouse(FIFO8* fifo, MOUSE_DEC* mouse_dec);
 int mouse_decode(MOUSE_DEC* mdec, uchar dat);
 
 #endif /* MWOS_H_ */

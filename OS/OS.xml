@@ -26,6 +26,7 @@
 		<code src="src/int.c" />
 		<code src="src/keyboard.c" />
 		<code src="src/mouse.c" />
+		<code src="src/fifo.c"></code>
 	</codepart>
 	<!-- 
 	<codepart type="app" out="HelloWorld.mwe">
