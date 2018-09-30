@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<link rel="stylesheet" type="text/css" href="../easyui/themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../easyui/themes/icon.css">
+		<style type="text/css">
+			body {
+				margin: 0px;
+			}
+			.datagrid-header-row, .datagrid-row {
+				height: 22px;
+			}
+		</style>
+		<script type="text/javascript" src="../easyui/jquery.min.js"></script>
+		<script type="text/javascript" src="../easyui/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="../easyui/ext/datagrid-detailview.js"></script>
+		<script type="text/javascript" src="./view.js"></script>
+		<script>
+			//点击单元格
+			function onDblClickCell(rowIndex, field, value){
+				$('#memTable').datagrid('editCell',{index:rowIndex, field:field});
+			}
+		</script>
+	</head>
+	<body>
+		<table id="memTable" class="easyui-datagrid"></table>
+	</body>
+	<script>
+		$.extend($.fn.datagrid.methods, {
+			editCell: function(jq,param){
+				return jq.each(function(){
+						var opts = $(this).datagrid('options');
+						var fields = $(this).datagrid('getColumnFields',true).concat($(this).datagrid('getColumnFields'));
+						for(var i=0; i<fields.length; i++){
+							var col = $(this).datagrid('getColumnOption', fields[i]);
+							col.editor1 = col.editor;
+							if (fields[i] != param.field){
+								col.editor = null;				
+							}
+						}			
+						$(this).datagrid('beginEdit', param.index);
+						for(var i=0; i<fields.length; i++){
+							var col = $(this).datagrid('getColumnOption', fields[i]);
+							col.editor = col.editor1;
+						}
+					});	
+				}}
+			);
+		$(function(){
+			var columns=[
+				{field : 'selAddr', title : '地址\偏移量', width:90, align:'left'}
+			];
+			for(var i=0; i<16; i++){
+				columns.push({
+					field : 'offset'+i, title : i.toString(16).toUpperCase(), width:30, align:'center',
+					editor : {type:'text', options:{height:'auto'}}
+				});
+			}
+			columns.push({field : 'ascll', title : 'ASCII', width:100, align:'left'});
+			
+			var data = [
+				{selAddr:'0x000AD111', offset0:'AD', offset1:'AA', offset2:'45', offset3:'66'},
+				{selAddr:'0x000AD111', offset3:'AD', offset1:'AA', offset6:'45', offset14:'66'}
+			];
+			$('#memTable').datagrid({
+				title : 'memory',
+				width : 'auto',
+				height : 'auto',
+				singleSelect : true,
+				autoRowHeight : false,
+				fitColumns : false,
+				striped : true,
+				idField : 'selAddr',
+				onDblClickCell : onDblClickCell,
+				view : detailview,
+				columns : [columns],
+				data : data,
+				detailFormatter : function(rowIndex, rowData) {
+					return '<table><tr>' + '<td rowspan=2 style="border:0"><img src="images/' + rowData.itemid + '.png" style="height:50px;"></td>' + '<td style="border:0">' + '<p>Attribute: ' + rowData.attr1 + '</p>' + '<p>Status: ' + rowData.status + '</p>' + '</td>' + '</tr></table>';
+				}
+			});
+		});    
+	</script>
+</html>

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 /**
@@ -14,7 +14,7 @@ function hostTableInit() {
 		height : 300,
 		// border : false,
 		striped : true,
-		columns : [ [ {
+		columns : [[{
 			title : '序号',
 			field : 'NO',
 			width : 40
@@ -26,10 +26,10 @@ function hostTableInit() {
 			field : 'other',
 			title : '其他',
 			width : 80
-		} ] ]
+		}]]
 	});
 	$($('#hostTable').datagrid('getPanel')).panel({
-		headerCls:'panelHeader'
+		headerCls : 'panelHeader'
 	});
 }
 
@@ -39,13 +39,13 @@ function hostTableInit() {
 function regTableInit() {
 	$('#regTable').datagrid({
 		width : '100%',
-	//	height : 300,
+		//	height : 300,
 		// border : false,
 		striped : true,
 		title : '寄存器',
 		showHeader : false,
 		singleSelect : true,
-		data : [ {
+		data : [{
 			name1 : 'EAX',
 			value1 : '0x00000000',
 			name2 : 'EBP',
@@ -95,8 +95,8 @@ function regTableInit() {
 			value1 : '',
 			name2 : '',
 			value2 : ''
-		} ],
-		columns : [ [ {
+		}],
+		columns : [[{
 			title : '名称',
 			field : 'name1',
 			width : 40
@@ -112,11 +112,14 @@ function regTableInit() {
 			title : '值',
 			field : 'value2',
 			width : 90,
-		} ] ]
-	});
-	
-	$($('#regTable').datagrid('getPanel')).panel({
-		headerCls:'panelHeader'
+		}]]
 	});
 
+	$($('#regTable').datagrid('getPanel')).panel({
+		headerCls : 'panelHeader'
+	});
 }
+	
+/*
+ * memory
+ */
