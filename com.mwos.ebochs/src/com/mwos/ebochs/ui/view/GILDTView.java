@@ -40,9 +40,10 @@ public class GILDTView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout(SWT.HORIZONTAL));
-
-		Browser browser = new Browser(parent, SWT.NONE);
-		browser.setUrl(Activator.getResourceURL("resource/view/gidt.html"));
+		{
+			Label lblNewLabel = new Label(parent, SWT.NONE);
+			lblNewLabel.setText("New Label");
+		}
 
 		createActions();
 		initializeToolBar();

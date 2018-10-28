@@ -75,7 +75,7 @@ public class LaunchType implements ILaunchConfigurationDelegate {
 				Process process = bochs.debug();
 				DebugModel dm = new DebugModel(process, config);
 
-				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.perspective.OSDebugPerspective",
+				PlatformUI.getWorkbench().showPerspective("com.mwos.ebochs.ui.view.OSPerspective",
 						PlatformUI.getWorkbench().getActiveWorkbenchWindow());
 
 				PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {

@@ -4,7 +4,6 @@ import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.wb.swt.ResourceManager;
 
 import com.mwos.ebochs.Activator;
 

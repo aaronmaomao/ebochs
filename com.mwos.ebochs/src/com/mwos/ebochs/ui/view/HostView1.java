@@ -27,7 +27,7 @@ import com.mwos.ebochs.core.vm.bochs.DebugModel;
 import com.mwos.ebochs.ui.view.model.host.HostNode;
 import com.mwos.ebochs.ui.view.model.host.Node;
 
-public class HostView extends ViewPart implements IInfoListener {
+public class HostView1 extends ViewPart implements IInfoListener {
 
 	public static final String ID = "com.mwos.ebochs.ui.view.HostView"; //$NON-NLS-1$
 
@@ -41,7 +41,7 @@ public class HostView extends ViewPart implements IInfoListener {
 
 	private Set<String> cares = new HashSet<>();
 
-	public HostView() {
+	public HostView1() {
 		this.cares.add(CmdStr.AddDM);
 		this.cares.add(CmdStr.DestoryDM);
 		center.addListener(this);

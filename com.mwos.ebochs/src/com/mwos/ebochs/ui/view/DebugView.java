@@ -3,12 +3,14 @@ package com.mwos.ebochs.ui.view;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mwos.ebochs.Activator;
+
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.widgets.Label;
 
 public class DebugView extends ViewPart {
 
@@ -24,12 +26,12 @@ public class DebugView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new FillLayout(SWT.HORIZONTAL));
-		{
-			Browser browser = new Browser(container, SWT.NONE);
-			browser.setUrl(Activator.getResourceURL("resource/view/debug.html"));
-		}
+		
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new FillLayout(SWT.HORIZONTAL));
+		Browser browser = new Browser(composite, SWT.NONE);
+		
+		browser.setUrl(Activator.getResourceURL("/resource/view/debug.html"));
 
 		createActions();
 		initializeToolBar();
