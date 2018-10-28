@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mwos.ebochs2.ui.preference.OSPreference"
+            id="com.mwos.ebochs2.preference"
+            name="OS">
+      </page>
+      <page
+            category="com.mwos.ebochs2.preference"
+            class="com.mwos.ebochs2.ui.preference.OSPreferencePage1"
+            id="com.mwos.ebochs2.preferencePage1"
+            name="Toolchain">
+      </page>
+   </extension>
+
+</plugin>

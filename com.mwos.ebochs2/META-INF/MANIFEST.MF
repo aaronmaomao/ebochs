@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Ebochs2
-Bundle-SymbolicName: com.mwos.ebochs2
+Bundle-SymbolicName: com.mwos.ebochs2;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.mwos.ebochs2.Activator
 Bundle-Vendor: MWOS
