@@ -22,10 +22,7 @@ public class CTree {
 		Toolchain tc = (Toolchain) object;
 		TreeColumn[] columns = tree.getColumns();
 		for (TreeColumn column : columns) {
-			CTreeItem cItem = new CTreeItem(cTree)
-			Control editor = provider.getEditor(column, tc);
-			if (editor != null)
-				break;
+			
 			
 			
 		}

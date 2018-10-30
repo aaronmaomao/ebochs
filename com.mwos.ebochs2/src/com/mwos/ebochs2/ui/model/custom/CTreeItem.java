@@ -11,6 +11,9 @@ public class CTreeItem {
 	private List<CTreeItem> childs;
 	private CTreeItem parent;
 
+	public CTreeItem() {
+	}
+
 	public CTreeItem(CTreeItem parent) {
 		super();
 		this.parent = parent;

@@ -1,6 +1,6 @@
 package com.mwos.ebochs2.model;
 
-public class Tool {
+public class Tool implements IJSONSerial {
 	private String name;
 
 	public Tool() {
@@ -20,4 +20,14 @@ public class Tool {
 		this.name = name;
 	}
 
+	@Override
+	public JSONObject getSerial() {
+		JSONObject object = new JSONObject("name",this.name);
+		return object;
+	}
+
+	@Override
+	public void setSerial(JSONObject serial) {
+		this.name = serial.get("name", String.class);
+	}
 }
