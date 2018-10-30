@@ -1,9 +1,12 @@
 package com.mwos.ebochs2.ui.preference;
 
+import javax.swing.table.TableCellEditor;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.custom.TreeEditor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -16,6 +19,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -32,6 +36,7 @@ import com.mwos.ebochs2.model.Toolchain;
 import com.mwos.ebochs2.ui.model.custom.CTree;
 import com.mwos.ebochs2.ui.model.custom.CTreeProvider;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -62,9 +67,9 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 		gl_container.horizontalSpacing = 0;
 		gl_container.marginHeight = 0;
 		container.setLayout(gl_container);
-		
+
 		ToolBar toolBar = new ToolBar(container, SWT.FLAT | SWT.WRAP | SWT.RIGHT | SWT.SHADOW_OUT);
-		
+
 		ToolItem tltmNewItem = new ToolItem(toolBar, SWT.NONE);
 		tltmNewItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -73,7 +78,7 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 			}
 		});
 		tltmNewItem.setImage(ResourceManager.getPluginImage("com.mwos.ebochs2", "resource/easyui/themes/icons/edit_add.png"));
-		
+
 		Tree tree = new Tree(container, SWT.BORDER);
 		tree.setLinesVisible(true);
 		tree.setHeaderVisible(true);
@@ -89,15 +94,12 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 		TreeColumn trclmnTool = new TreeColumn(tree, SWT.NONE);
 		trclmnTool.setWidth(150);
 		trclmnTool.setText("Tool");
-		
+
 		TreeEditor treeEditor = new TreeEditor(tree);
 		treeEditor.horizontalAlignment = SWT.LEFT;
-		
 
 		return container;
 	}
-	
-	
 
 	/**
 	 * Initialize the preference page.
@@ -105,65 +107,78 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 	public void init(IWorkbench workbench) {
 		// Initialize the preference page
 	}
-	
+
 	private void initTreeData() {
-		
+
 	}
-	
+
 	private void showAddDialog() {
 		Dialog dialog = new Dialog(Activator.getDefault().getWorkbench().getModalDialogShellProvider()) {
-			
+
+			@Override
+			protected boolean isResizable() {
+				return true;
+			}
+
 			@Override
 			protected Point getInitialSize() {
 				return new Point(500, 400);
 			}
-			
+
 			@Override
 			protected Control createDialogArea(Composite parent) {
-				Composite composite = new Composite(parent, SWT.NONE);
+				Composite composite = (Composite) super.createDialogArea(parent);
 				composite.setLayout(new GridLayout(3, false));
-				
+
 				Label label = new Label(composite, SWT.NONE);
-				label.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+				label.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 				label.setText("名称");
-				
+
 				Text text = new Text(composite, SWT.BORDER);
 				text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 				new Label(composite, SWT.NONE);
-				
+
 				Label label_1 = new Label(composite, SWT.NONE);
-				label_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+				label_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 				label_1.setText("位置");
-				
+
 				Text text_1 = new Text(composite, SWT.BORDER);
 				text_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-				
+
 				Button btnBrowse = new Button(composite, SWT.NONE);
 				btnBrowse.setText("Browse...");
-				
+
 				Table table = new Table(composite, SWT.BORDER | SWT.FULL_SELECTION);
 				table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 				table.setHeaderVisible(true);
 				table.setLinesVisible(true);
-				
+
 				TableColumn tblclmnName = new TableColumn(table, SWT.NONE);
 				tblclmnName.setWidth(100);
 				tblclmnName.setText("Name");
-				
+
 				TableColumn tblclmnLocation = new TableColumn(table, SWT.NONE);
 				tblclmnLocation.setWidth(230);
 				tblclmnLocation.setText("Location");
+
+				TableEditor tableEditor = new TableEditor(table);
+				tableEditor.grabHorizontal = true;
+				
+				TableItem item0 = new TableItem(table, SWT.NONE);
+				item0.setText(new String[] { "编译器", "" });
+				Combo combo = new Combo(table, SWT.NONE);
+				combo.setSize(SWT.DEFAULT, 10);
+				combo.setItems(new String[] {"gcc.ece", "abd.exe"});
+				tableEditor.setEditor(combo, item0, 1);
+				
+				
+				TableItem item1 = new TableItem(table, SWT.NONE);
+				item1.setText(new String[] { "编译器", "" });
+				TableItem item2 = new TableItem(table, SWT.NONE);
+				item2.setText(new String[] { "编译器", "" });
 				return composite;
-			}
-			
-			@Override
-			protected void setShellStyle(int newShellStyle) {
-				newShellStyle|=(SWT.MAX);
-				super.setShellStyle(newShellStyle);
 			}
 		};
 		dialog.open();
-		
 	}
-
 }

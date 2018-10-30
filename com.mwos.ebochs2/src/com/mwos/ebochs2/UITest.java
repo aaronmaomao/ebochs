@@ -12,6 +12,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Tree;
+
+import com.mwos.ebochs2.ui.UITest2;
+
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Combo;
@@ -19,6 +22,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.List;
 
 public class UITest {
 
@@ -64,13 +68,13 @@ public class UITest {
 		shell.setText("SWT Application");
 		shell.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		CTabFolder tabFolder = new CTabFolder(shell, SWT.BORDER);
+		CTabFolder tabFolder = new CTabFolder(shell, SWT.NONE);
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 		
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 		tabItem.setText("New Item");
 		
-		Composite composite = new Composite(tabFolder, SWT.NONE);
+		Composite composite = new Composite(tabFolder, SWT.BORDER);
 		tabItem.setControl(composite);
 		composite.setLayout(new GridLayout(3, false));
 		

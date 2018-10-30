@@ -3,8 +3,6 @@ package com.mwos.ebochs2.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.print.JobSettings;
-
 public class Toolchain implements IJSONSerial {
 	private String name;
 	private List<Tool> tools;
