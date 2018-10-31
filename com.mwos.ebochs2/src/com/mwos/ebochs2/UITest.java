@@ -1,28 +1,26 @@
 package com.mwos.ebochs2;
 
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ICellModifier;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Tree;
-
-import com.mwos.ebochs2.ui.UITest2;
-
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Text;
 
 public class UITest {
 
@@ -96,18 +94,87 @@ public class UITest {
 		Button btnBrowse = new Button(composite, SWT.NONE);
 		btnBrowse.setText("Browse...");
 		
-		table = new Table(composite, SWT.BORDER | SWT.FULL_SELECTION);
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
-		table.setHeaderVisible(true);
+		TableViewer tableViewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
+		table = tableViewer.getTable();
 		table.setLinesVisible(true);
+		table.setHeaderVisible(true);
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+		tableViewer.setContentProvider(new IStructuredContentProvider() {
+			
+			@Override
+			public Object[] getElements(Object inputElement) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+		});
+
+		CellEditor[] cellEditor = new CellEditor[4];
+		cellEditor[0] = new TextCellEditor();
+		cellEditor[1] = new TextCellEditor();
+		cellEditor[2] = new TextCellEditor();
+		cellEditor[3] = new TextCellEditor();
+		tableViewer.setColumnProperties(new String[] {"Tool","Location"});
+		tableViewer.setCellEditors(cellEditor);
+		tableViewer.setCellModifier(new ICellModifier() {
+			
+			@Override
+			public void modify(Object element, String property, Object value) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public Object getValue(Object element, String property) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public boolean canModify(Object element, String property) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
 		
-		TableColumn tblclmnName = new TableColumn(table, SWT.NONE);
-		tblclmnName.setWidth(100);
-		tblclmnName.setText("Name");
+		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnTool = tableViewerColumn.getColumn();
+		tblclmnTool.setWidth(100);
+		tblclmnTool.setText("Tool");
 		
-		TableColumn tblclmnLocation = new TableColumn(table, SWT.NONE);
-		tblclmnLocation.setWidth(230);
+		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnLocation = tableViewerColumn_1.getColumn();
+		tblclmnLocation.setWidth(200);
 		tblclmnLocation.setText("Location");
+		EditingSupport editingSupport = new EditingSupport(tableViewerColumn_1.getViewer()) {
+			
+			@Override
+			protected void setValue(Object element, Object value) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			protected Object getValue(Object element) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			protected CellEditor getCellEditor(Object element) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			protected boolean canEdit(Object element) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
+
+	//	tableViewer.setColumnViewerEditor(columnViewerEditor);
+	//	tableViewer.setInput(new String[] {"编译器","C://d.exe"});
 		
 		CTabItem tbtmNewItem = new CTabItem(tabFolder, SWT.NONE);
 		tbtmNewItem.setText("New Item");
