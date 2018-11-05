@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Toolchain implements IJSONSerial {
 	private String name;
+	private String location = "";
 	private List<Tool> tools;
 
 	public Toolchain() {
@@ -41,13 +42,39 @@ public class Toolchain implements IJSONSerial {
 		return tools;
 	}
 
-	public static Toolchain get() {
+	public static Toolchain[] get() {
 		Toolchain toolchain = new Toolchain("原生工具链");
 		Tool t1 = new Tool("编译器");
+		t1.setPath("D://a.exe");
 		Tool t2 = new Tool("链接器");
+		t2.setPath("C://home/c.exe");
 		toolchain.addTool(t1);
 		toolchain.addTool(t2);
-		return toolchain;
+		
+		Toolchain toolchain2 = new Toolchain("原生工具链2");
+		Tool t12 = new Tool("编译器");
+		t12.setPath("D://a.exe");
+		Tool t22 = new Tool("链接器");
+		t22.setPath("C://home/c.exe");
+		toolchain2.addTool(t12);
+		toolchain2.addTool(t22);
+		
+		Toolchain toolchain3 = new Toolchain("原生工具链3");
+		Tool t13 = new Tool("编译器");
+		t13.setPath("D://a.exe");
+		Tool t23 = new Tool("链接器");
+		t23.setPath("C://home/c.exe");
+		toolchain3.addTool(t13);
+		toolchain3.addTool(t23);
+		return new Toolchain[] { toolchain,toolchain2,toolchain3 };
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	@Override

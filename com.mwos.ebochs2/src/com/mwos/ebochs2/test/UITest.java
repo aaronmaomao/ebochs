@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.TableItem;
 public class UITest {
 
 	protected Shell shell;
-	private Text text;
-	private Text text_1;
+	private Text txt;
+	private Text txtLocation;
 	private Table table;
 
 	/**
@@ -78,15 +78,16 @@ public class UITest {
 		label.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		label.setText("名称");
 
-		text = new Text(composite, SWT.BORDER);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txt = new Text(composite, SWT.BORDER);
+		txt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		new Label(composite, SWT.NONE);
 
 		Label label_1 = new Label(composite, SWT.NONE);
 		label_1.setText("位置");
 
-		text_1 = new Text(composite, SWT.BORDER);
-		text_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtLocation = new Text(composite, SWT.BORDER);
+		txtLocation.setEditable(false);
+		txtLocation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		Button btnNewButton = new Button(composite, SWT.NONE);
 		btnNewButton.setText("Browse...");
@@ -104,13 +105,18 @@ public class UITest {
 		
 		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnLocation = tableViewerColumn_1.getColumn();
-		tblclmnLocation.setWidth(100);
-		tblclmnLocation.setText("Location");
+		tblclmnLocation.setWidth(200);
+		tblclmnLocation.setText("Path");
 		tableViewerColumn_1.setEditingSupport(new ToolEditSupport(tableViewerColumn_1.getViewer()));
 		
 		tableViewer.setLabelProvider(new LabelProvider());
 		tableViewer.setContentProvider(new ContentProvider());
 		tableViewer.setCellModifier(new CellModify());
+		
+		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnNewColumn = tableViewerColumn_2.getColumn();
+		tblclmnNewColumn.setWidth(100);
+		tblclmnNewColumn.setText("Args");
 		
 		tableViewer.setInput(new String[] {"编译器","D://a.exe"});
 	}

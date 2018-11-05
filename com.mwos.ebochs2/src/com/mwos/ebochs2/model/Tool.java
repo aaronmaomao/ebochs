@@ -2,6 +2,7 @@ package com.mwos.ebochs2.model;
 
 public class Tool implements IJSONSerial {
 	private String name;
+	private String path="";
 
 	public Tool() {
 		// TODO Auto-generated constructor stub
@@ -18,6 +19,14 @@ public class Tool implements IJSONSerial {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	@Override

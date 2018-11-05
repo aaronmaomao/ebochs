@@ -43,6 +43,14 @@ public class JSONObject {
 		data = (data.substring(0, data.length() - 1) + "}");
 		return data;
 	}
+	
+	public static JSONObject fromStr(String obj) {
+		JSONObject object = new JSONObject();
+		String temp = obj;
+
+		
+		return object;
+	}
 
 	public static void main(String[] args) {
 	}
