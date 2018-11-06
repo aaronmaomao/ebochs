@@ -2,6 +2,7 @@ package com.mwos.ebochs2.model;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class JSONObject {
 	private Map<String, Object> _map;
@@ -44,15 +45,26 @@ public class JSONObject {
 		return data;
 	}
 	
-	public static JSONObject fromStr(String obj) {
+	public static JSONObject fromStr(String jsonStr) {
 		JSONObject object = new JSONObject();
-		String temp = obj;
-
+		if(jsonStr.matches("^{.*.}$")) {
+			String cont = jsonStr.substring(1, jsonStr.length()-1);
+			String[] objs = cont.split(",");
+			for(String obj:objs) {
+			}
+		}
 		
 		return object;
 	}
+		
 
 	public static void main(String[] args) {
+		String json = "{\"name\" : \"m\"}";
+		String reg="^\\{.*\\}$";
+		Pattern pattern = Pattern.compile(reg);
+//		for(String s:pattern.matcher(json).){
+//			System.out.println(s);
+//		}
 	}
 
 }

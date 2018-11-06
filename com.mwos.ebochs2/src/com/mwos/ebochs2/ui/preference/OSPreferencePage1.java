@@ -25,10 +25,13 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.mwos.ebochs2.Activator;
 import com.mwos.ebochs2.model.Toolchain;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.ICheckStateProvider;
+import org.eclipse.swt.widgets.Label;
 
 public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPreferencePage {
 
-	private TreeViewer treeViewer;
+	private CheckboxTreeViewer treeViewer;
 
 	/**
 	 * Create the preference page.
@@ -77,17 +80,26 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 		});
 		toolItem_1.setImage(ResourceManager.getPluginImage("com.mwos.ebochs2", "resource/easyui/themes/icons/pencil.png"));
 
-		treeViewer = new TreeViewer(container, SWT.BORDER);
+		treeViewer = new CheckboxTreeViewer(container, SWT.BORDER );
 		Tree tree = treeViewer.getTree();
 		tree.setLinesVisible(true);
 		tree.setHeaderVisible(true);
+		treeViewer.setCheckStateProvider(new ICheckStateProvider() {
+			
+			@Override
+			public boolean isGrayed(Object element) {
+				treeViewer.setSubtreeChecked(element, false);
+				return false;
+			}
+			
+			@Override
+			public boolean isChecked(Object element) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
+		
 		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
-		TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
-		TreeColumn trclmnCheck = treeViewerColumn.getColumn();
-		trclmnCheck.setResizable(false);
-		trclmnCheck.setWidth(40);
-		trclmnCheck.setText("S");
 
 		TreeViewerColumn treeViewerColumn_1 = new TreeViewerColumn(treeViewer, SWT.NONE);
 		TreeColumn trclmnNewColumn = treeViewerColumn_1.getColumn();
@@ -102,7 +114,7 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 		treeViewer.setContentProvider(new TCTreeContentProvider());
 		treeViewer.setLabelProvider(new TCTreeLabelProvider());
 		initTreeData();
-		initCheckbox();
+	//	initCheckbox();
 		
 		
 		

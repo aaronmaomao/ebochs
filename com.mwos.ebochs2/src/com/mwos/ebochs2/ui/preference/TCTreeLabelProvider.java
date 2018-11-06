@@ -45,10 +45,8 @@ public class TCTreeLabelProvider implements ITableLabelProvider{
 			Toolchain toolchain = (Toolchain) element;
 			switch (columnIndex) {
 			case 0:
-				return "";
-			case 1:
 				return toolchain.getName();
-			case 2:
+			case 1:
 				return toolchain.getLocation();
 			default:
 				return "";
@@ -56,9 +54,9 @@ public class TCTreeLabelProvider implements ITableLabelProvider{
 		}else if(element instanceof Tool) {
 			Tool tool = (Tool) element;
 			switch (columnIndex) {
-			case 1:
+			case 0:
 				return tool.getName();
-			case 2:
+			case 1:
 				return tool.getPath();
 			default:
 				return "";
