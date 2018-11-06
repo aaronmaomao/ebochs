@@ -2,7 +2,8 @@ package com.mwos.ebochs2.ui.preference;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TreeEditor;
@@ -24,10 +25,8 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.mwos.ebochs2.Activator;
+import com.mwos.ebochs2.model.Tool;
 import com.mwos.ebochs2.model.Toolchain;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.jface.viewers.ICheckStateProvider;
-import org.eclipse.swt.widgets.Label;
 
 public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPreferencePage {
 
@@ -73,37 +72,23 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Object select = treeViewer.getStructuredSelection().getFirstElement();
-				if(select!=null && select instanceof Toolchain) {
+				if (select != null && select instanceof Toolchain) {
 					showAddDialog((Toolchain) select);
 				}
 			}
 		});
 		toolItem_1.setImage(ResourceManager.getPluginImage("com.mwos.ebochs2", "resource/easyui/themes/icons/pencil.png"));
 
-		treeViewer = new CheckboxTreeViewer(container, SWT.BORDER );
+		treeViewer = new CheckboxTreeViewer(container, SWT.BORDER);
 		Tree tree = treeViewer.getTree();
 		tree.setLinesVisible(true);
 		tree.setHeaderVisible(true);
-		treeViewer.setCheckStateProvider(new ICheckStateProvider() {
-			
-			@Override
-			public boolean isGrayed(Object element) {
-				treeViewer.setSubtreeChecked(element, false);
-				return false;
-			}
-			
-			@Override
-			public boolean isChecked(Object element) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		});
-		
+
 		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		TreeViewerColumn treeViewerColumn_1 = new TreeViewerColumn(treeViewer, SWT.NONE);
 		TreeColumn trclmnNewColumn = treeViewerColumn_1.getColumn();
-		trclmnNewColumn.setWidth(100);
+		trclmnNewColumn.setWidth(150);
 		trclmnNewColumn.setText("Name");
 
 		TreeViewerColumn treeViewerColumn_2 = new TreeViewerColumn(treeViewer, SWT.NONE);
@@ -113,21 +98,33 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 
 		treeViewer.setContentProvider(new TCTreeContentProvider());
 		treeViewer.setLabelProvider(new TCTreeLabelProvider());
+		treeViewer.setCheckStateProvider(new ICheckStateProvider() {
+
+			@Override
+			public boolean isGrayed(Object element) {
+				if(element instanceof Tool)
+					return true;
+				return false;
+			}
+
+			@Override
+			public boolean isChecked(Object element) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
 		initTreeData();
-	//	initCheckbox();
-		
-		
-		
+
 		return container;
 	}
-	
+
 	@Override
 	protected void performApply() {
 		Object input = treeViewer.getInput();
-		if(input instanceof Toolchain[]) {
+		if (input instanceof Toolchain[]) {
 		}
 	}
-	
+
 	@Override
 	public boolean performOk() {
 		// TODO Auto-generated method stub
@@ -143,29 +140,29 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 	private void initTreeData() {
 		treeViewer.setInput(Toolchain.get());
 	}
-	
+
 	private void initCheckbox() {
-		
-		for(TreeItem item: treeViewer.getTree().getItems()) {
-			if(item.getParentItem()!=null) {
+
+		for (TreeItem item : treeViewer.getTree().getItems()) {
+			if (item.getParentItem() != null) {
 				continue;
 			}
 			TreeEditor editor = new TreeEditor(this.treeViewer.getTree());
 			editor.horizontalAlignment = SWT.LEFT;
 			editor.minimumWidth = 20;
 			Button check = new Button(this.treeViewer.getTree(), SWT.CHECK);
-			
+
 			editor.setEditor(check, item, 0);
 		}
 	}
-	
+
 	private String getCheckedTC() {
 		return null;
-		
+
 	}
-	
+
 	private void setCheckedTC(String name) {
-		
+
 	}
 
 	private void showAddDialog(Toolchain toolchain) {
