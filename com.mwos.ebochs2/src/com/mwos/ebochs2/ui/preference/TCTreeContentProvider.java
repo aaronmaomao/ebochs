@@ -2,7 +2,6 @@ package com.mwos.ebochs2.ui.preference;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
-import com.mwos.ebochs2.model.Tool;
 import com.mwos.ebochs2.model.Toolchain;
 
 public class TCTreeContentProvider implements ITreeContentProvider {
@@ -21,7 +20,7 @@ public class TCTreeContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof Toolchain) {
 			Toolchain toolchain = (Toolchain) parentElement;
-			return toolchain.getTools().toArray(new Tool[] {});
+			return toolchain.getTools().toArray();
 		}
 		return null;
 	}

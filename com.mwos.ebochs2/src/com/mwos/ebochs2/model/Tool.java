@@ -1,8 +1,10 @@
 package com.mwos.ebochs2.model;
 
-public class Tool implements IJSONSerial {
+import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonObject;
+
+public class Tool implements ISeriable {
 	private String name;
-	private String path="";
+	private String path = "";
 
 	public Tool() {
 		// TODO Auto-generated constructor stub
@@ -20,7 +22,7 @@ public class Tool implements IJSONSerial {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getPath() {
 		return path;
 	}
@@ -30,13 +32,19 @@ public class Tool implements IJSONSerial {
 	}
 
 	@Override
-	public JSONObject getSerial() {
-		JSONObject object = new JSONObject("name",this.name);
-		return object;
+	public String getSerial() {
+		JsonObject object = new JsonObject();
+		object.add("name", name);
+		object.add("path", path);
+		return object.toString();
 	}
 
 	@Override
-	public void setSerial(JSONObject serial) {
-		this.name = serial.get("name", String.class);
+	public boolean setSerial(String str) {
+		JsonObject object = JsonObject.readFrom(str);
+		name = object.getString("name", null);
+		path = object.getString("path", null);
+		return true;
 	}
+
 }

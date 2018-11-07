@@ -14,6 +14,12 @@
             id="com.mwos.ebochs2.preferencePage1"
             name="Toolchain">
       </page>
+      <page
+            category="com.mwos.ebochs2.preference"
+            class="com.mwos.ebochs2.ui.preference.OSPreferencePage2"
+            id="com.mwos.ebochs2.preferencePage2"
+            name="VM">
+      </page>
    </extension>
 
 </plugin>

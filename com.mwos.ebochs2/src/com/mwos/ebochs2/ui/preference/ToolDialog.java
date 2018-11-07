@@ -63,6 +63,7 @@ public class ToolDialog extends Composite {
 		TableColumn tblclmnNewColumn_1 = tableViewerColumn_1.getColumn();
 		tblclmnNewColumn_1.setWidth(200);
 		tblclmnNewColumn_1.setText("Path");
+		tableViewerColumn_1.setEditingSupport(new ToolPathEditing(tableViewerColumn_1.getViewer()));
 
 		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnNewColumn_2 = tableViewerColumn_2.getColumn();

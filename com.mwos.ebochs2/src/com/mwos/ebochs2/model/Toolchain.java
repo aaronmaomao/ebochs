@@ -3,7 +3,11 @@ package com.mwos.ebochs2.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Toolchain implements IJSONSerial {
+import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonArray;
+import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonObject;
+import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonValue;
+
+public class Toolchain implements ISeriable {
 	private String name;
 	private String location = "";
 	private List<Tool> tools;
@@ -50,7 +54,7 @@ public class Toolchain implements IJSONSerial {
 		t2.setPath("C://home/c.exe");
 		toolchain.addTool(t1);
 		toolchain.addTool(t2);
-		
+
 		Toolchain toolchain2 = new Toolchain("原生工具链2");
 		Tool t12 = new Tool("编译器");
 		t12.setPath("D://a.exe");
@@ -58,7 +62,7 @@ public class Toolchain implements IJSONSerial {
 		t22.setPath("C://home/c.exe");
 		toolchain2.addTool(t12);
 		toolchain2.addTool(t22);
-		
+
 		Toolchain toolchain3 = new Toolchain("原生工具链3");
 		Tool t13 = new Tool("编译器");
 		t13.setPath("D://a.exe");
@@ -66,7 +70,7 @@ public class Toolchain implements IJSONSerial {
 		t23.setPath("C://home/c.exe");
 		toolchain3.addTool(t13);
 		toolchain3.addTool(t23);
-		return new Toolchain[] { toolchain,toolchain2,toolchain3 };
+		return new Toolchain[] { toolchain, toolchain2, toolchain3 };
 	}
 
 	public String getLocation() {
@@ -78,22 +82,29 @@ public class Toolchain implements IJSONSerial {
 	}
 
 	@Override
-	public JSONObject getSerial() {
-		JSONObject object = new JSONObject("name", name);
-		JSONArray array = new JSONArray();
-		for (Tool t : tools) {
-			array.add(t.getSerial());
+	public String getSerial() {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.add("name", this.name);
+		jsonObject.add("location", this.location);
+		JsonArray array = new JsonArray();
+		for (Tool tool : tools) {
+			array.add(tool.getSerial());
 		}
-		object.add("tools", array);
-		return object;
+		jsonObject.add("tools", array);
+		return jsonObject.toString();
 	}
 
 	@Override
-	public void setSerial(JSONObject serial) {
-		this.name = serial.get("name", String.class);
-		JSONArray array = serial.get("tools", JSONArray.class);
-		for (JSONObject tool : array) {
-			this.tools.add(IJSONSerial.deSerial(tool, Tool.class));
+	public boolean setSerial(String t) {
+		JsonObject jsonObject = JsonObject.readFrom(t);
+		name = jsonObject.getString("name", null);
+		location = jsonObject.getString("location", null);
+		JsonArray toolsArray = (JsonArray) jsonObject.get("tools");
+		tools.clear();
+		for (JsonValue object : toolsArray.values()) {
+			tools.add(ISeriable.toObject(object.toString(), Tool.class));
 		}
+		return true;
 	}
+
 }

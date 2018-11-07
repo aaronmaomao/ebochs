@@ -17,6 +17,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+
+import com.mwos.ebochs2.model.Toolchain;
+
 import org.eclipse.swt.widgets.TableItem;
 
 public class UITest {
@@ -118,7 +121,7 @@ public class UITest {
 		tblclmnNewColumn.setWidth(100);
 		tblclmnNewColumn.setText("Args");
 		
-		tableViewer.setInput(new String[] {"编译器","D://a.exe"});
+		tableViewer.setInput(Toolchain.get());
 	}
 
 }

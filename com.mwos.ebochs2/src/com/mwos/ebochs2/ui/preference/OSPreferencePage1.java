@@ -4,6 +4,8 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonArray;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TreeEditor;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -73,33 +75,37 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Object select = treeViewer.getStructuredSelection().getFirstElement();
-				if(select!=null && select instanceof Toolchain) {
+				if (select != null && select instanceof Toolchain) {
 					showAddDialog((Toolchain) select);
 				}
 			}
 		});
 		toolItem_1.setImage(ResourceManager.getPluginImage("com.mwos.ebochs2", "resource/easyui/themes/icons/pencil.png"));
 
-		treeViewer = new CheckboxTreeViewer(container, SWT.BORDER );
+		treeViewer = new CheckboxTreeViewer(container, SWT.BORDER);
 		Tree tree = treeViewer.getTree();
 		tree.setLinesVisible(true);
 		tree.setHeaderVisible(true);
 		treeViewer.setCheckStateProvider(new ICheckStateProvider() {
-			
+
 			@Override
 			public boolean isGrayed(Object element) {
 				treeViewer.setSubtreeChecked(element, false);
 				return false;
 			}
-			
+
 			@Override
 			public boolean isChecked(Object element) {
 				// TODO Auto-generated method stub
 				return false;
 			}
 		});
-		
+
 		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+		TreeColumn treeColumn = treeViewerColumn.getColumn();
+		treeColumn.setWidth(30);
 
 		TreeViewerColumn treeViewerColumn_1 = new TreeViewerColumn(treeViewer, SWT.NONE);
 		TreeColumn trclmnNewColumn = treeViewerColumn_1.getColumn();
@@ -114,20 +120,22 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 		treeViewer.setContentProvider(new TCTreeContentProvider());
 		treeViewer.setLabelProvider(new TCTreeLabelProvider());
 		initTreeData();
-	//	initCheckbox();
-		
-		
-		
+		// initCheckbox();
+
 		return container;
 	}
-	
+
 	@Override
 	protected void performApply() {
 		Object input = treeViewer.getInput();
-		if(input instanceof Toolchain[]) {
+		if (input instanceof Toolchain[]) {
+			JsonArray array = new JsonArray();
+			for (Toolchain tc : (Toolchain[]) input) {
+				array.add(tc.)
+			}
 		}
 	}
-	
+
 	@Override
 	public boolean performOk() {
 		// TODO Auto-generated method stub
@@ -143,29 +151,29 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 	private void initTreeData() {
 		treeViewer.setInput(Toolchain.get());
 	}
-	
+
 	private void initCheckbox() {
-		
-		for(TreeItem item: treeViewer.getTree().getItems()) {
-			if(item.getParentItem()!=null) {
+
+		for (TreeItem item : treeViewer.getTree().getItems()) {
+			if (item.getParentItem() != null) {
 				continue;
 			}
 			TreeEditor editor = new TreeEditor(this.treeViewer.getTree());
 			editor.horizontalAlignment = SWT.LEFT;
 			editor.minimumWidth = 20;
 			Button check = new Button(this.treeViewer.getTree(), SWT.CHECK);
-			
+
 			editor.setEditor(check, item, 0);
 		}
 	}
-	
+
 	private String getCheckedTC() {
 		return null;
-		
+
 	}
-	
+
 	private void setCheckedTC(String name) {
-		
+
 	}
 
 	private void showAddDialog(Toolchain toolchain) {
