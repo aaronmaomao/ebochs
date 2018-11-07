@@ -15,5 +15,35 @@
             name="Toolchain">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.mwos.ebochs2.wizard.category"
+            name="OS">
+      </category>
+      <wizard
+            category="com.mwos.ebochs2.wizard.category"
+            class="com.mwos.ebochs2.ui.wizard.OSWizard"
+            icon="resource/images/os.png"
+            id="com.mwos.ebochs2.wizard"
+            name="New OS"
+            project="true">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="com.mwos.ebochs2.ui.perspective.OSPerspective"
+            icon="resource/images/os.png"
+            id="com.mwos.ebochs2.ui.perspective.OSPerspective"
+            name="OS Dev">
+      </perspective>
+      <perspective
+            class="com.mwos.ebochs2.ui.perspective.OSDebugPerspective"
+            icon="resource/images/panda.png"
+            id="com.mwos.ebochs2.ui.perspective.OSDebugPerspective"
+            name="OS Debug">
+      </perspective>
+   </extension>
 
 </plugin>
