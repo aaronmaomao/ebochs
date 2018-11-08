@@ -2,6 +2,7 @@ package com.mwos.ebochs2.ui.preference;
 
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonArray;
+import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonObject;
 import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonValue;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -46,7 +47,7 @@ public class OSPreference extends PreferencePage implements IWorkbenchPreference
 	public static Toolchain getSelectTc() {
 		String select = Activator.getDefault().getPreferenceStore().getDefaultString(SELECT_TC);
 		if (!select.isEmpty()) {
-			Toolchain toolchain = ISeriable.toObject(select, Toolchain.class);
+			Toolchain toolchain = ISeriable.toObject(JsonObject.readFrom(select), Toolchain.class);
 			return toolchain;
 		} else {
 			return null;
@@ -59,7 +60,7 @@ public class OSPreference extends PreferencePage implements IWorkbenchPreference
 			JsonArray array = JsonArray.readFrom(all);
 			Toolchain[] tcs = new Toolchain[array.size()];
 			for (int i = 0; i < array.size(); i++) {
-				tcs[i] = ISeriable.toObject(array.get(i).toString(), Toolchain.class);
+				tcs[i] = ISeriable.toObject(JsonObject.readFrom(array.get(i).toString()), Toolchain.class);
 			}
 
 			return tcs;

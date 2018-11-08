@@ -131,7 +131,7 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 		if (input instanceof Toolchain[]) {
 			JsonArray array = new JsonArray();
 			for (Toolchain tc : (Toolchain[]) input) {
-				array.add(tc.)
+				//array.add(tc.)
 			}
 		}
 	}

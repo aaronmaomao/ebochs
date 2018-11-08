@@ -82,7 +82,7 @@ public class Toolchain implements ISeriable {
 	}
 
 	@Override
-	public String getSerial() {
+	public JsonObject getSerial() {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.add("name", this.name);
 		jsonObject.add("location", this.location);
@@ -91,18 +91,17 @@ public class Toolchain implements ISeriable {
 			array.add(tool.getSerial());
 		}
 		jsonObject.add("tools", array);
-		return jsonObject.toString();
+		return jsonObject;
 	}
 
 	@Override
-	public boolean setSerial(String t) {
-		JsonObject jsonObject = JsonObject.readFrom(t);
-		name = jsonObject.getString("name", null);
-		location = jsonObject.getString("location", null);
-		JsonArray toolsArray = (JsonArray) jsonObject.get("tools");
+	public boolean setSerial(JsonObject object) {
+		name = object.getString("name", null);
+		location = object.getString("location", null);
+		JsonArray toolsArray = (JsonArray) object.get("tools");
 		tools.clear();
-		for (JsonValue object : toolsArray.values()) {
-			tools.add(ISeriable.toObject(object.toString(), Tool.class));
+		for (JsonValue value : toolsArray.values()) {
+			tools.add(ISeriable.toObject((JsonObject)value, Tool.class));
 		}
 		return true;
 	}

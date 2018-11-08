@@ -32,16 +32,15 @@ public class Tool implements ISeriable {
 	}
 
 	@Override
-	public String getSerial() {
+	public JsonObject getSerial() {
 		JsonObject object = new JsonObject();
 		object.add("name", name);
 		object.add("path", path);
-		return object.toString();
+		return object;
 	}
 
 	@Override
-	public boolean setSerial(String str) {
-		JsonObject object = JsonObject.readFrom(str);
+	public boolean setSerial(JsonObject object) {
 		name = object.getString("name", null);
 		path = object.getString("path", null);
 		return true;
