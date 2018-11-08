@@ -17,7 +17,7 @@ import com.mwos.ebochs2.model.Toolchain;
 public class OSPreference extends PreferencePage implements IWorkbenchPreferencePage {
 
 	public static final String ALL_TC = Activator.PLUGIN_ID + ".ALL_TOOLCHAINS";
-	public static final String SELECT_TC = Activator.PLUGIN_ID + ".SELECT_TOOLCHAINS";
+	public static final String DEFAULT_TC = Activator.PLUGIN_ID + ".DEFAULT_TC";
 
 	/**
 	 * Create the preference page.
@@ -45,9 +45,9 @@ public class OSPreference extends PreferencePage implements IWorkbenchPreference
 	}
 
 	public static Toolchain getSelectTc() {
-		String select = Activator.getDefault().getPreferenceStore().getDefaultString(SELECT_TC);
-		if (!select.isEmpty()) {
-			Toolchain toolchain = ISeriable.toObject(JsonObject.readFrom(select), Toolchain.class);
+		String defaultTC = Activator.getDefault().getPreferenceStore().getString(DEFAULT_TC);
+		if (!defaultTC.isEmpty()) {
+			Toolchain toolchain = ISeriable.toObject(JsonObject.readFrom(defaultTC), Toolchain.class);
 			return toolchain;
 		} else {
 			return null;
@@ -55,14 +55,13 @@ public class OSPreference extends PreferencePage implements IWorkbenchPreference
 	}
 
 	public static Toolchain[] getAllTc() {
-		String all = Activator.getDefault().getPreferenceStore().getDefaultString(ALL_TC);
+		String all = Activator.getDefault().getPreferenceStore().getString(ALL_TC);
 		if (!all.isEmpty()) {
 			JsonArray array = JsonArray.readFrom(all);
 			Toolchain[] tcs = new Toolchain[array.size()];
 			for (int i = 0; i < array.size(); i++) {
 				tcs[i] = ISeriable.toObject(JsonObject.readFrom(array.get(i).toString()), Toolchain.class);
 			}
-
 			return tcs;
 		} else {
 			return null;

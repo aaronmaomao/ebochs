@@ -4,6 +4,7 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TreeEditor;
@@ -30,7 +31,9 @@ import com.mwos.ebochs2.model.Toolchain;
 
 public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPreferencePage {
 
-	private CheckboxTreeViewer treeViewer;
+	private TreeViewer treeViewer;
+	private Toolchain[] allTC;
+	private Toolchain defaultTC;
 
 	/**
 	 * Create the preference page.
@@ -79,7 +82,7 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 		});
 		toolItem_1.setImage(ResourceManager.getPluginImage("com.mwos.ebochs2", "resource/easyui/themes/icons/pencil.png"));
 
-		treeViewer = new CheckboxTreeViewer(container, SWT.BORDER);
+		treeViewer = new TreeViewer(container, SWT.BORDER);
 		Tree tree = treeViewer.getTree();
 		tree.setLinesVisible(true);
 		tree.setHeaderVisible(true);
@@ -98,21 +101,7 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 
 		treeViewer.setContentProvider(new TCTreeContentProvider());
 		treeViewer.setLabelProvider(new TCTreeLabelProvider());
-		treeViewer.setCheckStateProvider(new ICheckStateProvider() {
-
-			@Override
-			public boolean isGrayed(Object element) {
-				if(element instanceof Tool)
-					return true;
-				return false;
-			}
-
-			@Override
-			public boolean isChecked(Object element) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		});
+		
 		initTreeData();
 
 		return container;
@@ -135,31 +124,16 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 	 * Initialize the preference page.
 	 */
 	public void init(IWorkbench workbench) {
+		allTC = OSPreference.getAllTc();
+		defaultTC = OSPreference.getSelectTc();
 	}
 
 	private void initTreeData() {
-		treeViewer.setInput(Toolchain.get());
-	}
-
-	private void initCheckbox() {
-
-		for (TreeItem item : treeViewer.getTree().getItems()) {
-			if (item.getParentItem() != null) {
-				continue;
-			}
-			TreeEditor editor = new TreeEditor(this.treeViewer.getTree());
-			editor.horizontalAlignment = SWT.LEFT;
-			editor.minimumWidth = 20;
-			Button check = new Button(this.treeViewer.getTree(), SWT.CHECK);
-
-			editor.setEditor(check, item, 0);
+		if(allTC!=null) {
+			treeViewer.setInput(Toolchain.get());
 		}
 	}
 
-	private String getCheckedTC() {
-		return null;
-
-	}
 
 	private void setCheckedTC(String name) {
 

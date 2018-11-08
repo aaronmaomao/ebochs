@@ -12,7 +12,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -21,6 +23,8 @@ import org.eclipse.swt.widgets.Text;
 import com.mwos.ebochs2.model.Toolchain;
 
 import org.eclipse.swt.widgets.TableItem;
+import swing2swt.layout.BorderLayout;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class UITest {
 
@@ -121,7 +125,31 @@ public class UITest {
 		tblclmnNewColumn.setWidth(100);
 		tblclmnNewColumn.setText("Args");
 		
+		CTabItem tbtmNewItem_1 = new CTabItem(tabFolder, SWT.NONE);
+		tbtmNewItem_1.setText("New Item");
+		
+		Composite composite_1 = new Composite(tabFolder, SWT.NONE);
+		
+		tbtmNewItem_1.setControl(composite_1);
+		composite_1.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		Label lblNewLabel = new Label(composite_1, SWT.BORDER | SWT.CENTER);
+		lblNewLabel.setText("1");
+		lblNewLabel.addListener(SWT.Resize, new Listener() {
+			
+			@Override
+			public void handleEvent(Event event) {
+				System.out.println("aaa");
+				
+			}
+		});
+		
+		lblNewLabel.setBounds(10, 10, 200, 100);
+		lblNewLabel.setSize(20, 300);
+		lblNewLabel.computeSize(200, 20);
+		lblNewLabel.setImage(SWTResourceManager.getImage("/Users/admin/Desktop/icon.png"));
+		lblNewLabel.pack();
+		
 		tableViewer.setInput(Toolchain.get());
 	}
-
 }
