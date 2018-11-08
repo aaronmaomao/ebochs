@@ -16,6 +16,9 @@ import com.mwos.ebochs2.model.Tool;
 import com.mwos.ebochs2.model.Toolchain;
 
 public class ToolDialog extends Composite {
+
+	private Toolchain tc;
+
 	private Text text;
 	private Text text_1;
 	private TableViewer tableViewer;
@@ -26,8 +29,10 @@ public class ToolDialog extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public ToolDialog(Composite parent, int style) {
-		super(parent, style);
+	public ToolDialog(Toolchain toolchain, Composite parent, int style) {
+
+		super(parent, SWT.EMBEDDED);
+		
 		setLayout(new GridLayout(3, false));
 
 		Label label = new Label(this, SWT.NONE);
@@ -72,20 +77,24 @@ public class ToolDialog extends Composite {
 
 		tableViewer.setLabelProvider(new ToolTableLabelProvider());
 		tableViewer.setContentProvider(new ToolTableContentProvider());
-	}
-
-	public ToolDialog(Toolchain toolchain, Composite parent, int style) {
-		this(parent, style);
 		if (toolchain != null) {
-			setToolChain(toolchain);
+			tc = toolchain;
+		} else {
+			initTC();
 		}
+
+		text.setText(tc.getName());
+		text_1.setText(tc.getLocation());
+		tableViewer.setInput(tc.getTools().toArray(new Tool[] {}));
 	}
 
-	public void setToolChain(Toolchain toolchain) {
-		text.setText(toolchain.getName());
-		text_1.setText(toolchain.getLocation());
-		Tool[] tools = toolchain.getTools().toArray(new Tool[] {});
-		tableViewer.setInput(tools);
+	private void initTC() {
+		this.tc = new Toolchain("");
+		tc.setLocation("");
+		tc.addTool(new Tool("汇编器"));
+		tc.addTool(new Tool("编译器"));
+		tc.addTool(new Tool("链接器"));
+		tc.addTool(new Tool("格式器"));
 	}
 
 	@Override

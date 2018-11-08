@@ -15,4 +15,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: com.mwos.ebochs2
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
+ swing2swt.jar,
  swing2swt.jar

@@ -1,6 +1,8 @@
 package com.mwos.ebochs2.ui.preference;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateProvider;
@@ -16,6 +18,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
@@ -28,6 +31,7 @@ import org.eclipse.wb.swt.ResourceManager;
 import com.mwos.ebochs2.Activator;
 import com.mwos.ebochs2.model.Tool;
 import com.mwos.ebochs2.model.Toolchain;
+import org.eclipse.swt.widgets.Label;
 
 public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPreferencePage {
 
@@ -56,7 +60,7 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 		gl_container.marginHeight = 0;
 		container.setLayout(gl_container);
 
-		ToolBar toolBar = new ToolBar(container, SWT.FLAT | SWT.WRAP | SWT.RIGHT | SWT.SHADOW_OUT);
+		ToolBar toolBar = new ToolBar(container, SWT.FLAT | SWT.RIGHT);
 
 		ToolItem tltmNewItem = new ToolItem(toolBar, SWT.NONE);
 		tltmNewItem.addSelectionListener(new SelectionAdapter() {
@@ -101,7 +105,7 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 
 		treeViewer.setContentProvider(new TCTreeContentProvider());
 		treeViewer.setLabelProvider(new TCTreeLabelProvider());
-		
+
 		initTreeData();
 
 		return container;
@@ -129,11 +133,10 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 	}
 
 	private void initTreeData() {
-		if(allTC!=null) {
+		if (allTC != null) {
 			treeViewer.setInput(Toolchain.get());
 		}
 	}
-
 
 	private void setCheckedTC(String name) {
 
@@ -141,6 +144,7 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 
 	private void showAddDialog(Toolchain toolchain) {
 		Dialog dialog = new Dialog(Activator.getDefault().getWorkbench().getModalDialogShellProvider()) {
+			private ToolDialog toolDialog;
 
 			@Override
 			protected boolean isResizable() {
@@ -154,10 +158,16 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 
 			@Override
 			protected Control createDialogArea(Composite parent) {
-				ToolDialog toolDialog = new ToolDialog(toolchain, parent, SWT.NONE);
+				toolDialog = new ToolDialog(toolchain, parent, SWT.NONE);
 				toolDialog.setLayoutData(new GridData(GridData.FILL_BOTH));
 				return toolDialog;
 			}
+			
+			@Override
+			protected void okPressed() {
+				this.getButton(IDialogConstants.OK_ID).setEnabled(false);;
+			}
+			
 		};
 		dialog.open();
 	}
