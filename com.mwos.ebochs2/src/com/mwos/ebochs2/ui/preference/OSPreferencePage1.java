@@ -2,10 +2,9 @@ package com.mwos.ebochs2.ui.preference;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.TreeViewerColumn;
-import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonArray;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TreeEditor;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,10 +25,8 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.mwos.ebochs2.Activator;
+import com.mwos.ebochs2.model.Tool;
 import com.mwos.ebochs2.model.Toolchain;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.jface.viewers.ICheckStateProvider;
-import org.eclipse.swt.widgets.Label;
 
 public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPreferencePage {
 
@@ -86,30 +83,12 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 		Tree tree = treeViewer.getTree();
 		tree.setLinesVisible(true);
 		tree.setHeaderVisible(true);
-		treeViewer.setCheckStateProvider(new ICheckStateProvider() {
-
-			@Override
-			public boolean isGrayed(Object element) {
-				treeViewer.setSubtreeChecked(element, false);
-				return false;
-			}
-
-			@Override
-			public boolean isChecked(Object element) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		});
 
 		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
-		TreeColumn treeColumn = treeViewerColumn.getColumn();
-		treeColumn.setWidth(30);
-
 		TreeViewerColumn treeViewerColumn_1 = new TreeViewerColumn(treeViewer, SWT.NONE);
 		TreeColumn trclmnNewColumn = treeViewerColumn_1.getColumn();
-		trclmnNewColumn.setWidth(100);
+		trclmnNewColumn.setWidth(150);
 		trclmnNewColumn.setText("Name");
 
 		TreeViewerColumn treeViewerColumn_2 = new TreeViewerColumn(treeViewer, SWT.NONE);
@@ -119,8 +98,22 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 
 		treeViewer.setContentProvider(new TCTreeContentProvider());
 		treeViewer.setLabelProvider(new TCTreeLabelProvider());
+		treeViewer.setCheckStateProvider(new ICheckStateProvider() {
+
+			@Override
+			public boolean isGrayed(Object element) {
+				if(element instanceof Tool)
+					return true;
+				return false;
+			}
+
+			@Override
+			public boolean isChecked(Object element) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
 		initTreeData();
-		// initCheckbox();
 
 		return container;
 	}
@@ -129,10 +122,6 @@ public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPrefe
 	protected void performApply() {
 		Object input = treeViewer.getInput();
 		if (input instanceof Toolchain[]) {
-			JsonArray array = new JsonArray();
-			for (Toolchain tc : (Toolchain[]) input) {
-				//array.add(tc.)
-			}
 		}
 	}
 
