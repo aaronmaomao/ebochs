@@ -1,9 +1,12 @@
 package com.mwos.ebochs2.ui.wizard;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+
+import com.mwos.ebochs2.ui.project.OSProject;
 
 public class OSWizard extends Wizard implements INewWizard{
 	
@@ -24,9 +27,15 @@ public class OSWizard extends Wizard implements INewWizard{
 
 	@Override
 	public boolean performFinish() {
-		return false;
+		try {
+			OSProject.create(page1.getProjectName());
+			return true;
+		} catch (CoreException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-
+	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		// TODO Auto-generated method stub

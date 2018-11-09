@@ -51,5 +51,18 @@
             name="OS Debug">
       </perspective>
    </extension>
+   <extension
+         id="com.mwos.ebochs2.osnature"
+         name="OS Project"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="com.mwos.ebochs2.ui.project.OSNature">
+         </run>
+      </runtime>
+      <requires-nature
+            id="org.eclipse.cdt.core.cnature">
+      </requires-nature>
+   </extension>
 
 </plugin>

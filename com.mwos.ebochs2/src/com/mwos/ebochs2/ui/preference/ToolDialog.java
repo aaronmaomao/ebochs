@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.mwos.ebochs2.model.Tool;
 import com.mwos.ebochs2.model.Toolchain;
+import org.eclipse.swt.widgets.Combo;
 
 public class ToolDialog extends Composite {
 
@@ -41,7 +42,9 @@ public class ToolDialog extends Composite {
 
 		text = new Text(this, SWT.BORDER);
 		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		new Label(this, SWT.NONE);
+		
+		Combo combo = new Combo(this, SWT.NONE);
+		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Label label_1 = new Label(this, SWT.NONE);
 		label_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
