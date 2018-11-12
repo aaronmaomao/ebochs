@@ -12,7 +12,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.mwos.ebochs2.Activator;
 import com.mwos.ebochs2.model.ISeriable;
-import com.mwos.ebochs2.model.Toolchain;
+import com.mwos.ebochs2.model.toolchain.Toolchain;
 
 public class OSPreference extends PreferencePage implements IWorkbenchPreferencePage {
 

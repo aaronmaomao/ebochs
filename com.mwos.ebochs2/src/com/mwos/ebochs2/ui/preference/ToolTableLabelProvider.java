@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import com.mwos.ebochs2.model.Tool;
+import com.mwos.ebochs2.model.toolchain.Tool;
 
 public class ToolTableLabelProvider implements ITableLabelProvider {
 

@@ -29,8 +29,9 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.wb.swt.ResourceManager;
 
 import com.mwos.ebochs2.Activator;
-import com.mwos.ebochs2.model.Tool;
-import com.mwos.ebochs2.model.Toolchain;
+import com.mwos.ebochs2.model.toolchain.Tool;
+import com.mwos.ebochs2.model.toolchain.Toolchain;
+
 import org.eclipse.swt.widgets.Label;
 
 public class OSPreferencePage1 extends PreferencePage implements IWorkbenchPreferencePage {

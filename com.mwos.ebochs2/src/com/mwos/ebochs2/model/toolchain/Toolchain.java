@@ -1,4 +1,4 @@
-package com.mwos.ebochs2.model;
+package com.mwos.ebochs2.model.toolchain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonArray;
 import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonObject;
 import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonValue;
+
+import com.mwos.ebochs2.model.ISeriable;
 
 public class Toolchain implements ISeriable {
 	private String name;

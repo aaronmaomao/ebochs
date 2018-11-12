@@ -2,7 +2,7 @@ package com.mwos.ebochs2.ui.preference;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 
-import com.mwos.ebochs2.model.Toolchain;
+import com.mwos.ebochs2.model.toolchain.Toolchain;
 
 public class TCTreeContentProvider implements ITreeContentProvider {
 

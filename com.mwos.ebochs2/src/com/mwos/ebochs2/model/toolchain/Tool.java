@@ -1,6 +1,8 @@
-package com.mwos.ebochs2.model;
+package com.mwos.ebochs2.model.toolchain;
 
 import org.eclipse.json.provisonnal.com.eclipsesource.json.JsonObject;
+
+import com.mwos.ebochs2.model.ISeriable;
 
 public class Tool implements ISeriable {
 	private String name;

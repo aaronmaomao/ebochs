@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import com.mwos.ebochs2.model.Toolchain;
+import com.mwos.ebochs2.model.toolchain.Toolchain;
 
 public class UITest {
 

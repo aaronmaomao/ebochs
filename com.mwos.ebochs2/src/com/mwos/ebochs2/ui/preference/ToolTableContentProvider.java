@@ -2,7 +2,7 @@ package com.mwos.ebochs2.ui.preference;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 
-import com.mwos.ebochs2.model.Tool;
+import com.mwos.ebochs2.model.toolchain.Tool;
 
 public class ToolTableContentProvider implements IStructuredContentProvider {
 

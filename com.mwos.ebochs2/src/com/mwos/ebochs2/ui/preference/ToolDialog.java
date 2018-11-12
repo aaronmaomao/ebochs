@@ -12,8 +12,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import com.mwos.ebochs2.model.Tool;
-import com.mwos.ebochs2.model.Toolchain;
+import com.mwos.ebochs2.model.toolchain.Tool;
+import com.mwos.ebochs2.model.toolchain.Toolchain;
+
 import org.eclipse.swt.widgets.Combo;
 
 public class ToolDialog extends Composite {

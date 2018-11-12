@@ -4,8 +4,8 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import com.mwos.ebochs2.model.Tool;
-import com.mwos.ebochs2.model.Toolchain;
+import com.mwos.ebochs2.model.toolchain.Tool;
+import com.mwos.ebochs2.model.toolchain.Toolchain;
 
 public class TCTreeLabelProvider implements ITableLabelProvider{
 
