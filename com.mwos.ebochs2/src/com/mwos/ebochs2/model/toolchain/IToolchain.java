@@ -1,6 +1,6 @@
 package com.mwos.ebochs2.model.toolchain;
 
-public interface IToolChain {
+public interface IToolchain {
 
 	public String getName();
 	public String getPath();

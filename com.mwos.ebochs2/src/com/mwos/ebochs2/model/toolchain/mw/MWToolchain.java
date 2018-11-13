@@ -1,9 +1,9 @@
-package com.mwos.ebochs2.model.toolchain.mwtc;
+package com.mwos.ebochs2.model.toolchain.mw;
 
 import com.mwos.ebochs2.model.toolchain.ITool;
-import com.mwos.ebochs2.model.toolchain.IToolChain;
+import com.mwos.ebochs2.model.toolchain.IToolchain;
 
-public class MWToolChain implements IToolChain {
+public class MWToolchain implements IToolchain {
 
 	@Override
 	public String getName() {
