@@ -31,7 +31,7 @@ public class Utils {
 				temp = ("0" + temp);
 			}
 		}
-		return "0x" + temp.toUpperCase();
+		return temp.toUpperCase();
 	}
 
 	public static void main(String[] args) {

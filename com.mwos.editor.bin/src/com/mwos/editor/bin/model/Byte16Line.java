@@ -23,7 +23,7 @@ public class Byte16Line {
 
 	public Integer getValue(int position) {
 		if (position >=0 && position < byte16.length) {
-			return byte16[position]&0xff;
+			return byte16[position]&0x00ff;
 		} else {
 			return null;
 		}
