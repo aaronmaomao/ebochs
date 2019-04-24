@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.mwos.editor.bin.ui.editor.BinEditor"
+            default="true"
+            extensions="bin"
+            icon="icons/binary-data.png"
+            id="com.mwos.editor.bin.ui.editor.BinEditor"
+            name="New MultiPageEditorPart">
+      </editor>
+   </extension>
+</plugin>
