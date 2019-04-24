@@ -27,6 +27,7 @@ public class BinEditor extends MultiPageEditorPart {
 		if (input instanceof FileEditorInput) {
 			service = new BinService(((FileEditorInput) input).getPath().toFile());
 		}
+		this.setPartName(input.getName());
 	}
 
 	@Override

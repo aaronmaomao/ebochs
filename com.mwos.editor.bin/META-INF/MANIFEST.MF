@@ -8,10 +8,10 @@ Bundle-Vendor: MWOS
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface.text,
  org.eclipse.ui,
- org.eclipse.ui.ide;bundle-version="3.13.1",
- org.eclipse.core.resources;bundle-version="3.12.0"
+ org.eclipse.ui.ide,
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: com.mwos.editor.bin
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
- swing2swt.jar
+ lib/swing2swt.jar

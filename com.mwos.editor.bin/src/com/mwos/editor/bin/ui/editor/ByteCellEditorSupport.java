@@ -23,19 +23,16 @@ public class ByteCellEditorSupport extends EditingSupport{
 
 	@Override
 	protected boolean canEdit(Object element) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	protected Object getValue(Object element) {
-		// TODO Auto-generated method stub
 		return element.toString();
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		// TODO Auto-generated method stub
 		
 	}
 

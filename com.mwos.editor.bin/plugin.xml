@@ -9,7 +9,7 @@
             extensions="bin"
             icon="icons/binary-data.png"
             id="com.mwos.editor.bin.ui.editor.BinEditor"
-            name="New MultiPageEditorPart">
+            name="Bin Editor">
       </editor>
    </extension>
 </plugin>
