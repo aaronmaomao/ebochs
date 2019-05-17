@@ -7,6 +7,8 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -59,7 +61,7 @@ public class BinViewComposite extends Composite {
 		setLayout(new BorderLayout(0, 0));
 		boolean readOnly = (style & SWT.READ_ONLY) != 0 ? true : false;
 
-		Composite composite = new Composite(this, SWT.NONE);
+		Composite composite = new Composite(this, SWT.BORDER);
 		composite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		composite.setTouchEnabled(true);
 		composite.setLayoutData(BorderLayout.NORTH);
@@ -160,7 +162,11 @@ public class BinViewComposite extends Composite {
 
 		tableViewer = new TableViewer(composite_1, SWT.BORDER | SWT.FULL_SELECTION);
 		table = tableViewer.getTable();
-		table.setFont(SWTResourceManager.getFont("Consolas", 10, SWT.NORMAL));
+		FontData fd[] = table.getFont().getFontData();
+		fd[0].setName("Consolas");
+		fd[0].setHeight(fd[0].getHeight()+1);
+		Font font = new Font(this.getDisplay(), fd);
+		table.setFont(font);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		table.addListener(SWT.EraseItem, new Listener() {
@@ -197,7 +203,7 @@ public class BinViewComposite extends Composite {
 
 		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn addrColumn = tableViewerColumn.getColumn();
-		addrColumn.setWidth(72);
+		addrColumn.setWidth(75);
 		addrColumn.setText("地址");
 
 		TableViewerColumn tableViewerColumn_0 = new TableViewerColumn(tableViewer, SWT.NONE);

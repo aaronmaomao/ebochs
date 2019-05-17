@@ -38,7 +38,7 @@ public class BinEditor extends MultiPageEditorPart{
 
 	@Override
 	protected void createPages() {
-
+		
 		int page0 = this.addPage(createBinViewPage());
 		this.setPageText(page0, "视图");
 
@@ -77,8 +77,6 @@ public class BinEditor extends MultiPageEditorPart{
 	
 	private Composite createBinViewPage() {
 		viewPage = new BinViewComposite(service,this.getContainer(), SWT.NONE);
-		int page0 = this.addPage(viewPage);
-		this.setPageText(page0, "视图");
 		viewPage.addListener(SWT.Modify, new Listener() {
 
 			@Override
