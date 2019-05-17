@@ -2,7 +2,11 @@ package com.mwos.editor.bin.ui.editor;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.FileEditorInput;
@@ -10,13 +14,15 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 
 import com.mwos.editor.bin.service.BinService;
 
-public class BinEditor extends MultiPageEditorPart {
+public class BinEditor extends MultiPageEditorPart{
 
 	public static final String ID = "com.mwos.editor.bin.ui.editor.BinEditor"; //$NON-NLS-1$
 
-	private ViewPage viewPage;
+	private BinViewComposite viewPage;
 	private SourcePage sourcePage;
 	private BinService service;
+	
+	private boolean isDirty;
 
 	public BinEditor() {
 	}
@@ -33,8 +39,7 @@ public class BinEditor extends MultiPageEditorPart {
 	@Override
 	protected void createPages() {
 
-		viewPage = new ViewPage(service,this.getContainer(), SWT.NONE);
-		int page0 = this.addPage(viewPage);
+		int page0 = this.addPage(createBinViewPage());
 		this.setPageText(page0, "视图");
 
 		sourcePage = new SourcePage(this.getContainer(), null, SWT.NONE);
@@ -50,11 +55,39 @@ public class BinEditor extends MultiPageEditorPart {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
+		boolean result = service.save();
+		if(result) {
+			isDirty = false;
+			firePropertyChange(PROP_DIRTY);
+		}
 	}
 
 	@Override
 	public void doSaveAs() {
 		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public boolean isDirty() {
+		if(isDirty) {
+			return true;
+		}
+		return super.isDirty();
+	}
+	
+	private Composite createBinViewPage() {
+		viewPage = new BinViewComposite(service,this.getContainer(), SWT.NONE);
+		int page0 = this.addPage(viewPage);
+		this.setPageText(page0, "视图");
+		viewPage.addListener(SWT.Modify, new Listener() {
+
+			@Override
+			public void handleEvent(Event event) {
+				isDirty = true;
+				firePropertyChange(IEditorPart.PROP_DIRTY);
+			}
+		});
+
+		return viewPage;
 	}
 }
