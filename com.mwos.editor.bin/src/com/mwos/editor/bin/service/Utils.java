@@ -3,6 +3,8 @@ package com.mwos.editor.bin.service;
 import java.io.File;
 import java.io.FileInputStream;
 
+import com.mwos.editor.bin.shell.ShellRunner;
+
 public class Utils {
 	/**
 	 * 返回较小的数
@@ -60,6 +62,6 @@ public class Utils {
 	}
 	
 	public static void main(String[] args) {
-		String a="asdasd";
+		
 	}
 }
